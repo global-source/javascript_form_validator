@@ -63,9 +63,14 @@ It has automated listener to eliminating unnecessary changes on form.
            
 4. Form Tag Should use **novalidate** to Avoid Browser level validation.
 
-         <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> ... </form>
+         <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> 
+         ...
+         ...
+         </form>
+         
+ **This will support to avoid interrupts from browsers.**
        
-           ex. Chrome Browser       //This will support to avoid interrupts from browsers.
+           ex. Chrome Browser      
            
 It Will listen the **Submit** button event **Automatically**.
 
