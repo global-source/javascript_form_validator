@@ -62,6 +62,10 @@ It has automated listener to eliminating unnecessary changes on form.
            <input type="text" name="uname" required>
            
 4. Form Tag Should use **novalidate** to Avoid Browser level validation.
+
+         <form novalidate> ... </form>
+         
+This will support to avoid interrupts from browsers.
        
            ex. Chrome Browser. 
            
