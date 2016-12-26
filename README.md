@@ -61,7 +61,7 @@ It has automated listener to eliminating unnecessary changes on form.
            <label for="uname">Name :</label>
            <input type="text" name="uname" required>
            
-4. Form Tag Should use **novalidate** to Avoid Browser level validation.
+4. Form Tag Should use "**novalidate**" to Avoid Browser level validation.
 
          <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> 
          ...
