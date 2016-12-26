@@ -1,7 +1,7 @@
 JavaScript Library For Form Validation
 --------------------------------------
 
-#### Why Simple Form Validator ?
+#### Why javascriptFormValidator ?
 
 1. It's developed by Core JavaScript. 
 2. It supports most of browsers.
