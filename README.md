@@ -64,9 +64,10 @@ It has automated listener to eliminating unnecessary changes on form.
 4. Form Tag Should use **novalidate** to Avoid Browser level validation.
        
            ex. Chrome Browser. 
+           
+It Will listen the **Submit** button event **Automatically**.
 
 So **No Need** to use ``<input type="submit"..... onClick="validate()" .....>``
-This Validation listen the **Submit** button event **Automatically**.
 
 ###License
 
