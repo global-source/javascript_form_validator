@@ -151,7 +151,7 @@ function validate(data) {
 
     for (var i = 0; i < st_form_inputs.length; i++) {
         // Implement Listener on Form Submission.
-        if (st_form_inputs[i].type == 'button') {
+        if (st_form_inputs[i].type == 'submit') {
             st_form_inputs[i].addEventListener('click', function (event) {
                 if (!initValidation(data.form)) {
                     event.preventDefault();
