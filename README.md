@@ -57,7 +57,7 @@ It has automated listener to eliminating unnecessary changes on form.
            <input type="email" required name="name">           
            
            // For Password Match Validation.
-           <input type="password" required match="field_name" name="confirm_password">
+           <input type="password" required match="field_name" name="password">
            
 3. Every Input Fields should have a Label with **FOR** attributes.
 
