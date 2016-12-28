@@ -54,7 +54,10 @@ It has automated listener to eliminating unnecessary changes on form.
            <input type="text" required max=16 name="name">
            
            // For E-Mail Validation.
-           <input type="email" required name="name">
+           <input type="email" required name="name">           
+           
+           // For Password Match Validation.
+           <input type="password" required match="field_name" name="confirm_password">
            
 3. Every Input Fields should have a Label with **FOR** attributes.
 
