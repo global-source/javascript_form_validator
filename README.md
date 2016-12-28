@@ -76,6 +76,20 @@ It Will listen the **Submit** button event **Automatically**.
 
 So **No Need** to use ``<input type="submit"..... onClick="validate()" .....>``
 
+**Adjust your CSS with the following,**
+
+       input {
+            display: block !important;
+        }
+
+        span {
+            display: inline !important;
+        }
+
+        label {
+            display: inline !important;
+        }
+
 ###License
 
 MIT License
