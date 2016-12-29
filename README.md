@@ -1,5 +1,4 @@
 ##JavaScript Library For Form Validation
---------------------------------------
 
 #### Why javascriptFormValidator ?
 
