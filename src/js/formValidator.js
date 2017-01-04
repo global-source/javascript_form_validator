@@ -6,8 +6,9 @@ var warning_class = '';
 var form = {
     validate: function (form) {
 
-        var st_form_inputs = document.getElementById(form).getElementsByTagName('input');
-        var st_form_labels = document.getElementById(form).getElementsByTagName('label');
+        var parent_form = document.getElementById(form);
+        var st_form_inputs = parent_form.getElementsByTagName('input');
+        var st_form_labels = parent_form.getElementsByTagName('label');
 
 // ----------------------------------RESET ERRORS----------------------------------------------
         // Remove all Alter Elements.
