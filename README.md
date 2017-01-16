@@ -43,6 +43,8 @@ It has automated listener to eliminating unnecessary changes on form.
            <div id=newUser> </div>      // Not-Preferred [but it supports]
            
 2. Input Fields should specify the type of validation.
+ 
+         //***************For General Input Validation**************************************
 
            // For Simple Require.
            <input type="text" required name="name">
@@ -58,6 +60,22 @@ It has automated listener to eliminating unnecessary changes on form.
            
            // For Password Match Validation.
            <input type="password" required match="field_name" name="password">
+           
+           //***************For Select Validation*******************************************
+           
+           //For Simple Required
+           <select class="" required>
+              <option value=0></option>                  // This Option going to filter.
+              <option value="...">...</option>
+              <option value="...">...</option>
+              <option value="...">...</option>
+           </select>
+           
+           //***************For Textarea Validation*******************************************
+           
+           // For Simple Required
+           <textarea required>.....</textarea>
+           
            
 3. Every Input Fields should have a Label with **FOR** attributes.
 
