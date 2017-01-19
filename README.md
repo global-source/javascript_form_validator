@@ -65,7 +65,7 @@ It has automated listener to eliminating unnecessary changes on form.
            
            //For Simple Required
            <select class="" required>
-              <option value=0></option>                  // This Option going to filter.
+              <option value=0></option>                  // Value '0' is used to represent empty.
               <option value="...">...</option>
               <option value="...">...</option>
               <option value="...">...</option>
