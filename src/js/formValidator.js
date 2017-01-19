@@ -174,7 +174,7 @@ var form = {
 
 
                 // Basic Field Empty Validation.
-                if (field_value == 0) {
+                if (field_value == '-') {
 
                     response = label_core + ' <span style="color: ' + warning_font_color + '; font-weight: 400" class="alert_message ' + warning_class + '">'
                         + 'Choose valid Option </span>';
