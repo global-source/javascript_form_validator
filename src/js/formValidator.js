@@ -7,10 +7,15 @@ var form = {
     // TODO: Simplify the "TextArea" Validation.
     validate: function (form) {
 
+        // For Basic Element Selection.
         var form_el = document.getElementById(form);
+        // For Normal Textboxes.
         var st_form_inputs = form_el.getElementsByTagName('input');
+        // For Textareas.
         var st_form_textArea = form_el.getElementsByTagName('textarea');
+        // For Select or Drop Down Box.
         var st_form_select = form_el.getElementsByTagName('select');
+        // For Labels.
         var st_form_labels = form_el.getElementsByTagName('label');
 
         console.log(st_form_inputs);
