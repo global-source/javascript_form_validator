@@ -1,5 +1,4 @@
 //---------------------Form New Ticket---------------------------
-
 var warning_font_color = '#761c19';
 var warning_class = '';
 var form = {
@@ -21,9 +20,9 @@ var form = {
             elements[0].parentNode.removeChild(elements[0]);
         }
 // **********************************VALIDATE AND POPULATE******************************************
-        
+
 // ----------------------------------GENERAL VALIDATION [Input]-------------------------------------
-        
+
         // Start Searching Elements for Validation.
         for (var i = 0; i < st_form_inputs.length; i++) {
             if (st_form_inputs[i].required == true) {
@@ -288,14 +287,4 @@ function validate(data) {
 // Trigger the Validation process.
 function initValidation(activeForm) {
     return form.validate(activeForm);
-}
-
-
-var data = {
-    form: 'new_ticket_form',
-    warning_color: 'aa0000',
-    new_class: 'test'
 };
-
-// Default Form Init.
-validate(data);

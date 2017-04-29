@@ -1,0 +1,30 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=0.9">
+</head>
+<body>
+<div>
+    <form name="demo_validation" id="demoValidation" novalidate>
+        <div>
+            <label for="name">Name :</label>
+            <input type="text" name="name">
+        </div>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+<script src="./../js/validatorNew.js"></script>
+<script>
+    (function () {
+        'use strict';
+
+        jsValidator.init({
+            form: 'demoValidation'
+        });
+
+    }());
+</script>
+</body>
+</html>
