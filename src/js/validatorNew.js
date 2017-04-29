@@ -9,11 +9,13 @@ var jsValidator = {
     jsForm: false,
     jsSettings: false,
     jsFormError: false,
-
+    // Initiating the Validator.
     init: function (option) {
         jsLogger.table(option);
 
+        // Update "jsForm" to Global Object.
         this.jsForm = jsForm.init(option);
+        // Update "jsSettings" to Global Object.
         this.jsSettings = jsSettings.init(option);
     },
     rules: function () {
@@ -21,6 +23,9 @@ var jsValidator = {
     }
 };
 
+/**
+ * To Perform all Form based Operations.
+ */
 var jsForm = {
     form: false,
     input: false,
@@ -28,6 +33,7 @@ var jsForm = {
     textArea: false,
     label: false,
 
+    // To Initiating the "jsForm".
     init: function (option) {
         jsLogger.out('Form', option.form);
         // To Register Form.
@@ -37,21 +43,29 @@ var jsForm = {
         return this;
     },
 
+    // To Register Active Form to Global Object.
     registerForm: function (form) {
+        // validate and Update Log.
         if (typeof form == 'undefined') jsLogger.out('Form Identification', 'Form Identification is Missing !');
 
+        // Fetch Form element from Document.
         this.form = document.getElementById(form);
     },
 
+    // To Parse all Relative Form components.
     parseForm: function (form) {
+        // "Input" elements like "text, date, time..."
         this.input = form.getElementsByTagName('input');
+        // "Select" element.
         this.select = form.getElementsByTagName('select');
+        // "TextArea" element.
         this.textArea = form.getElementsByTagName('textarea');
+        // "Label" element.
         this.label = form.getElementsByTagName('label');
     },
     log: function () {
         alert(this.form);
-        jsLogger.out('Form 234', this.form);
+        jsLogger.out('Form', this.form);
         jsLogger.out('input', this.input);
         jsLogger.out('select', this.select);
         jsLogger.out('textarea', this.textArea);
@@ -59,12 +73,16 @@ var jsForm = {
     }
 };
 
+/**
+ * To Update overall JsValidator Settings.
+ */
 var jsSettings = {
 
     errorColor: false,
     followedElement: false,
     errorTemplate: false,
 
+    // To Initiate the Configurations.
     init: function (option) {
         //if (typeof option.errorColor !== 'undefined') option.errorColor = false;
         this.errorColor = option.errorColor;
@@ -79,6 +97,9 @@ var jsSettings = {
     }
 };
 
+/**
+ * To Manage JsValidator Errors.
+ */
 var jsFormError = {
     errorHit: false,
     init: function () {
