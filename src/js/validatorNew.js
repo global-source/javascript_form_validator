@@ -1,9 +1,6 @@
 /**
  * To Perform Effective Validations with HTML Form.
  */
-
-'use strict';
-
 var jsValidator = {
     formData: false,
     jsForm: false,
@@ -13,13 +10,40 @@ var jsValidator = {
     init: function (option) {
         jsLogger.table(option);
 
-        // Update "jsForm" to Global Object.
-        this.jsForm = jsForm.init(option);
         // Update "jsSettings" to Global Object.
         this.jsSettings = jsSettings.init(option);
-    },
-    rules: function () {
+        // Update "jsForm" to Global Object.
+        this.jsForm = jsForm.init(option);
 
+        return this;
+    },
+    check: function () {
+
+    }
+};
+
+/**
+ * To Update overall JsValidator Settings.
+ */
+var jsSettings = {
+
+    errorColor: false,
+    followedElement: false,
+    errorTemplate: false,
+    phonePattern: false,
+
+    // To Initiate the Configurations.
+    init: function (option) {
+        //if (typeof option.errorColor !== 'undefined') option.errorColor = false;
+        this.errorColor = option.errorColor;
+        this.followedElement = option.followedElement;
+        this.errorTemplate = option.errorTemplate;
+        return this;
+    },
+    log: function () {
+        jsLogger.out(this.errorColor);
+        jsLogger.out(this.followedElement);
+        jsLogger.out(this.errorTemplate);
     }
 };
 
@@ -40,6 +64,9 @@ var jsForm = {
         this.registerForm(option.form);
         // To Parsing the Form.
         this.parseForm(this.form);
+        // To Filter Required Elements.
+        this.required();
+
         return this;
     },
 
@@ -63,37 +90,63 @@ var jsForm = {
         // "Label" element.
         this.label = form.getElementsByTagName('label');
     },
+    required: function () {
+        this.input = jsField.required(this.input);
+        this.select = jsField.required(this.select);
+        this.textArea = jsField.required(this.textArea);
+        this.log();
+    },
     log: function () {
-        alert(this.form);
         jsLogger.out('Form', this.form);
         jsLogger.out('input', this.input);
         jsLogger.out('select', this.select);
         jsLogger.out('textarea', this.textArea);
-        jsLogger.out('labels', this.labels);
+        jsLogger.out('labels', this.label);
     }
 };
 
 /**
- * To Update overall JsValidator Settings.
+ * Perform Operations in Field level.
  */
-var jsSettings = {
+var jsField = {
+    required: function (field) {
+        var requiredFieldsList = [];
+        for (var i = 0; i < field.length; i++) {
+            if (field[i].required == true) {
+                requiredFieldsList.push(field[i]);
+            }
+        }
+        return requiredFieldsList;
+    }
+};
 
-    errorColor: false,
-    followedElement: false,
-    errorTemplate: false,
+/**
+ * List of Validation Rules.
+ */
+var ruleSets = {
+    // To Check, whether the element have value or not.
+    isSet: function (elem) {
 
-    // To Initiate the Configurations.
-    init: function (option) {
-        //if (typeof option.errorColor !== 'undefined') option.errorColor = false;
-        this.errorColor = option.errorColor;
-        this.followedElement = option.followedElement;
-        this.errorTemplate = option.errorTemplate;
-        return this;
     },
-    log: function () {
-        jsLogger.out(this.errorColor);
-        jsLogger.out(this.followedElement);
-        jsLogger.out(this.errorTemplate);
+    // To Check Element with Min Condition.
+    min: function (elem, val) {
+
+    },
+    // To Check Element with Max Condition.
+    max: function (elem, val) {
+
+    },
+    // To Check Element Email is Valid or Not.
+    email: function (elem) {
+
+    },
+    // To Check Element Phone Value is Valid or Not.
+    phone: function (elem, pattern) {
+
+    },
+    // To Compare two Elements Values.
+    compare: function (elem1, elem2) {
+
     }
 };
 
