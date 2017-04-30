@@ -23,6 +23,7 @@
 /*
  * For Managing overall Validation flow.
  */
+
 class jsValidator {
 
     constructor() {
@@ -41,19 +42,18 @@ class jsValidator {
         // Overall validation status.
         this.validationPass = false;
         // Common Logger Instance.
-        this.jsLogger = false;
         this.jsFilter = false;
         this.jsRuleSet = false;
     }
 
     // Initiating the Validator.
     init(option) {
+        var status;
 
-        this.jsLogger = new jsLogger();
         this.jsFilter = new jsFilter();
         this.jsRuleSet = new jsRuleSets();
 
-        this.jsLogger.table(option);
+        jsLogger.table(option);
 
         // Updating the filter flag to global.
         const onlyFilter = option.onlyFilter;
@@ -64,7 +64,7 @@ class jsValidator {
         // Initiate form error setup.
         this.jsFormError = new jsFormError().init();
         // To check the form elements.
-        this.check();
+        status = this.check();
         // To register the listener.
         this.submitListener(this.jsForm.formCore, this);
         // Send back "this".
@@ -77,10 +77,9 @@ class jsValidator {
         if (false === this.onlyFilter) {
             // Initiate listener for form submission.
             document.querySelector("#" + formID).addEventListener("submit", function (e) {
-                // To start form validations.
-                obj.check();
-                // Check validation status.
-                if (false === obj.validationPass) {
+
+                // To start form validations and authorize.
+                if (false === obj.check()) {
                     //stop form from submitting, if validation fails
                     e.preventDefault();
                 }
@@ -94,6 +93,8 @@ class jsValidator {
         var jsFormObj = this.jsForm;
         // Loading JS error list.
         var errorList = this.formErrorList;
+        // Overall validation status.
+        var status = false;
 
         // Looping the "input" elements for validation and filter implementation.
         errorList.input = this.elemLoop('input', jsFormObj.input);
@@ -102,7 +103,7 @@ class jsValidator {
         // Looping the "select" elements fro validation filter implementation.
         errorList.select = this.elemLoop('select', jsFormObj.select);
 
-        this.jsLogger.out('Error List', this.formErrorList);
+        jsLogger.out('Error List', this.formErrorList);
 
         // To Update global Validation Status.
         // If, Input elements have no errors.
@@ -113,11 +114,11 @@ class jsValidator {
                 if (errorList.select.length === 0) {
                     alert('Form Valid !');
                     // If validation pass, then update "validationPass" object.
-                    this.validationPass = true;
+                    status = true;
                 }
             }
         }
-
+        return status;
     };
 
     // To looping all elements for actions.
@@ -210,7 +211,7 @@ class jsFilter {
                 break;
             // Allow only alpha Numeric [a-zA-Z0-9] not special characters.
             case 'string':
-                element.addEventListener("keypress", current.isAlphaNumeric, false);
+                element.addEventListener("keypress", current.constructor.isAlphaNumeric, false);
                 break;
             // Allow based on the pattern given.
             default:
@@ -232,10 +233,12 @@ class jsFilter {
         element.addEventListener("keypress", this.constructor.isInLimit, false);
     };
 
+    //TODO: fix live entry issue.
     // Restrict element with it's limit.
     static isInLimit(event) {
+        var value = event.target.value;
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
 
         // Getting object from element.
         var min = event.target.min;
@@ -243,22 +246,26 @@ class jsFilter {
 
         // Default values for Min and Max.
         if (!min) min = 0;
-        if (!max) max = 9;
+        if (!max) max = 54;
 
         // Forming pattern for Restriction.
-        var regex = new RegExp('^[' + min + '-' + max + ' ]+$');
+        var regex = new RegExp('^[0-9]+$');
         // Validation with Code.
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
 
-        jsLogger.out('Alpha', regex.test(key));
+        jsLogger.out('Limit', regex.test(key) + ' | min |' + min + ' | max | ' + max);
+        jsLogger.out('Regex', regex.test(key));
         // Return status of the Action.
-        if (false === regex.test(key)) event.preventDefault();
+        if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
+            event.preventDefault();
+        }
+        event.target.value = event.target.value.substring(0, event.target.value.length - 1);
     };
 
     // Only allow alpha([a-zA-Z]).
     static isAlpha(event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         // Set default values for special characters.
@@ -269,15 +276,15 @@ class jsFilter {
         var regex = new RegExp('^[a-zA-Z' + allow_special + ']+$');
         // Validation with Code.
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        //jsLogger.out('Alpha', regex.test(key));
+        jsLogger.out('Alpha', regex.test(key));
         // Return status of the Action.
         if (false === regex.test(key)) event.preventDefault();
     };
 
     // Only allow alpha([a-zA-Z0-9]).
-    isAlphaNumeric(event) {
+    static isAlphaNumeric(event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         // Set default values for special characters.
@@ -296,7 +303,7 @@ class jsFilter {
     // Only allow by pattern(ex. ^[a-zA-Z0-3@#$!_.]+$).
     static isPatternValid(event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Getting special characters list.
         var pattern = event.target.getAttribute('data-allow');
         // Validate with special formed pattern.
@@ -311,7 +318,7 @@ class jsFilter {
     // Check is numeric or not.
     static isNumberKey(event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Validation with Code.
         var charCode = (event.which) ? event.which : event.keyCode;
         if (charCode === 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -368,13 +375,11 @@ class jsForm {
         this.textArea = false;
         // Form element's labels.
         this.label = false;
-
-        this.jsLogger = new jsLogger();
     }
 
     // To Initiating the "jsForm".
     init(option) {
-        this.jsLogger.out('Form', option.form);
+        jsLogger.out('Form', option.form);
         // To Register Form.
         this.registerForm(option.form);
         // To Parsing the Form.
@@ -419,11 +424,11 @@ class jsForm {
     };
 
     log() {
-        this.jsLogger.out('Form', this.form);
-        this.jsLogger.out('input', this.input);
-        this.jsLogger.out('select', this.select);
-        this.jsLogger.out('textarea', this.textArea);
-        this.jsLogger.out('labels', this.label);
+        jsLogger.out('Form', this.form);
+        jsLogger.out('input', this.input);
+        jsLogger.out('select', this.select);
+        jsLogger.out('textarea', this.textArea);
+        jsLogger.out('labels', this.label);
     };
 }
 
@@ -552,33 +557,29 @@ class jsFormError {
     }
 }
 
-
 /*
  * For manage overall logging with validator.
  *
  */
-class jsLogger {
-    constructor() {
-
-    }
+var jsLogger = {
 
     // Simple log with "heading" and "message".
-    out(heading, message) {
+    out: function (heading, message) {
         console.log('======' + heading + '======');
         console.log(message);
         console.log('------------------------');
-    };
+    },
 
     // For bulk data logging.
-    bulk(data) {
+    bulk: function (data) {
         console.log(data);
-    };
+    },
 
     // For log data with table.
-    table(data) {
+    table: function (data) {
         console.table(data);
-    };
-}
+    }
+};
 
 /*
  * To check the keyboard action is window action or not.
@@ -591,7 +592,7 @@ function isWindowAction(event) {
 
     // Check with list of code and ignore holding.
     // Tab, Space, Home, End, Up, Down, Left, Right...
-    if (key === 9 || key === 32 || key === 13 || key === 8 || key >= 35 || key <= 40) { //TAB was pressed
+    if (key === 9 || key === 32 || key === 13 || key === 8 || (key >= 35 && key <= 40)) { //TAB was pressed
         return true;
     }
     // If not in list then check return with corresponding data.
@@ -600,25 +601,4 @@ function isWindowAction(event) {
     if (key.length == 0) return true;
     // Finally return "false" for general keys.
     return false;
-}
-
-function isAlpha(event) {
-    // To check is this action is from "windows" action or not.
-    console.log('Is Window');
-    //if (false !== isWindowAction(event)) return true;
-    console.log('No Window');
-    // Getting special characters list.
-    //var allow_special = event.target.getAttribute('data-allowSpecial');
-    // Set default values for special characters.
-    //if (!allow_special && allow_special == null) allow_special = '';
-    // Format to string.
-    //allow_special = allow_special.toString();
-    // Validate with special formed pattern.
-    var regex = new RegExp('^[a-zA-Z]+$');
-    // Validation with Code.
-    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-    //jsLogger.out('Alpha', regex.test(key));
-    console.log(regex.test(key));
-    // Return status of the Action.
-    if (false === regex.test(key)) event.preventDefault();
 }

@@ -134,7 +134,7 @@ var jsValidator = {
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
     },
-    // To start valiation process.
+    // To start validation process.
     checkValidation: function (activeElem, log) {
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem))log.push({'empty': activeElem});
@@ -171,24 +171,23 @@ var jsFilter = {
     string: function (element) {
         // Getting "data" attribute for actions.
         var type = element.getAttribute('data-allow');
+        var current = this;
 
         // Switching actions.
         switch (type) {
             // Allow only alphabets [a-zA-Z] not [0-9] and special characters.
             case 'onlyAlpha':
-                element.addEventListener("keypress", this.isAlpha, false);
+                element.addEventListener("keypress", current.isAlpha, false);
                 break;
             // Allow only alpha Numeric [a-zA-Z0-9] not special characters.
             case 'string':
-                element.addEventListener("keypress", this.isAlphaNumeric, false);
+                element.addEventListener("keypress", current.isAlphaNumeric, false);
                 break;
             // Allow based on the pattern given.
             default:
-                element.addEventListener("keypress", this.isPatternValid, false);
+                element.addEventListener("keypress", current.isPatternValid, false);
                 break;
         }
-
-
     },
     // Email elements filter listener.
     email: function (element) {
@@ -200,8 +199,9 @@ var jsFilter = {
     },
     // Restrict element with it's limit.
     isInLimit: function (event) {
+        var value = event.target.value;
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
 
         // Getting object from element.
         var min = event.target.min;
@@ -209,21 +209,25 @@ var jsFilter = {
 
         // Default values for Min and Max.
         if (!min) min = 0;
-        if (!max) max = 9;
+        if (!max) max = 54;
 
         // Forming pattern for Restriction.
-        var regex = new RegExp('^[' + min + '-' + max + ' ]+$');
+        var regex = new RegExp('^[0-9]+$');
         // Validation with Code.
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
 
-        jsLogger.out('Alpha', regex.test(key));
+        jsLogger.out('Limit', regex.test(key) + ' | min |' + min + ' | max | ' + max);
+        jsLogger.out('Regex', regex.test(key));
         // Return status of the Action.
-        if (false === regex.test(key)) event.preventDefault();
+        if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
+            event.preventDefault();
+        }
+        event.target.value = event.target.value.substring(0, event.target.value.length - 1);
     },
     // Only allow alpha([a-zA-Z]).
     isAlpha: function (event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        //if (true === isWindowAction(event)) return true;
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         // Set default values for special characters.
@@ -241,7 +245,7 @@ var jsFilter = {
     // Only allow alpha([a-zA-Z0-9]).
     isAlphaNumeric: function (event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         // Set default values for special characters.
@@ -259,7 +263,7 @@ var jsFilter = {
     // Only allow by pattern(ex. ^[a-zA-Z0-3@#$!_.]+$).
     isPatternValid: function (event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Getting special characters list.
         var pattern = event.target.getAttribute('data-allow');
         // Validate with special formed pattern.
@@ -273,7 +277,7 @@ var jsFilter = {
     // Check is numeric or not.
     isNumberKey: function (event) {
         // To check is this action is from "windows" action or not.
-        if (false !== isWindowAction(event)) return true;
+        if (true === isWindowAction(event)) return true;
         // Validation with Code.
         var charCode = (event.which) ? event.which : event.keyCode;
         if (charCode === 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -518,13 +522,13 @@ function isWindowAction(event) {
 
     // Check with list of code and ignore holding.
     // Tab, Space, Home, End, Up, Down, Left, Right...
-    if (key === 9 || key === 32 || key === 13 || key === 8 || key >= 35 || key <= 40) { //TAB was pressed
+    if (key === 9 || key === 32 || key === 13 || key === 8 || (key >= 35 && key <= 40)) { //TAB was pressed
         return true;
     }
     // If not in list then check return with corresponding data.
-    key = String.fromCharCode(key);
+    //key = String.fromCharCode(key);
     // Return also if length is 0.
-    if (key.length == 0) return true;
+    //if (key.length == 0) return true;
     // Finally return "false" for general keys.
     return false;
 }
