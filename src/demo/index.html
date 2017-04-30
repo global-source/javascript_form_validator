@@ -9,10 +9,14 @@
     <form name="demo_validation" id="demoValidation" novalidate>
         <div>
             <label for="name">Name :</label>
-            <input type="text" name="name" required>
-            <input type="text" name="name">
-            <select required></select>
-            <select required></select>
+            <input type="number" value="131231" name="name" required>
+            <input type="number" pattern="\d+" name="name" id="number" required>
+            <select required>
+                <option value="123">123</option>
+            </select>
+            <select required>
+                <option value="456">456</option>
+            </select>
             <textarea required></textarea>
         </div>
         <input type="submit" value="Save">
@@ -21,11 +25,13 @@
 
 <script src="./../js/validatorNew.js"></script>
 <script>
+
     (function () {
         'use strict';
 
-        jsValidator.init({
-            form: 'demoValidation'
+        var validator = jsValidator.init({
+            form: 'demoValidation',
+            onlyFilter: false
         });
 
     }());

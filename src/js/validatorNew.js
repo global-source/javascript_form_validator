@@ -3,22 +3,113 @@
  */
 var jsValidator = {
     formData: false,
+    onlyFilter: false,
     jsForm: false,
     jsSettings: false,
     jsFormError: false,
+    formErrorList: {},
+    validationPass: false,
     // Initiating the Validator.
     init: function (option) {
         jsLogger.table(option);
+        this.onlyFilter = option.onlyFilter;
 
         // Update "jsSettings" to Global Object.
         this.jsSettings = jsSettings.init(option);
         // Update "jsForm" to Global Object.
         this.jsForm = jsForm.init(option);
+        // Initiate Form Error Setup.
+        this.jsFormError = jsFormError.init();
+        this.check();
+        // To Register the Listener.
+        this.submitListener(this.jsForm.formCore, this);
 
         return this;
     },
+    submitListener: function (formID, obj) {
+        // To Off Submit Listener.
+        if (false == this.onlyFilter) {
+            //jsForm.form.addEventListener('submit', function (event) {
+            document.querySelector("#" + formID).addEventListener("submit", function (e) {
+                obj.check();
+                if (false == obj.validationPass) {
+                    e.preventDefault();    //stop form from submitting
+                }
+            });
+        }
+    },
     check: function () {
+        var jsFormObj = this.jsForm;
+        var errorList = this.formErrorList;
 
+        errorList.input = this.elemLoop('input', jsFormObj.input);
+        errorList.textArea = this.elemLoop('textArea', jsFormObj.textArea);
+        errorList.select = this.elemLoop('select', jsFormObj.select);
+
+        jsLogger.out('Error List', this.formErrorList);
+
+        // To Update global Validation Status.
+        if (errorList.input.length == 0) {
+            if (errorList.textArea.length == 0) {
+                if (errorList.select.length == 0) {
+                    alert(231);
+                    this.validationPass = true;
+                }
+            }
+        }
+
+    },
+    elemLoop: function (index, formElem) {
+        var log = [];
+        for (var i in formElem) {
+            var activeElem = formElem[i];
+            //jsLogger.out(index, activeElem.value);
+            log = this.checkValidation(activeElem, log)
+            this.applyFilters(activeElem);
+        }
+        return log;
+    },
+    applyFilters: function (activeElem) {
+        if (activeElem.type == 'number') jsFilter.number(activeElem);
+    },
+    checkValidation: function (activeElem, log) {
+        // To Generally checks, the field is empty or not.
+        if (!jsRuleSets.isSet(activeElem)) log.push({'empty': activeElem});
+        // To Check the Value is less than min or not.
+        if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({'min': activeElem});
+        // To Check the Value is grater than max or not.
+        if (activeElem.max) if (!jsRuleSets.max(activeElem)) log.push({'max': activeElem});
+        // To Check the Entered E-mail is Valid or Not.
+        if (activeElem.type == "email") if (!jsRuleSets.email(activeElem)) log.push({'email': activeElem});
+        // To Compare the Password is Same or Not with Re-Password.
+        // TODO: Implement Simplified Comparison.
+        if (activeElem.type == "password")if (!jsRuleSets.compare(activeElem)) log.push({'password': activeElem});
+
+        return log;
+    }
+};
+
+var jsFilter = {
+    number: function (element) {
+        var txtChar = element;
+        txtChar.addEventListener("keypress", this.isNumberKey, false);
+    },
+    string: function () {
+
+    },
+    alphaNumeric: function () {
+
+    },
+    alphaNumericWith: function () {
+
+    },
+    isNumberKey: function (evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode == 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
+            evt.preventDefault();
+            return false;
+        }
+        return true;
     }
 };
 
@@ -52,6 +143,7 @@ var jsSettings = {
  */
 var jsForm = {
     form: false,
+    formCore: false,
     input: false,
     select: false,
     textArea: false,
@@ -77,6 +169,8 @@ var jsForm = {
 
         // Fetch Form element from Document.
         this.form = document.getElementById(form);
+        // Update Direct Form ID.
+        this.formCore = form;
     },
 
     // To Parse all Relative Form components.
@@ -94,7 +188,7 @@ var jsForm = {
         this.input = jsField.required(this.input);
         this.select = jsField.required(this.select);
         this.textArea = jsField.required(this.textArea);
-        this.log();
+        //this.log();
     },
     log: function () {
         jsLogger.out('Form', this.form);
@@ -123,30 +217,51 @@ var jsField = {
 /**
  * List of Validation Rules.
  */
-var ruleSets = {
+var jsRuleSets = {
     // To Check, whether the element have value or not.
     isSet: function (elem) {
-
+        var status = true;
+        if (elem.length == 0 || elem.value == '') status = false;
+        return status;
     },
     // To Check Element with Min Condition.
-    min: function (elem, val) {
-
+    min: function (elem) {
+        var status = true;
+        if (elem.length < elem.min && elem.length != 0) status = false;
+        return status;
     },
     // To Check Element with Max Condition.
-    max: function (elem, val) {
-
+    max: function (elem) {
+        var status = true;
+        if (elem.value > elem.max) status = false;
+        return status;
     },
     // To Check Element Email is Valid or Not.
     email: function (elem) {
-
+        var status = true;
+        var email = elem.value;
+        // To Validate Email.
+        // Convert to Native String Format.
+        email = email.toString();
+        // To Check it as String or Not.
+        if (!email) status = false;
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+            // Valid Email.
+            status = true;
+        }
+        return status;
     },
     // To Check Element Phone Value is Valid or Not.
     phone: function (elem, pattern) {
-
+        var status = true;
+        if (elem.value == '') status = false;
+        return status;
     },
     // To Compare two Elements Values.
     compare: function (elem1, elem2) {
-
+        var status = true;
+        if ((elem1.value !== elem2.value) && elem1.length !== elem2.length) status = false;
+        return status;
     }
 };
 
@@ -155,19 +270,28 @@ var ruleSets = {
  */
 var jsFormError = {
     errorHit: false,
+    errorCss: false,
+    successCss: false,
     init: function () {
         this.errorHit = false;
+        this.errorCss = 'border-color: red;border-radius: 5px;color: red;';
+        this.successCss = 'border-color: green;border-radius: 5px;color: green;';
+
     },
     log: function () {
         jsLogger.out('Form Error Hit', this.errorHit);
+    },
+    style: function (css) {
+        this.errorCss = css.error;
+        this.successCss = css.success;
     }
 };
 
 var jsLogger = {
     out: function (heading, message) {
-        console.log('============' + heading + '============');
+        console.log('======' + heading + '======');
         console.log(message);
-        console.log('========================================');
+        console.log('------------------------');
     },
     bulk: function (data) {
         console.log(data);
