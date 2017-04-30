@@ -9,8 +9,9 @@
     <form name="demo_validation" id="demoValidation" novalidate>
         <div>
             <label for="name">Name :</label>
-            <input type="number" value="131231" name="name" required>
-            <input type="number" pattern="\d+" name="name" id="number" required>
+            <input type="text" data-allow="onlyAlpha" value="" name="name" required>
+            <input type="text" data-allow="string" value="" name="name" required>
+            <input type="number" name="name" id="number" required>
             <select required>
                 <option value="123">123</option>
             </select>

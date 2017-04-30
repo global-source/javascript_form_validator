@@ -1,6 +1,25 @@
-/**
- * To Perform Effective Validations with HTML Form.
+/*!
+ * JavaScript Validator Library v0.9
+ * To perform effective validation and filter with form elements.
+ *
+ * Author : Shankar Thiyagaraajan
+ * Email  : shankarthiyagaraajan@gmail.com
+ * Github : https://github.com/shankarThiyagaraajan
+ *
+ * Source
+ * https://github.com/global-source/javascript_form_validator
+ *
+ * Site
+ * https://global-source.github.io/javascript_form_validator/
+ *
+ * Copyright 2017
+ *
+ * Released under the MIT license
+ * https://github.com/global-source/javascript_form_validator/blob/master/LICENSE
+ *
+ * Date: 2017-05-01
  */
+
 var jsValidator = {
     formData: false,
     onlyFilter: false,
@@ -28,11 +47,11 @@ var jsValidator = {
     },
     submitListener: function (formID, obj) {
         // To Off Submit Listener.
-        if (false == this.onlyFilter) {
+        if (false === this.onlyFilter) {
             //jsForm.form.addEventListener('submit', function (event) {
             document.querySelector("#" + formID).addEventListener("submit", function (e) {
                 obj.check();
-                if (false == obj.validationPass) {
+                if (false === obj.validationPass) {
                     e.preventDefault();    //stop form from submitting
                 }
             });
@@ -49,9 +68,9 @@ var jsValidator = {
         jsLogger.out('Error List', this.formErrorList);
 
         // To Update global Validation Status.
-        if (errorList.input.length == 0) {
-            if (errorList.textArea.length == 0) {
-                if (errorList.select.length == 0) {
+        if (errorList.input.length === 0) {
+            if (errorList.textArea.length === 0) {
+                if (errorList.select.length === 0) {
                     alert(231);
                     this.validationPass = true;
                 }
@@ -64,13 +83,15 @@ var jsValidator = {
         for (var i in formElem) {
             var activeElem = formElem[i];
             //jsLogger.out(index, activeElem.value);
-            log = this.checkValidation(activeElem, log)
+            log = this.checkValidation(activeElem, log);
             this.applyFilters(activeElem);
         }
         return log;
     },
     applyFilters: function (activeElem) {
         if (activeElem.type == 'number') jsFilter.number(activeElem);
+        if (activeElem.type == 'email') jsFilter.email(activeElem);
+        if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
     },
     checkValidation: function (activeElem, log) {
         // To Generally checks, the field is empty or not.
@@ -91,11 +112,24 @@ var jsValidator = {
 
 var jsFilter = {
     number: function (element) {
-        var txtChar = element;
-        txtChar.addEventListener("keypress", this.isNumberKey, false);
+        element.addEventListener("keypress", this.isNumberKey, false);
     },
-    string: function () {
+    string: function (element) {
+        var type = element.getAttribute('data-allow');
 
+        switch (type) {
+            case 'onlyAlpha':
+                element.addEventListener("keypress", this.isAlpha, true);
+                break;
+            case 'string':
+                element.addEventListener("keypress", this.isAlphaNumeric, true);
+                break;
+        }
+
+
+    },
+    email: function (element) {
+        element.addEventListener("keypress", jsRuleSets.email, false);
     },
     alphaNumeric: function () {
 
@@ -103,9 +137,27 @@ var jsFilter = {
     alphaNumericWith: function () {
 
     },
+    max: function () {
+
+    },
+    min: function () {
+
+    },
+    isAlpha: function (event) {
+        var regex = new RegExp("^[a-zA-Z ]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        jsLogger.out('Alpha', regex.test(key));
+        if (false === regex.test(key)) event.preventDefault();
+    },
+    isAlphaNumeric: function (event) {
+        var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        jsLogger.out('Alpha', regex.test(key));
+        if (false === regex.test(key)) event.preventDefault();
+    },
     isNumberKey: function (evt) {
         var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if (charCode == 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
+        if (charCode === 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
             evt.preventDefault();
             return false;
         }
@@ -206,7 +258,7 @@ var jsField = {
     required: function (field) {
         var requiredFieldsList = [];
         for (var i = 0; i < field.length; i++) {
-            if (field[i].required == true) {
+            if (field[i].required === true) {
                 requiredFieldsList.push(field[i]);
             }
         }
@@ -221,13 +273,13 @@ var jsRuleSets = {
     // To Check, whether the element have value or not.
     isSet: function (elem) {
         var status = true;
-        if (elem.length == 0 || elem.value == '') status = false;
+        if (elem.length === 0 || elem.value === '') status = false;
         return status;
     },
     // To Check Element with Min Condition.
     min: function (elem) {
         var status = true;
-        if (elem.length < elem.min && elem.length != 0) status = false;
+        if (elem.length < elem.min && elem.length !== 0) status = false;
         return status;
     },
     // To Check Element with Max Condition.
@@ -254,7 +306,7 @@ var jsRuleSets = {
     // To Check Element Phone Value is Valid or Not.
     phone: function (elem, pattern) {
         var status = true;
-        if (elem.value == '') status = false;
+        if (elem.value === '') status = false;
         return status;
     },
     // To Compare two Elements Values.
