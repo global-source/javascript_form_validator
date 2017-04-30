@@ -120,13 +120,13 @@ var jsFilter = {
 
         switch (type) {
             case 'onlyAlpha':
-                element.addEventListener("keypress", this.isAlpha, true);
+                element.addEventListener("keypress", this.isAlpha, false);
                 break;
             case 'string':
-                element.addEventListener("keypress", this.isAlphaNumeric, true);
+                element.addEventListener("keypress", this.isAlphaNumeric, false);
                 break;
             default:
-                element.addEventListener("keypress", this.isPatternValid, true);
+                element.addEventListener("keypress", this.isPatternValid, false);
                 break;
         }
 
@@ -142,6 +142,9 @@ var jsFilter = {
 
     },
     isInLimit: function (event) {
+
+        if (false !== isWindowAction(event)) return true;
+
         var min = event.target.min;
         var max = event.target.max;
 
@@ -154,6 +157,9 @@ var jsFilter = {
         if (false === regex.test(key)) event.preventDefault();
     },
     isAlpha: function (event) {
+
+        if (false !== isWindowAction(event)) return true;
+
         var allow_special = event.target.getAttribute('data-allowSpecial');
 
         if (!allow_special && allow_special == null) allow_special = '';
@@ -163,9 +169,13 @@ var jsFilter = {
         var regex = new RegExp('^[a-zA-Z' + allow_special + ']+$');
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         jsLogger.out('Alpha', regex.test(key));
+
         if (false === regex.test(key)) event.preventDefault();
     },
     isAlphaNumeric: function (event) {
+
+        if (false !== isWindowAction(event)) return true;
+
         var allow_special = event.target.getAttribute('data-allowSpecial');
 
         if (!allow_special && allow_special == null) allow_special = '';
@@ -174,20 +184,28 @@ var jsFilter = {
 
         var regex = new RegExp('^[a-zA-Z0-9' + allow_special + ']+$');
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        jsLogger.out('Alpha', regex.test(key));
+        jsLogger.out('String', regex.test(key));
+
         if (false === regex.test(key)) event.preventDefault();
     },
     isPatternValid: function (event) {
+
+        if (false !== isWindowAction(event)) return true;
+
         var pattern = event.target.getAttribute('data-allow');
         var regex = new RegExp(pattern);
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         jsLogger.out('Alpha', regex.test(key));
+
         if (false === regex.test(key)) event.preventDefault();
     },
-    isNumberKey: function (evt) {
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
+    isNumberKey: function (event) {
+
+        if (false !== isWindowAction(event)) return true;
+
+        var charCode = (event.which) ? event.which : event.keyCode;
         if (charCode === 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
-            evt.preventDefault();
+            event.preventDefault();
             return false;
         }
         return true;
@@ -381,3 +399,15 @@ var jsLogger = {
         console.table(data);
     }
 };
+
+function isWindowAction(event) {
+    var theEvent = event || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    if (key === 9) { //TAB was pressed
+        return true;
+    }
+
+    key = String.fromCharCode(key);
+    if (key.length == 0) return true;
+    return false;
+}
