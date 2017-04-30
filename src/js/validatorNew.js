@@ -71,7 +71,7 @@ var jsValidator = {
         if (errorList.input.length === 0) {
             if (errorList.textArea.length === 0) {
                 if (errorList.select.length === 0) {
-                    alert(231);
+                    alert('Form Valid !');
                     this.validationPass = true;
                 }
             }
@@ -91,6 +91,7 @@ var jsValidator = {
     applyFilters: function (activeElem) {
         if (activeElem.type == 'number') jsFilter.number(activeElem);
         if (activeElem.type == 'email') jsFilter.email(activeElem);
+        if (activeElem.min || activeElem.max) jsFilter.limit(activeElem);
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
     },
     checkValidation: function (activeElem, log) {
@@ -124,6 +125,9 @@ var jsFilter = {
             case 'string':
                 element.addEventListener("keypress", this.isAlphaNumeric, true);
                 break;
+            default:
+                element.addEventListener("keypress", this.isPatternValid, true);
+                break;
         }
 
 
@@ -131,26 +135,51 @@ var jsFilter = {
     email: function (element) {
         element.addEventListener("keypress", jsRuleSets.email, false);
     },
-    alphaNumeric: function () {
-
+    limit: function (element) {
+        element.addEventListener("keypress", this.isInLimit, false);
     },
     alphaNumericWith: function () {
 
     },
-    max: function () {
+    isInLimit: function (event) {
+        var min = event.target.min;
+        var max = event.target.max;
 
-    },
-    min: function () {
+        if (!min) min = 0;
+        if (!max) max = 9;
 
+        var regex = new RegExp('^[' + min + '-' + max + ' ]+$');
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        jsLogger.out('Alpha', regex.test(key));
+        if (false === regex.test(key)) event.preventDefault();
     },
     isAlpha: function (event) {
-        var regex = new RegExp("^[a-zA-Z ]+$");
+        var allow_special = event.target.getAttribute('data-allowSpecial');
+
+        if (!allow_special && allow_special == null) allow_special = '';
+
+        allow_special = allow_special.toString();
+
+        var regex = new RegExp('^[a-zA-Z' + allow_special + ']+$');
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         jsLogger.out('Alpha', regex.test(key));
         if (false === regex.test(key)) event.preventDefault();
     },
     isAlphaNumeric: function (event) {
-        var regex = new RegExp("^[a-zA-Z0-9 ]+$");
+        var allow_special = event.target.getAttribute('data-allowSpecial');
+
+        if (!allow_special && allow_special == null) allow_special = '';
+
+        allow_special = allow_special.toString();
+
+        var regex = new RegExp('^[a-zA-Z0-9' + allow_special + ']+$');
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        jsLogger.out('Alpha', regex.test(key));
+        if (false === regex.test(key)) event.preventDefault();
+    },
+    isPatternValid: function (event) {
+        var pattern = event.target.getAttribute('data-allow');
+        var regex = new RegExp(pattern);
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         jsLogger.out('Alpha', regex.test(key));
         if (false === regex.test(key)) event.preventDefault();

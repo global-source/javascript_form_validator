@@ -8,17 +8,35 @@
 <div>
     <form name="demo_validation" id="demoValidation" novalidate>
         <div>
-            <label for="name">Name :</label>
-            <input type="text" data-allow="onlyAlpha" value="" name="name" required>
-            <input type="text" data-allow="string" value="" name="name" required>
-            <input type="number" name="name" id="number" required>
-            <select required>
-                <option value="123">123</option>
-            </select>
-            <select required>
-                <option value="456">456</option>
-            </select>
-            <textarea required></textarea>
+            <div>
+                <label for="name">Name :</label>
+                <input type="text" data-allow="onlyAlpha" data-allowSpecial="_." value="" name="name" required>
+            </div>
+            <div>
+                <label for="name">String :</label>
+                <input type="text" data-allow="string" value="" name="name" required>
+            </div>
+            <div>
+                <label for="name">String + [0-5]:</label>
+                <input type="text" data-allow="^[a-zA-Z0-5]+$" value="" name="name" required>
+            </div>
+            <div>
+                <label for="name">Number in [3-7] :</label>
+                <input type="number" name="name" id="number" min="3" max="7" required>
+            </div>
+            <div>
+                <select required>
+                    <option value="123">123</option>
+                </select>
+            </div>
+            <div>
+                <select required>
+                    <option value="456">456</option>
+                </select>
+            </div>
+            <div>
+                <textarea required></textarea>
+            </div>
         </div>
         <input type="submit" value="Save">
     </form>
