@@ -153,7 +153,9 @@ var jsFilter = {
 
         var regex = new RegExp('^[' + min + '-' + max + ' ]+$');
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
         jsLogger.out('Alpha', regex.test(key));
+
         if (false === regex.test(key)) event.preventDefault();
     },
     isAlpha: function (event) {
@@ -403,7 +405,9 @@ var jsLogger = {
 function isWindowAction(event) {
     var theEvent = event || window.event;
     var key = theEvent.keyCode || theEvent.which;
-    if (key === 9) { //TAB was pressed
+
+    // Tab, Space, Home, End, Up, Down, Left, Right...
+    if (key === 9 || key === 32 || key === 13 || key === 8 || key >= 35 || key <= 40) { //TAB was pressed
         return true;
     }
 
