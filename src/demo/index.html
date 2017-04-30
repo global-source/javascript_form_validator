@@ -25,6 +25,17 @@
                 <input type="number" name="name" id="number" min="3" max="7" required>
             </div>
             <div>
+                <label for="name">Password :</label>
+                <input type="password" data-check="rePassword" id="password" data-allow="^[a-zA-Z0-5]+$" value=""
+                       name="name"
+                       required>
+            </div>
+            <div>
+                <label for="name">Re-Password :</label>
+                <input type="password" name="name" data-parent="password" id="rePassword" data-allow="^[a-zA-Z0-5]+$"
+                       required>
+            </div>
+            <div>
                 <select required>
                     <option value="123">123</option>
                 </select>
@@ -47,9 +58,8 @@
 <script>
 
     (function () {
-        'use strict';
 
-        var validator = jsValidator.init({
+        var val = jsValidator.init({
             form: 'demoValidation',
             onlyFilter: false
         });
