@@ -53,8 +53,6 @@ class jsValidator {
 
         jsLogger.table(option);
 
-        // Updating the filter flag to global.
-        const onlyFilter = option.onlyFilter;
         // Update "jsSettings" to global object.
         this.jsSettings = new jsSettings().init(option);
         // Update "jsForm" to global object.
@@ -67,7 +65,7 @@ class jsValidator {
         this.submitListener(this.jsForm.formCore, this);
         // Send back "this".
         return this;
-    };
+    }
 
     // To make listen on submit action of the form.
     submitListener(formID, obj) {
@@ -83,7 +81,7 @@ class jsValidator {
                 }
             });
         }
-    };
+    }
 
     // To checking all elements from registered form.
     check() {
@@ -117,26 +115,29 @@ class jsValidator {
             }
         }
         return status;
-    };
+    }
 
     // To looping all elements for actions.
     elemLoop(index, formElem) {
         // Initiate empty array for keep list of errors.
         var log = [];
+        if(formElem === null || typeof formElem === 'undefined') return false;
         // Looping elements.
         for (var i in formElem) {
-            // Switch to static variable.
-            var activeElem = formElem[i];
-            // Apply filter to element.
-            this.applyFilters(activeElem);
-            // If not only filter, then start validations.
-            if (false === this.onlyFilter) {
-                // Initiate validations and update to log.
-                log = this.constructor.checkValidation(activeElem, log);
+            if(formElem[i]){
+                // Switch to static variable.
+                var activeElem = formElem[i];
+                // Apply filter to element.
+                this.applyFilters(activeElem);
+                // If not only filter, then start validations.
+                if (false === this.onlyFilter) {
+                    // Initiate validations and update to log.
+                    log = this.constructor.checkValidation(activeElem, log);
+                }
             }
         }
         return log;
-    };
+    }
 
     // To apply filter to all relevant elements by it's attributes.
     applyFilters(activeElem) {
@@ -150,7 +151,7 @@ class jsValidator {
         if (activeElem.min || activeElem.max) this.jsFilter.limit(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) this.jsFilter.string(activeElem);
-    };
+    }
 
     // To start validation process.
     static checkValidation(activeElem, log) {
@@ -168,7 +169,7 @@ class jsValidator {
         if (activeElem.type == "password")if (!jsRuleSet.constructor.compare(activeElem)) log.push({'password': activeElem});
         // Return overall log report of validation.
         return log;
-    };
+    }
     // Single step instance validator for Ajax form submissions.
     validate() {
         // Initiate form Check.
@@ -188,7 +189,7 @@ class jsFilter {
     number(element) {
         var current = this;
         element.addEventListener("keypress", current.constructor.isNumberKey, false);
-    };
+    }
 
     // String elements filter listener.
     string(element) {
@@ -217,18 +218,18 @@ class jsFilter {
         }
 
 
-    };
+    }
 
     // Email elements filter listener.
     static email(element) {
         //this.jsRuleSet = new jsRuleSets();
         //element.addEventListener("keypress", this.jsRuleSet.constructor.email, false);
-    };
+    }
 
     // Numeric with Limited elements filter listener.
     limit(element) {
         element.addEventListener("keypress", this.constructor.isInLimit, false);
-    };
+    }
 
     //TODO: fix live entry issue.
     // Restrict element with it's limit.
@@ -257,7 +258,7 @@ class jsFilter {
             event.preventDefault();
         }
         event.target.value = event.target.value.substring(0, event.target.value.length - 1);
-    };
+    }
 
     // Only allow alpha([a-zA-Z]).
     static isAlpha(event) {
@@ -267,7 +268,7 @@ class jsFilter {
         console.log(status);
         // Return status of the Action.
         if (false === status) event.preventDefault();
-    };
+    }
 
     // Only allow alpha([a-zA-Z0-9]).
     static isAlphaNumeric(event) {
@@ -277,7 +278,7 @@ class jsFilter {
         var status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
-    };
+    }
 
     static isValidPassword(event) {
         // Prevent using "space".
@@ -292,7 +293,7 @@ class jsFilter {
         var status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
-    };
+    }
 
     // Only allow by pattern(ex. ^[a-zA-Z0-3@#$!_.]+$).
     static isPatternValid(event) {
@@ -302,7 +303,7 @@ class jsFilter {
         var status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
-    };
+    }
 
     // Check is numeric or not.
     static isNumberKey(event) {
@@ -338,13 +339,13 @@ class jsSettings {
         this.errorTemplate = option.errorTemplate;
         // Return "this" object.
         return this;
-    };
+    }
 
     log() {
         jsLogger.out(this.errorColor);
         jsLogger.out(this.followedElement);
         jsLogger.out(this.errorTemplate);
-    };
+    }
 }
 
 /**
@@ -377,7 +378,7 @@ class jsForm {
         this.required();
 
         return this;
-    };
+    }
 
     // To Register Active Form to Global Object.
     registerForm(form) {
@@ -388,7 +389,7 @@ class jsForm {
         this.form = document.getElementById(form);
         // Update Direct Form ID.
         this.formCore = form;
-    };
+    }
 
     // To Parse all Relative Form components.
     parseForm(form) {
@@ -400,7 +401,7 @@ class jsForm {
         this.textArea = form.getElementsByTagName('textarea');
         // "Label" element.
         this.label = form.getElementsByTagName('label');
-    };
+    }
 
     // To set fields are required.
     required() {
@@ -410,7 +411,7 @@ class jsForm {
         this.select = jsField.required(this.select);
         // Filter all required "textArea" elements.
         this.textArea = jsField.required(this.textArea);
-    };
+    }
 
     log() {
         jsLogger.out('Form', this.form);
@@ -418,7 +419,7 @@ class jsForm {
         jsLogger.out('select', this.select);
         jsLogger.out('textarea', this.textArea);
         jsLogger.out('labels', this.label);
-    };
+    }
 }
 
 /*
@@ -457,9 +458,9 @@ class jsRuleSets {
         var status = true;
         var value = elem.value;
         //TODO: Implement suitable solution for this.
-        if (value.length == 0 || value == '' || value == ' ') status = false;
+        if (value.length === 0 || value === '' || value === ' ') status = false;
         return status;
-    };
+    }
 
     // To Check Element with Min Condition.
     static min(elem) {
@@ -469,7 +470,7 @@ class jsRuleSets {
         //TODO: Implement suitable solution for this.
         if (value < min) status = false;
         return status;
-    };
+    }
 
     // To Check Element with Max Condition.
     static max(elem) {
@@ -479,7 +480,7 @@ class jsRuleSets {
         //TODO: Implement suitable solution for this.
         if (value > max) status = false;
         return status;
-    };
+    }
 
     // To Check Element Email is Valid or Not.
     static email(elem) {
@@ -495,20 +496,20 @@ class jsRuleSets {
             status = true;
         }
         return status;
-    };
+    }
 
     // To Check Element Phone Value is Valid or Not.
     static phone(elem, pattern) {
         var status = true;
         if (elem.value === '') status = false;
         return status;
-    };
+    }
 
     // To Compare two Elements Values.
     static compare(elem1) {
         var elem2_id = elem1.getAttribute('data-check');
 
-        if (elem2_id == null) elem2_id = elem1.getAttribute('data-parent');
+        if (elem2_id === null) elem2_id = elem1.getAttribute('data-parent');
         elem2_id = elem2_id.toString();
 
         var elem2 = document.getElementById(elem2_id);
@@ -540,12 +541,12 @@ class jsFormError {
         this.errorCss = 'border-color: red;border-radius: 5px;color: red;';
         this.successCss = 'border-color: green;border-radius: 5px;color: green;';
 
-    };
+    }
 
     // Form error log.
     log() {
         jsLogger.out('Form Error Hit', this.errorHit);
-    };
+    }
 
     // Form error style.
     style(css) {
@@ -597,25 +598,25 @@ var helper = {
         // If not in list then check return with corresponding data.
         key = String.fromCharCode(key);
         // Return also if length is 0.
-        if (key.length == 0) return true;
+        if (key.length === 0) return true;
 
         // Finally return "false" for general keys.
         return false;
     },
     // To generate pattern from element attribute.
     getDefaultPattern: function (event, originalPattern) {
-        if (typeof originalPattern == 'undefined') var originalPattern = false;
+        if (typeof originalPattern == 'undefined') originalPattern = '';
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         var pattern = event.target.pattern;
         console.log(pattern.length);
         var defaultPattern;
         // Set default values for special characters.
-        if (!allow_special && allow_special == null) allow_special = '';
+        if (!allow_special && allow_special === null) allow_special = '';
         // Format to string.
         allow_special = allow_special.toString();
 
-        if (pattern != '' && pattern.length > 0 && pattern != null) {
+        if (pattern !== '' && pattern.length > 0 && pattern !== null) {
             defaultPattern = pattern;
         } else {
             defaultPattern = '^[' + originalPattern + allow_special + ']+$';
