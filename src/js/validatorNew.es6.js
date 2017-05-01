@@ -173,11 +173,8 @@ class jsValidator {
     // Single step instance validator for Ajax form submissions.
     validate() {
         // Initiate form Check.
-        ret
-        this.check();
+        return this.check();
     }
-
-    //};
 }
 
 /*

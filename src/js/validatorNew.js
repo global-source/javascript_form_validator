@@ -152,9 +152,7 @@ var jsValidator = {
     // Single step instance validator for Ajax form submissions.
     validate: function () {
         // Initiate form Check.
-        this.check();
-        // Return validation status.
-        return this.validationPass;
+        return this.check();
     }
 };
 
