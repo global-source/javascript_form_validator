@@ -9,6 +9,7 @@
     <form name="demo_validation" id="demoValidation" novalidate>
         <div>
             <div>
+                <div id="test"></div>
                 <label for="name">Name :</label>
                 <input type="text" data-allow="onlyAlpha" pattern="^[a-zA-C]+$" id="check" data-allowSpecial="_."
                        value=""
@@ -24,8 +25,8 @@
                 <input type="text" data-allow="string" pattern="^[a-zA-Z0-5]+$" value="" name="name" required>
             </div>
             <div>
-                <label for="name">Number in [3-7] :</label>
-                <input type="number" name="name" id="number" min="3" max="7" required>
+                <label for="name">Number in [3-500] :</label>
+                <input type="number" name="name" id="number" min="3" max="500" required>
             </div>
             <div>
                 <label for="name">Password :</label>
@@ -62,21 +63,21 @@
 </div>
 
 <!--<script src="./../js/formValidator.min.js"></script>-->
-<script src="./../js/validatorNew.js"></script>
-<!--<script src="../js/validatorNew.es6.js"></script>-->
+<!--<script src="./../js/validatorNew.js"></script>-->
+<script src="../js/validatorNew.es6.js"></script>
 <script>
 
     (function () {
 
-        var val = jsValidator.init({
-            form: 'demoValidation',
-            onlyFilter: false
-        });
-
-//        var val = new jsValidator().init({
+//        var val = jsValidator.init({
 //            form: 'demoValidation',
 //            onlyFilter: false
 //        });
+
+        var val = new jsValidator().init({
+            form: 'demoValidation',
+            onlyFilter: false
+        });
 
     }());
 </script>

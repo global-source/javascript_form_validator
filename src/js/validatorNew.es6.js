@@ -92,6 +92,8 @@ class jsValidator {
         // Overall validation status.
         let status = false;
 
+        let option = [];
+
         // Looping the "input" elements for validation and filter implementation.
         errorList.input = this.elemLoop('input', jsFormObj.input);
         // Looping the "textArea" elements fro validation filter implementation.
@@ -99,7 +101,9 @@ class jsValidator {
         // Looping the "select" elements fro validation filter implementation.
         errorList.select = this.elemLoop('select', jsFormObj.select);
 
-        jsLogger.out('Error List', this.formErrorList);
+        option.push({'errorElem': errorList});
+
+        jsLogger.out('Error List', option);
 
         // To Update global Validation Status.
         // If, Input elements have no errors.
@@ -114,6 +118,8 @@ class jsValidator {
                 }
             }
         }
+
+        validationResponse.init(errorList);
         return status;
     }
 
@@ -230,6 +236,8 @@ class jsFilter {
     // Numeric with Limited elements filter listener.
     limit(element) {
         element.addEventListener("keypress", this.constructor.isInLimit, false);
+        element.addEventListener("keypress", this.constructor.isInLimit, false);
+
     }
 
     //TODO: fix live entry issue.
@@ -258,7 +266,7 @@ class jsFilter {
         if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
             event.preventDefault();
         }
-        event.target.value = event.target.value.substring(0, event.target.value.length - 1);
+        event.target.value = (event.target.value > max) ? max : event.target.value;
     }
 
     // Only allow alpha([a-zA-Z]).
@@ -423,7 +431,7 @@ class jsForm {
     }
 }
 
-/*
+/**
  * Perform Operations in Field level.
  */
 class jsField {
@@ -556,7 +564,7 @@ class jsFormError {
     }
 }
 
-/*
+/**
  * For manage overall logging with validator.
  *
  */
@@ -606,7 +614,7 @@ let helper = {
     }
 };
 
-/*
+/**
  * Simple library for Pattern.
  */
 let pattern = {
@@ -641,4 +649,44 @@ let pattern = {
         let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         return regex.test(key);
     }
+};
+
+let validationResponse = {
+
+    init: function (errorList) {
+        // let errorElements = option.errorElem;
+        jsLogger.out('Errors', errorList);
+        this.input(errorList.input);
+        // this.select(errorElements.select);
+        // this.textArea(errorElements.textArea);
+    },
+
+    input: function (elem) {
+        this.process(elem);
+    },
+
+    select: function (elem) {
+        this.process(elem);
+    },
+
+    textArea: function (elem) {
+        this.process(elem);
+    },
+
+    process: function (elem) {
+        for (let i in elem) {
+            jsLogger.out('Elem Input', elem[i]);
+            if (elem[i].empty) {
+                //     jsLogger.out('Error Elem', elem[i]);
+                var spanTag = document.getElementById(elem[i].id);
+                spanTag.innerHTML = 'abcd';
+                elem[i].empty.parentNode.insertBefore(spanTag, elem[i].empty.nextSibling);
+            }
+        }
+    },
+
+    template: function () {
+
+    }
+
 };
