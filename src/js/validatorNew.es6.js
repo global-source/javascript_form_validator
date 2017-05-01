@@ -41,15 +41,15 @@ class jsValidator {
         this.formErrorList = {};
         // Common Logger Instance.
         this.jsFilter = false;
-        this.jsRuleSet = false;
+        // To Filter non-required fields.
+        this.forceFilter = false;
+        // To Filter the First load.
+        this.initialLoad = true;
     }
 
     // Initiating the Validator.
     init(option) {
-        let status;
-
-        this.jsFilter = new jsFilter();
-        this.jsRuleSet = new jsRuleSets();
+        this.jsFilter = new jsFilter(option.forceFilter);
 
         jsLogger.table(option);
 
@@ -59,8 +59,10 @@ class jsValidator {
         this.jsForm = new jsForm().init(option);
         // Initiate form error setup.
         this.jsFormError = new jsFormError().init();
+        // Update Force Field status.
+        this.forceFilter = option.forceFilter;
         // To check the form elements.
-        status = this.check();
+        this.check();
         // To register the listener.
         this.submitListener(this.jsForm.formCore, this);
         // Send back "this".
@@ -118,8 +120,10 @@ class jsValidator {
                 }
             }
         }
+        if (false == this.initialLoad) validationResponse.init(errorList);
 
-        validationResponse.init(errorList);
+        this.initialLoad = false;
+
         return status;
     }
 
@@ -128,6 +132,7 @@ class jsValidator {
         // Initiate empty array for keep list of errors.
         let log = [];
         if (formElem === null || typeof formElem === 'undefined') return false;
+        jsLogger.out('Elem Loop Filter', formElem);
         // Looping elements.
         for (let i in formElem) {
             if (formElem[i]) {
@@ -147,8 +152,6 @@ class jsValidator {
 
     // To apply filter to all relevant elements by it's attributes.
     applyFilters(activeElem) {
-        //console.log(this.jsFilter);
-        //let jsFilter = new jsFilter();
         // Apply filter for Number elements.
         if (activeElem.type == 'number') this.jsFilter.number(activeElem);
         // Apply filter for Email elements.
@@ -162,33 +165,63 @@ class jsValidator {
     // To start validation process.
     static checkValidation(activeElem, log) {
         let jsRuleSet = new jsRuleSets();
+        let validElem = true;
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem)) log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+        if (!jsRuleSets.isSet(activeElem)) {
+            log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+        }
         // To Check the Value is less than min or not.
-        if (activeElem.min) if (!jsRuleSet.constructor.min(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'min',
-            'id': activeElem.name
-        });
+        if (activeElem.min) {
+            if (!jsRuleSet.constructor.min(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'min',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
         // To Check the Value is grater than max or not.
-        if (activeElem.max) if (!jsRuleSet.constructor.max(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'max',
-            'id': activeElem.name
-        });
+        if (activeElem.max) {
+            if (!jsRuleSet.constructor.max(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'max',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
         // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") if (!jsRuleSet.constructor.email(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'email',
-            'id': activeElem.name
-        });
+        if (activeElem.type == "email") {
+            if (!jsRuleSet.constructor.email(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'email',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password")if (!jsRuleSet.constructor.compare(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'password',
-            'id': activeElem.name
-        });
+        if (activeElem.type == "password") {
+            if (!jsRuleSet.constructor.compare(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'password',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
+        // If valid, then reset validation message.
+        if (true === validElem) {
+            let elem = document.getElementById(activeElem.name);
+            if (typeof(elem) !== 'undefined' && elem !== null) {
+                elem.innerHTML = '';
+            }
+        }
         // Return overall log report of validation.
         return log;
     }
@@ -204,14 +237,22 @@ class jsValidator {
  * Common Filter instances.
  */
 class jsFilter {
-    constructor() {
-
+    constructor(forceFilter) {
+        this.forceFilter = forceFilter;
     }
 
     // Number elements filter listener.
     number(element) {
         let current = this;
-        element.addEventListener("keypress", current.constructor.isNumberKey, false);
+        let status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+        if (true === status) element.addEventListener("keypress", current.constructor.isNumberKey, false);
+
     }
 
     // String elements filter listener.
@@ -219,24 +260,32 @@ class jsFilter {
         // Getting "data" attribute for actions.
         let type = element.getAttribute('data-allow');
         let current = this;
+        let status = true;
+
+        if (false == this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
 
         // Switching actions.
         switch (type) {
             // Allow only alphabets [a-zA-Z] not [0-9] and special characters.
             case 'onlyAlpha':
-                element.addEventListener("keypress", current.constructor.isAlpha, false);
+                if (true === status) element.addEventListener("keypress", current.constructor.isAlpha, false);
                 break;
             // Allow only alpha Numeric [a-zA-Z0-9] not special characters.
             case 'string':
-                element.addEventListener("keypress", current.constructor.isAlphaNumeric, false);
+                if (true === status) element.addEventListener("keypress", current.constructor.isAlphaNumeric, false);
                 break;
             // Allow only alpha Numeric [a-zA-Z0-9] not special characters.
             case 'password':
-                element.addEventListener("keypress", current.constructor.isValidPassword, false);
+                if (true === status) element.addEventListener("keypress", current.constructor.isValidPassword, false);
                 break;
             // Allow based on the pattern given.
             default:
-                element.addEventListener("keypress", current.constructor.isPatternValid, false);
+                if (true === status) element.addEventListener("keypress", current.constructor.isPatternValid, false);
                 break;
         }
 
@@ -251,8 +300,14 @@ class jsFilter {
 
     // Numeric with Limited elements filter listener.
     limit(element) {
-        element.addEventListener("keypress", this.constructor.isInLimit, false);
-        element.addEventListener("keypress", this.constructor.isInLimit, false);
+        let status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+        if (true === status) element.addEventListener("keypress", this.constructor.isInLimit, false);
 
     }
 
@@ -378,6 +433,7 @@ class jsSettings {
  */
 class jsForm {
     constructor() {
+        this.options = false;
         // Form element.
         this.form = false;
         // Form ID.
@@ -390,11 +446,17 @@ class jsForm {
         this.textArea = false;
         // Form element's labels.
         this.label = false;
+        // Perform Force Filter on Elements.
+        this.forceFilter = false;
     }
 
     // To Initiating the "jsForm".
     init(option) {
         jsLogger.out('Form', option.form);
+        // Update Global Option.
+        this.options = option;
+        // Enable/Disable Force Filter.
+        this.forceFilter = option.forceFilter;
         // To Register Form.
         this.registerForm(option.form);
         // To Parsing the Form.
@@ -430,12 +492,14 @@ class jsForm {
 
     // To set fields are required.
     required() {
+        // let jsField = new jsField().init(this.options);
+        let forceFilter = this.forceFilter;
         // Filter all required "input" elements.
-        this.input = jsField.required(this.input);
+        this.input = jsField.required(this.input, forceFilter);
         // Filter all required "select" elements.
-        this.select = jsField.required(this.select);
+        this.select = jsField.required(this.select, forceFilter);
         // Filter all required "textArea" elements.
-        this.textArea = jsField.required(this.textArea);
+        this.textArea = jsField.required(this.textArea, forceFilter);
     }
 
     log() {
@@ -451,16 +515,22 @@ class jsForm {
  * Perform Operations in Field level.
  */
 class jsField {
-    constructor() {
 
+    constructor() {
+        this.forceFilter = false;
+    }
+
+    init(option) {
+        this.forceFilter = option.forceFilter;
     }
 
     // Return all required elements list.
-    static required(field) {
+    static required(field, forceFilter) {
         let requiredFieldsList = [];
         for (let i = 0; i < field.length; i++) {
             // Check and push elements.
-            if (field[i].required === true) {
+            // if (field[i].required === true) {
+            if ((field[i].required === true) || true === forceFilter) {
                 // Pushing to required elements list.
                 requiredFieldsList.push(field[i]);
             }
@@ -480,6 +550,7 @@ class jsRuleSets {
 
     // To Check, whether the element have value or not.
     static isSet(elem) {
+        if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
         //TODO: Implement suitable solution for this.
@@ -489,6 +560,7 @@ class jsRuleSets {
 
     // To Check Element with Min Condition.
     static min(elem) {
+        if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
         let min = elem.min;
@@ -499,6 +571,7 @@ class jsRuleSets {
 
     // To Check Element with Max Condition.
     static max(elem) {
+        if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
         let max = elem.max;
@@ -509,6 +582,7 @@ class jsRuleSets {
 
     // To Check Element Email is Valid or Not.
     static email(elem) {
+        if (false === elem.required) return true;
         let status = true;
         let email = elem.value;
         // To Validate Email.
@@ -525,6 +599,7 @@ class jsRuleSets {
 
     // To Check Element Phone Value is Valid or Not.
     static phone(elem, pattern) {
+        if (false === elem.required) return true;
         let status = true;
         if (elem.value === '') status = false;
         return status;
@@ -532,6 +607,8 @@ class jsRuleSets {
 
     // To Compare two Elements Values.
     static compare(elem1) {
+        if (false === elem1.required) return true;
+
         let elem2_id = elem1.getAttribute('data-check');
 
         if (elem2_id === null) elem2_id = elem1.getAttribute('data-parent');
@@ -673,8 +750,8 @@ let validationResponse = {
         // let errorElements = option.errorElem;
         jsLogger.out('Errors', errorList);
         this.input(errorList.input);
-        // this.select(errorElements.select);
-        // this.textArea(errorElements.textArea);
+        this.select(errorList.select);
+        this.textArea(errorList.textArea);
     },
 
     input: function (elem) {
@@ -692,20 +769,21 @@ let validationResponse = {
     process: function (elem) {
         for (let i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
-            if (elem[i].el) {
-                var spanTag = document.getElementById(elem[i].id);
-                jsLogger.out('Element Hit', spanTag);
+            if (elem[i].el && true === elem[i].el.required) {
+                let activeElem = elem[i];
+                let spanTag = document.getElementById(activeElem.id);
+                jsLogger.out('Element Hit', activeElem.type);
                 if (typeof(spanTag) === 'undefined' || spanTag === null) {
                     jsLogger.out('Element Found', false);
                     spanTag = document.createElement('span');
-                    spanTag.setAttribute('id', elem[i].id);
-                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    spanTag.setAttribute('id', activeElem.id);
+                    spanTag.innerHTML = 'Error ' + activeElem.type + ' - ' + Math.random().toString(36).substring(7);
                 } else {
-                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    spanTag.innerHTML = 'Error ' + activeElem.type + ' - ' + Math.random().toString(36).substring(7);
                     jsLogger.out('Element Found', true);
                 }
-                jsLogger.out('Error Elem', elem[i].el);
-                elem[i].el.parentNode.insertBefore(spanTag, elem[i].el.nextSibling);
+                jsLogger.out('Error Elem', activeElem.el);
+                activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
         }
     },
