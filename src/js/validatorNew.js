@@ -79,6 +79,8 @@ var jsValidator = {
         // Loading JS error list.
         var errorList = this.formErrorList;
 
+        var option = [];
+
         // Looping the "input" elements for validation and filter implementation.
         errorList.input = this.elemLoop('input', jsFormObj.input);
         // Looping the "textArea" elements fro validation filter implementation.
@@ -87,6 +89,8 @@ var jsValidator = {
         errorList.select = this.elemLoop('select', jsFormObj.select);
 
         jsLogger.out('Error List', this.formErrorList);
+
+        option.push({'errorElem': errorList});
 
         // To Update global Validation Status.
         // If, Input elements have no errors.
@@ -101,6 +105,7 @@ var jsValidator = {
                 }
             }
         }
+        validationResponse.init(errorList);
         return status;
 
     },
@@ -137,16 +142,32 @@ var jsValidator = {
     // To start validation process.
     checkValidation: function (activeElem, log) {
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem)) log.push({'empty': activeElem});
+        if (!jsRuleSets.isSet(activeElem)) log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
         // To Check the Value is less than min or not.
-        if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({'min': activeElem});
+        if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'min',
+            'id': activeElem.name
+        });
         // To Check the Value is grater than max or not.
-        if (activeElem.max) if (!jsRuleSets.max(activeElem)) log.push({'max': activeElem});
+        if (activeElem.max) if (!jsRuleSets.max(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'max',
+            'id': activeElem.name
+        });
         // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") if (!jsRuleSets.email(activeElem)) log.push({'email': activeElem});
+        if (activeElem.type == "email") if (!jsRuleSets.email(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'email',
+            'id': activeElem.name
+        });
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password")if (!jsRuleSets.compare(activeElem)) log.push({'password': activeElem});
+        if (activeElem.type == "password")if (!jsRuleSets.compare(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'password',
+            'id': activeElem.name
+        });
         // Return overall log report of validation.
         return log;
     },
@@ -571,3 +592,51 @@ var pattern = {
     }
 };
 
+var validationResponse = {
+
+    init: function (errorList) {
+        // let errorElements = option.errorElem;
+        jsLogger.out('Errors', errorList);
+        this.input(errorList.input);
+        // this.select(errorElements.select);
+        // this.textArea(errorElements.textArea);
+    },
+
+    input: function (elem) {
+        this.process(elem);
+    },
+
+    select: function (elem) {
+        this.process(elem);
+    },
+
+    textArea: function (elem) {
+        this.process(elem);
+    },
+
+    process: function (elem) {
+        for (let i in elem) {
+            // jsLogger.out('Element', document.getElementById(elem[i].id));
+            if (elem[i].el) {
+                var spanTag = document.getElementById(elem[i].id);
+                jsLogger.out('Element Hit', spanTag);
+                if (typeof(spanTag) === 'undefined' || spanTag === null) {
+                    jsLogger.out('Element Found', false);
+                    spanTag = document.createElement('span');
+                    spanTag.setAttribute('id', elem[i].id);
+                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                } else {
+                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    jsLogger.out('Element Found', true);
+                }
+                jsLogger.out('Error Elem', elem[i].el);
+                elem[i].el.parentNode.insertBefore(spanTag, elem[i].el.nextSibling);
+            }
+        }
+    },
+
+    template: function () {
+
+    }
+
+};

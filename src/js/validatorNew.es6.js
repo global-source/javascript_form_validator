@@ -163,16 +163,32 @@ class jsValidator {
     static checkValidation(activeElem, log) {
         let jsRuleSet = new jsRuleSets();
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem)) log.push({'empty': activeElem});
+        if (!jsRuleSets.isSet(activeElem)) log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
         // To Check the Value is less than min or not.
-        if (activeElem.min) if (!jsRuleSet.constructor.min(activeElem)) log.push({'min': activeElem});
+        if (activeElem.min) if (!jsRuleSet.constructor.min(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'min',
+            'id': activeElem.name
+        });
         // To Check the Value is grater than max or not.
-        if (activeElem.max) if (!jsRuleSet.constructor.max(activeElem)) log.push({'max': activeElem});
+        if (activeElem.max) if (!jsRuleSet.constructor.max(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'max',
+            'id': activeElem.name
+        });
         // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") if (!jsRuleSet.constructor.email(activeElem)) log.push({'email': activeElem});
+        if (activeElem.type == "email") if (!jsRuleSet.constructor.email(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'email',
+            'id': activeElem.name
+        });
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password")if (!jsRuleSet.constructor.compare(activeElem)) log.push({'password': activeElem});
+        if (activeElem.type == "password")if (!jsRuleSet.constructor.compare(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'password',
+            'id': activeElem.name
+        });
         // Return overall log report of validation.
         return log;
     }
@@ -675,12 +691,21 @@ let validationResponse = {
 
     process: function (elem) {
         for (let i in elem) {
-            jsLogger.out('Elem Input', elem[i]);
-            if (elem[i].empty) {
-                //     jsLogger.out('Error Elem', elem[i]);
+            // jsLogger.out('Element', document.getElementById(elem[i].id));
+            if (elem[i].el) {
                 var spanTag = document.getElementById(elem[i].id);
-                spanTag.innerHTML = 'abcd';
-                elem[i].empty.parentNode.insertBefore(spanTag, elem[i].empty.nextSibling);
+                jsLogger.out('Element Hit', spanTag);
+                if (typeof(spanTag) === 'undefined' || spanTag === null) {
+                    jsLogger.out('Element Found', false);
+                    spanTag = document.createElement('span');
+                    spanTag.setAttribute('id', elem[i].id);
+                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                } else {
+                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    jsLogger.out('Element Found', true);
+                }
+                jsLogger.out('Error Elem', elem[i].el);
+                elem[i].el.parentNode.insertBefore(spanTag, elem[i].el.nextSibling);
             }
         }
     },
