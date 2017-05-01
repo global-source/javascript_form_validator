@@ -16,15 +16,19 @@
 Then Integrate your form with Validator.
 
          <script>
+         
+             /.../
              
              var data = {
-             form: 'new_ticket_form',          // Required.
-             warning_color: 'aa0000',          // Optional.
-             new_class: 'test'                 // Optional.
+               form: 'new_ticket_form',          // Required.
+               warning_color: 'aa0000',          // Optional.
+               new_class: 'test'                 // Optional.
              };
 
              // Validation Will Init Here.
              validate(data);
+             
+             /.../
              
           </script>
           
@@ -44,7 +48,7 @@ It has automated listener to eliminating unnecessary changes on form.
            
 2. Input Fields should specify the type of validation.
  
-         //***************For General Input Validation**************************************
+         ////////////////////For General Input Validation////////////////////////////////////////
 
            // For Simple Require.
            <input type="text" required name="name">
@@ -61,17 +65,17 @@ It has automated listener to eliminating unnecessary changes on form.
            // For Password Match Validation.
            <input type="password" required match="field_name" name="password">
            
-           //***************For Select Validation*******************************************
+           ////////////////////For Select Validation////////////////////////////////////////////
            
            //For Simple Required
            <select class="" required>
-              <option value=0></option>                  // This Option going to filter.
+              <option value="-"></option>                  // Value '-' is used to represent empty.
               <option value="...">...</option>
               <option value="...">...</option>
               <option value="...">...</option>
            </select>
            
-           //***************For Textarea Validation*******************************************
+           ////////////////////For Textarea Validation//////////////////////////////////////////
            
            // For Simple Required
            <textarea required>.....</textarea>
@@ -111,7 +115,7 @@ So **No Need** to use ``<input type="submit"..... onClick="validate()" .....>``
             display: inline !important;
         }
 
-###License
+### License
 
 MIT License
 
