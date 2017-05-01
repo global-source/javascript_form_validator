@@ -1,0 +1,76 @@
+<!Doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=0.9">
+</head>
+<body>
+<div>
+    <form name="demo_validation" id="demoValidation" novalidate>
+        <div>
+            <div>
+                <label for="name">Name :</label>
+                <input type="text" data-allow="onlyAlpha" id="check" data-allowSpecial="_." value="" name="name" required>
+            </div>
+            <div>
+                <label for="name">String :</label>
+                <input type="text" data-allow="string" value="" name="name" required>
+            </div>
+            <div>
+                <label for="name">String + [0-5]:</label>
+                <input type="text" data-allow="^[a-zA-Z0-5]+$" value="" name="name" required>
+            </div>
+            <div>
+                <label for="name">Number in [3-7] :</label>
+                <input type="number" name="name" id="number" min="3" max="7" required>
+            </div>
+            <div>
+                <label for="name">Password :</label>
+                <input type="password" data-check="rePassword" id="password" data-allow="^[a-zA-Z0-5]+$" value=""
+                       name="name"
+                       required>
+            </div>
+            <div>
+                <label for="name">Re-Password :</label>
+                <input type="password" name="name" data-parent="password" id="rePassword" data-allow="^[a-zA-Z0-5]+$"
+                       required>
+            </div>
+            <div>
+                <select required>
+                    <option value="123">123</option>
+                </select>
+            </div>
+            <div>
+                <select required>
+                    <option value="456">456</option>
+                </select>
+            </div>
+            <div>
+                <textarea required></textarea>
+            </div>
+        </div>
+        <input type="submit" value="Save">
+    </form>
+</div>
+
+<!--<script src="./../js/formValidator.min.js"></script>-->
+<!--<script src="./../js/validatorNew.js"></script>-->
+<script src="../js/validatorNew.es6.js"></script>
+<script>
+
+    (function () {
+
+//        var val = jsValidator.init({
+//            form: 'demoValidation',
+//            onlyFilter: false
+//        });
+
+        var val = new jsValidator().init({
+            form: 'demoValidation',
+            onlyFilter: false
+        });
+
+    }());
+</script>
+</body>
+</html>
