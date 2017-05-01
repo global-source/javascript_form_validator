@@ -10,7 +10,10 @@
         <div>
             <div>
                 <label for="name">Name :</label>
-                <input type="text" data-allow="onlyAlpha" id="check" data-allowSpecial="_." value="" name="name" required>
+                <input type="text" data-allow="onlyAlpha" pattern="^[a-zA-C]+$" id="check" data-allowSpecial="_."
+                       value=""
+                       name="name"
+                       required>
             </div>
             <div>
                 <label for="name">String :</label>
@@ -18,7 +21,7 @@
             </div>
             <div>
                 <label for="name">String + [0-5]:</label>
-                <input type="text" data-allow="^[a-zA-Z0-5]+$" value="" name="name" required>
+                <input type="text" data-allow="string" pattern="^[a-zA-Z0-5]+$" value="" name="name" required>
             </div>
             <div>
                 <label for="name">Number in [3-7] :</label>
@@ -26,13 +29,16 @@
             </div>
             <div>
                 <label for="name">Password :</label>
-                <input type="password" data-check="rePassword" id="password" data-allow="^[a-zA-Z0-5]+$" value=""
+                <input type="password" data-check="rePassword" id="password" pattern="^[a-zA-Z0-5]+$"
+                       data-allow="password"
+                       value=""
                        name="name"
                        required>
             </div>
             <div>
                 <label for="name">Re-Password :</label>
-                <input type="password" name="name" data-parent="password" id="rePassword" data-allow="^[a-zA-Z0-5]+$"
+                <input type="password" name="name" data-parent="password" id="rePassword" pattern="^[a-zA-Z0-5]+$"
+                       data-allow="password"
                        required>
             </div>
             <div>
@@ -56,21 +62,21 @@
 </div>
 
 <!--<script src="./../js/formValidator.min.js"></script>-->
-<!--<script src="./../js/validatorNew.js"></script>-->
-<script src="../js/validatorNew.es6.js"></script>
+<script src="./../js/validatorNew.js"></script>
+<!--<script src="../js/validatorNew.es6.js"></script>-->
 <script>
 
     (function () {
 
-//        var val = jsValidator.init({
-//            form: 'demoValidation',
-//            onlyFilter: false
-//        });
-
-        var val = new jsValidator().init({
+        var val = jsValidator.init({
             form: 'demoValidation',
             onlyFilter: false
         });
+
+//        var val = new jsValidator().init({
+//            form: 'demoValidation',
+//            onlyFilter: false
+//        });
 
     }());
 </script>
