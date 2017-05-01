@@ -121,10 +121,10 @@ class jsValidator {
     elemLoop(index, formElem) {
         // Initiate empty array for keep list of errors.
         let log = [];
-        if(formElem === null || typeof formElem === 'undefined') return false;
+        if (formElem === null || typeof formElem === 'undefined') return false;
         // Looping elements.
         for (let i in formElem) {
-            if(formElem[i]){
+            if (formElem[i]) {
                 // Switch to static variable.
                 let activeElem = formElem[i];
                 // Apply filter to element.
@@ -157,7 +157,7 @@ class jsValidator {
     static checkValidation(activeElem, log) {
         let jsRuleSet = new jsRuleSets();
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem))log.push({'empty': activeElem});
+        if (!jsRuleSets.isSet(activeElem)) log.push({'empty': activeElem});
         // To Check the Value is less than min or not.
         if (activeElem.min) if (!jsRuleSet.constructor.min(activeElem)) log.push({'min': activeElem});
         // To Check the Value is grater than max or not.
@@ -170,6 +170,7 @@ class jsValidator {
         // Return overall log report of validation.
         return log;
     }
+
     // Single step instance validator for Ajax form submissions.
     validate() {
         // Initiate form Check.
@@ -264,7 +265,7 @@ class jsFilter {
     static isAlpha(event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
-        let status = helper.patternValid(event, 'a-zA-Z');
+        let status = pattern.validate(event, 'a-zA-Z');
         console.log(status);
         // Return status of the Action.
         if (false === status) event.preventDefault();
@@ -275,7 +276,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        let status = helper.patternValid(event, 'a-zA-Z0-9');
+        let status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     }
@@ -290,7 +291,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        let status = helper.patternValid(event, 'a-zA-Z0-9');
+        let status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     }
@@ -300,7 +301,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        let status = helper.patternValid(event, 'a-zA-Z0-9');
+        let status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     }
@@ -602,9 +603,16 @@ let helper = {
 
         // Finally return "false" for general keys.
         return false;
-    },
+    }
+};
+
+/*
+ * Simple library for Pattern.
+ */
+let pattern = {
+
     // To generate pattern from element attribute.
-    getDefaultPattern: function (event, originalPattern) {
+    getDefault: function (event, originalPattern) {
         if (typeof originalPattern == 'undefined') originalPattern = '';
         // Getting special characters list.
         let allow_special = event.target.getAttribute('data-allowSpecial');
@@ -624,9 +632,9 @@ let helper = {
         return defaultPattern;
     },
     // To validate event with the pattern.
-    patternValid: function (event, pattern) {
+    validate: function (event, pattern) {
         // Managing the Pattern.
-        let defaultPattern = this.getDefaultPattern(event, pattern);
+        let defaultPattern = this.getDefault(event, pattern);
         // Validate with special formed pattern.
         let regex = new RegExp(defaultPattern);
         // Validation with Code.

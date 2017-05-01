@@ -23,6 +23,7 @@
 /*
  * For Managing overall Validation flow.
  */
+
 var jsValidator = {
     // Holding form element data.
     formData: false,
@@ -136,7 +137,7 @@ var jsValidator = {
     // To start validation process.
     checkValidation: function (activeElem, log) {
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem))log.push({'empty': activeElem});
+        if (!jsRuleSets.isSet(activeElem)) log.push({'empty': activeElem});
         // To Check the Value is less than min or not.
         if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({'min': activeElem});
         // To Check the Value is grater than max or not.
@@ -225,7 +226,7 @@ var jsFilter = {
     isAlpha: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
-        var status = helper.patternValid(event, 'a-zA-Z');
+        var status = pattern.validate(event, 'a-zA-Z');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -234,7 +235,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -248,7 +249,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -257,7 +258,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -506,6 +507,7 @@ var jsLogger = {
     }
 };
 
+
 var helper = {
     /*
      * To check the keyboard action is window action or not.
@@ -525,25 +527,32 @@ var helper = {
         // If not in list then check return with corresponding data.
         key = String.fromCharCode(key);
         // Return also if length is 0.
-        if (key.length == 0) return true;
+        if (key.length === 0) return true;
 
         // Finally return "false" for general keys.
         return false;
-    },
+    }
+};
+
+/*
+ * Simple library for Pattern.
+ */
+var pattern = {
+
     // To generate pattern from element attribute.
-    getDefaultPattern: function (event, originalPattern) {
-        if (typeof originalPattern == 'undefined') var originalPattern = false;
+    getDefault: function (event, originalPattern) {
+        if (typeof originalPattern == 'undefined') originalPattern = '';
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         var pattern = event.target.pattern;
         console.log(pattern.length);
         var defaultPattern;
         // Set default values for special characters.
-        if (!allow_special && allow_special == null) allow_special = '';
+        if (!allow_special && allow_special === null) allow_special = '';
         // Format to string.
         allow_special = allow_special.toString();
 
-        if (pattern != '' && pattern.length > 0 && pattern != null) {
+        if (pattern !== '' && pattern.length > 0 && pattern !== null) {
             defaultPattern = pattern;
         } else {
             defaultPattern = '^[' + originalPattern + allow_special + ']+$';
@@ -551,9 +560,9 @@ var helper = {
         return defaultPattern;
     },
     // To validate event with the pattern.
-    patternValid: function (event, pattern) {
+    validate: function (event, pattern) {
         // Managing the Pattern.
-        var defaultPattern = this.getDefaultPattern(event, pattern);
+        var defaultPattern = this.getDefault(event, pattern);
         // Validate with special formed pattern.
         var regex = new RegExp(defaultPattern);
         // Validation with Code.
