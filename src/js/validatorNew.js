@@ -36,8 +36,6 @@ var jsValidator = {
     jsFormError: false,
     // Overall error list.
     formErrorList: {},
-    // Overall validation status.
-    validationPass: false,
     // Initiating the Validator.
     init: function (option) {
         jsLogger.table(option);
@@ -64,9 +62,8 @@ var jsValidator = {
             // Initiate listener for form submission.
             document.querySelector("#" + formID).addEventListener("submit", function (e) {
                 // To start form validations.
-                obj.check();
                 // Check validation status.
-                if (false === obj.validationPass) {
+                if (false === obj.check()) {
                     //stop form from submitting, if validation fails
                     e.preventDefault();
                 }
@@ -75,6 +72,7 @@ var jsValidator = {
     },
     // To checking all elements from registered form.
     check: function () {
+        var status = false;
         // Loading JS Form.
         var jsFormObj = this.jsForm;
         // Loading JS error list.
@@ -98,10 +96,11 @@ var jsValidator = {
                 if (errorList.select.length === 0) {
                     alert('Form Valid !');
                     // If validation pass, then update "validationPass" object.
-                    this.validationPass = true;
+                    status = true;
                 }
             }
         }
+        return status;
 
     },
     // To looping all elements for actions.
@@ -153,9 +152,7 @@ var jsValidator = {
     // Single step instance validator for Ajax form submissions.
     validate: function () {
         // Initiate form Check.
-        this.check();
-        // Return validation status.
-        return this.validationPass;
+        return this.check();
     }
 };
 
@@ -201,7 +198,7 @@ var jsFilter = {
     isInLimit: function (event) {
         var value = event.target.value;
         // To check is this action is from "windows" action or not.
-        if (true === isWindowAction(event)) return true;
+        if (true === helper.isWindowAction(event)) return true;
 
         // Getting object from element.
         var min = event.target.min;
@@ -227,57 +224,47 @@ var jsFilter = {
     // Only allow alpha([a-zA-Z]).
     isAlpha: function (event) {
         // To check is this action is from "windows" action or not.
-        //if (true === isWindowAction(event)) return true;
-        // Getting special characters list.
-        var allow_special = event.target.getAttribute('data-allowSpecial');
-        // Set default values for special characters.
-        if (!allow_special && allow_special == null) allow_special = '';
-        // Format to string.
-        allow_special = allow_special.toString();
-        // Validate with special formed pattern.
-        var regex = new RegExp('^[a-zA-Z' + allow_special + ']+$');
-        // Validation with Code.
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        jsLogger.out('Alpha', regex.test(key));
+        if (true === helper.isWindowAction(event)) return true;
+        var status = helper.patternValid(event, 'a-zA-Z');
         // Return status of the Action.
-        if (false === regex.test(key)) event.preventDefault();
+        if (false === status) event.preventDefault();
     },
     // Only allow alpha([a-zA-Z0-9]).
     isAlphaNumeric: function (event) {
         // To check is this action is from "windows" action or not.
-        if (true === isWindowAction(event)) return true;
-        // Getting special characters list.
-        var allow_special = event.target.getAttribute('data-allowSpecial');
-        // Set default values for special characters.
-        if (!allow_special && allow_special == null) allow_special = '';
-        // Format to string.
-        allow_special = allow_special.toString();
-        // Validate with special formed pattern.
-        var regex = new RegExp('^[a-zA-Z0-9' + allow_special + ']+$');
-        // Validation with Code.
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        jsLogger.out('Alpha', regex.test(key));
+        if (true === helper.isWindowAction(event)) return true;
+        // Managing the Pattern.
+        var status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
-        if (false === regex.test(key)) event.preventDefault();
+        if (false === status) event.preventDefault();
+    },
+    isValidPassword: function (event) {
+        // Prevent using "space".
+        var charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode === 32) {
+            event.preventDefault();
+            return false;
+        }
+        // To check is this action is from "windows" action or not.
+        if (true === helper.isWindowAction(event)) return true;
+        // Managing the Pattern.
+        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        // Return status of the Action.
+        if (false === status) event.preventDefault();
     },
     // Only allow by pattern(ex. ^[a-zA-Z0-3@#$!_.]+$).
     isPatternValid: function (event) {
         // To check is this action is from "windows" action or not.
-        if (true === isWindowAction(event)) return true;
-        // Getting special characters list.
-        var pattern = event.target.getAttribute('data-allow');
-        // Validate with special formed pattern.
-        var regex = new RegExp(pattern);
-        // Validation with Code.
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        jsLogger.out('Alpha', regex.test(key));
+        if (true === helper.isWindowAction(event)) return true;
+        // Managing the Pattern.
+        var status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
-        if (false === regex.test(key)) event.preventDefault();
+        if (false === status) event.preventDefault();
     },
     // Check is numeric or not.
     isNumberKey: function (event) {
         // To check is this action is from "windows" action or not.
-        if (true === isWindowAction(event)) return true;
+        if (true === helper.isWindowAction(event)) return true;
         // Validation with Code.
         var charCode = (event.which) ? event.which : event.keyCode;
         if (charCode === 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -410,21 +397,27 @@ var jsRuleSets = {
     // To Check, whether the element have value or not.
     isSet: function (elem) {
         var status = true;
-        // Check length and empty or not.
-        if (elem.length === 0 || elem.value === '') status = false;
+        var value = elem.value;
+        //TODO: Implement suitable solution for this.
+        if (value.length == 0 || value == '' || value == ' ') status = false;
         return status;
     },
     // To Check Element with Min Condition.
     min: function (elem) {
         var status = true;
+        var value = elem.value;
+        var min = elem.min;
         //TODO: Implement suitable solution for this.
-        //if (elem.length < elem.min && elem.length !== 0) status = false;
+        if (value < min) status = false;
         return status;
     },
     // To Check Element with Max Condition.
     max: function (elem) {
         var status = true;
-        if (elem.value > elem.max) status = false;
+        var value = elem.value;
+        var max = elem.max;
+        //TODO: Implement suitable solution for this.
+        if (value > max) status = false;
         return status;
     },
     // To Check Element Email is Valid or Not.
@@ -453,11 +446,13 @@ var jsRuleSets = {
         var elem2_id = elem1.getAttribute('data-check');
 
         if (elem2_id == null) elem2_id = elem1.getAttribute('data-parent');
-
         elem2_id = elem2_id.toString();
+
         var elem2 = document.getElementById(elem2_id);
+
         var status = true;
-        if ((elem1.value !== elem2.value) && elem1.length !== elem2.length) status = false;
+        if (elem1.value !== elem2.value) status = false;
+        jsLogger.out('Compare Status', status);
         return status;
     }
 };
@@ -511,24 +506,57 @@ var jsLogger = {
     }
 };
 
-/*
- * To check the keyboard action is window action or not.
- */
-function isWindowAction(event) {
-    // Getting the event to be triggered.
-    var theEvent = event || window.event;
-    // Getting the type of event or code.
-    var key = theEvent.keyCode || theEvent.which;
+var helper = {
+    /*
+     * To check the keyboard action is window action or not.
+     */
+    isWindowAction: function (event) {
 
-    // Check with list of code and ignore holding.
-    // Tab, Space, Home, End, Up, Down, Left, Right...
-    if (key === 9 || key === 32 || key === 13 || key === 8 || (key >= 35 && key <= 40)) { //TAB was pressed
-        return true;
+        // Getting the event to be triggered.
+        var theEvent = event || window.event;
+        // Getting the type of event or code.
+        var key = theEvent.shiftKey || theEvent.which;
+        // Check with list of code and ignore holding.
+        // Tab, Space, Home, End, Up, Down, Left, Right...
+        if (key === 9 || key === 0 || key === 8 || key === 32 || key === 13 || key === 8 || (key >= 35 && key <= 40)) {
+            return true;
+        }
+
+        // If not in list then check return with corresponding data.
+        key = String.fromCharCode(key);
+        // Return also if length is 0.
+        if (key.length == 0) return true;
+
+        // Finally return "false" for general keys.
+        return false;
+    },
+    getDefaultPattern: function (event, originalPattern) {
+        if (typeof originalPattern == 'undefined') var originalPattern = false;
+        // Getting special characters list.
+        var allow_special = event.target.getAttribute('data-allowSpecial');
+        var pattern = event.target.pattern;
+        console.log(pattern.length);
+        var defaultPattern;
+        // Set default values for special characters.
+        if (!allow_special && allow_special == null) allow_special = '';
+        // Format to string.
+        allow_special = allow_special.toString();
+
+        if (pattern != '' && pattern.length > 0 && pattern != null) {
+            defaultPattern = pattern;
+        } else {
+            defaultPattern = '^[' + originalPattern + allow_special + ']+$';
+        }
+        return defaultPattern;
+    },
+    patternValid: function (event, pattern) {
+        // Managing the Pattern.
+        var defaultPattern = this.getDefaultPattern(event, pattern);
+        // Validate with special formed pattern.
+        var regex = new RegExp(defaultPattern);
+        // Validation with Code.
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        return regex.test(key);
     }
-    // If not in list then check return with corresponding data.
-    //key = String.fromCharCode(key);
-    // Return also if length is 0.
-    //if (key.length == 0) return true;
-    // Finally return "false" for general keys.
-    return false;
-}
+};
+
