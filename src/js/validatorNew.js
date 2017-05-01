@@ -530,6 +530,7 @@ var helper = {
         // Finally return "false" for general keys.
         return false;
     },
+    // To generate pattern from element attribute.
     getDefaultPattern: function (event, originalPattern) {
         if (typeof originalPattern == 'undefined') var originalPattern = false;
         // Getting special characters list.
@@ -549,6 +550,7 @@ var helper = {
         }
         return defaultPattern;
     },
+    // To validate event with the pattern.
     patternValid: function (event, pattern) {
         // Managing the Pattern.
         var defaultPattern = this.getDefaultPattern(event, pattern);
