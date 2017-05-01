@@ -46,7 +46,7 @@ class jsValidator {
 
     // Initiating the Validator.
     init(option) {
-        var status;
+        let status;
 
         this.jsFilter = new jsFilter();
         this.jsRuleSet = new jsRuleSets();
@@ -86,11 +86,11 @@ class jsValidator {
     // To checking all elements from registered form.
     check() {
         // Loading JS Form.
-        var jsFormObj = this.jsForm;
+        let jsFormObj = this.jsForm;
         // Loading JS error list.
-        var errorList = this.formErrorList;
+        let errorList = this.formErrorList;
         // Overall validation status.
-        var status = false;
+        let status = false;
 
         // Looping the "input" elements for validation and filter implementation.
         errorList.input = this.elemLoop('input', jsFormObj.input);
@@ -120,13 +120,13 @@ class jsValidator {
     // To looping all elements for actions.
     elemLoop(index, formElem) {
         // Initiate empty array for keep list of errors.
-        var log = [];
+        let log = [];
         if(formElem === null || typeof formElem === 'undefined') return false;
         // Looping elements.
-        for (var i in formElem) {
+        for (let i in formElem) {
             if(formElem[i]){
                 // Switch to static variable.
-                var activeElem = formElem[i];
+                let activeElem = formElem[i];
                 // Apply filter to element.
                 this.applyFilters(activeElem);
                 // If not only filter, then start validations.
@@ -142,7 +142,7 @@ class jsValidator {
     // To apply filter to all relevant elements by it's attributes.
     applyFilters(activeElem) {
         //console.log(this.jsFilter);
-        //var jsFilter = new jsFilter();
+        //let jsFilter = new jsFilter();
         // Apply filter for Number elements.
         if (activeElem.type == 'number') this.jsFilter.number(activeElem);
         // Apply filter for Email elements.
@@ -155,7 +155,7 @@ class jsValidator {
 
     // To start validation process.
     static checkValidation(activeElem, log) {
-        var jsRuleSet = new jsRuleSets();
+        let jsRuleSet = new jsRuleSets();
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem))log.push({'empty': activeElem});
         // To Check the Value is less than min or not.
@@ -187,15 +187,15 @@ class jsFilter {
 
     // Number elements filter listener.
     number(element) {
-        var current = this;
+        let current = this;
         element.addEventListener("keypress", current.constructor.isNumberKey, false);
     }
 
     // String elements filter listener.
     string(element) {
         // Getting "data" attribute for actions.
-        var type = element.getAttribute('data-allow');
-        var current = this;
+        let type = element.getAttribute('data-allow');
+        let current = this;
 
         // Switching actions.
         switch (type) {
@@ -234,22 +234,22 @@ class jsFilter {
     //TODO: fix live entry issue.
     // Restrict element with it's limit.
     static isInLimit(event) {
-        var value = event.target.value;
+        let value = event.target.value;
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
 
         // Getting object from element.
-        var min = event.target.min;
-        var max = event.target.max;
+        let min = event.target.min;
+        let max = event.target.max;
 
         // Default values for Min and Max.
         if (!min) min = 0;
         if (!max) max = 54;
 
         // Forming pattern for Restriction.
-        var regex = new RegExp('^[0-9]+$');
+        let regex = new RegExp('^[0-9]+$');
         // Validation with Code.
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
 
         jsLogger.out('Limit', regex.test(key) + ' | min |' + min + ' | max | ' + max);
         jsLogger.out('Regex', regex.test(key));
@@ -264,7 +264,7 @@ class jsFilter {
     static isAlpha(event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
-        var status = helper.patternValid(event, 'a-zA-Z');
+        let status = helper.patternValid(event, 'a-zA-Z');
         console.log(status);
         // Return status of the Action.
         if (false === status) event.preventDefault();
@@ -275,14 +275,14 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        let status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     }
 
     static isValidPassword(event) {
         // Prevent using "space".
-        var charCode = (event.which) ? event.which : event.keyCode;
+        let charCode = (event.which) ? event.which : event.keyCode;
         if (charCode === 32) {
             event.preventDefault();
             return false;
@@ -290,7 +290,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        let status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     }
@@ -300,7 +300,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        let status = helper.patternValid(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     }
@@ -310,7 +310,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Validation with Code.
-        var charCode = (event.which) ? event.which : event.keyCode;
+        let charCode = (event.which) ? event.which : event.keyCode;
         if (charCode === 46 || charCode > 31 && (charCode < 48 || charCode > 57)) {
             event.preventDefault();
             return false;
@@ -432,8 +432,8 @@ class jsField {
 
     // Return all required elements list.
     static required(field) {
-        var requiredFieldsList = [];
-        for (var i = 0; i < field.length; i++) {
+        let requiredFieldsList = [];
+        for (let i = 0; i < field.length; i++) {
             // Check and push elements.
             if (field[i].required === true) {
                 // Pushing to required elements list.
@@ -455,8 +455,8 @@ class jsRuleSets {
 
     // To Check, whether the element have value or not.
     static isSet(elem) {
-        var status = true;
-        var value = elem.value;
+        let status = true;
+        let value = elem.value;
         //TODO: Implement suitable solution for this.
         if (value.length === 0 || value === '' || value === ' ') status = false;
         return status;
@@ -464,9 +464,9 @@ class jsRuleSets {
 
     // To Check Element with Min Condition.
     static min(elem) {
-        var status = true;
-        var value = elem.value;
-        var min = elem.min;
+        let status = true;
+        let value = elem.value;
+        let min = elem.min;
         //TODO: Implement suitable solution for this.
         if (value < min) status = false;
         return status;
@@ -474,9 +474,9 @@ class jsRuleSets {
 
     // To Check Element with Max Condition.
     static max(elem) {
-        var status = true;
-        var value = elem.value;
-        var max = elem.max;
+        let status = true;
+        let value = elem.value;
+        let max = elem.max;
         //TODO: Implement suitable solution for this.
         if (value > max) status = false;
         return status;
@@ -484,8 +484,8 @@ class jsRuleSets {
 
     // To Check Element Email is Valid or Not.
     static email(elem) {
-        var status = true;
-        var email = elem.value;
+        let status = true;
+        let email = elem.value;
         // To Validate Email.
         // Convert to Native String Format.
         email = email.toString();
@@ -500,21 +500,21 @@ class jsRuleSets {
 
     // To Check Element Phone Value is Valid or Not.
     static phone(elem, pattern) {
-        var status = true;
+        let status = true;
         if (elem.value === '') status = false;
         return status;
     }
 
     // To Compare two Elements Values.
     static compare(elem1) {
-        var elem2_id = elem1.getAttribute('data-check');
+        let elem2_id = elem1.getAttribute('data-check');
 
         if (elem2_id === null) elem2_id = elem1.getAttribute('data-parent');
         elem2_id = elem2_id.toString();
 
-        var elem2 = document.getElementById(elem2_id);
+        let elem2 = document.getElementById(elem2_id);
 
-        var status = true;
+        let status = true;
         if (elem1.value !== elem2.value) status = false;
         jsLogger.out('Compare Status', status);
         return status;
@@ -559,7 +559,7 @@ class jsFormError {
  * For manage overall logging with validator.
  *
  */
-var jsLogger = {
+let jsLogger = {
 
     // Simple log with "heading" and "message".
     out: function (heading, message) {
@@ -579,16 +579,16 @@ var jsLogger = {
     }
 };
 
-var helper = {
+let helper = {
     /*
      * To check the keyboard action is window action or not.
      */
     isWindowAction: function (event) {
 
         // Getting the event to be triggered.
-        var theEvent = event || window.event;
+        let theEvent = event || window.event;
         // Getting the type of event or code.
-        var key = theEvent.shiftKey || theEvent.which;
+        let key = theEvent.shiftKey || theEvent.which;
         // Check with list of code and ignore holding.
         // Tab, Space, Home, End, Up, Down, Left, Right...
         if (key === 9 || key === 0 || key === 8 || key === 32 || key === 13 || key === 8 || (key >= 35 && key <= 40)) {
@@ -607,10 +607,10 @@ var helper = {
     getDefaultPattern: function (event, originalPattern) {
         if (typeof originalPattern == 'undefined') originalPattern = '';
         // Getting special characters list.
-        var allow_special = event.target.getAttribute('data-allowSpecial');
-        var pattern = event.target.pattern;
+        let allow_special = event.target.getAttribute('data-allowSpecial');
+        let pattern = event.target.pattern;
         console.log(pattern.length);
-        var defaultPattern;
+        let defaultPattern;
         // Set default values for special characters.
         if (!allow_special && allow_special === null) allow_special = '';
         // Format to string.
@@ -626,11 +626,11 @@ var helper = {
     // To validate event with the pattern.
     patternValid: function (event, pattern) {
         // Managing the Pattern.
-        var defaultPattern = this.getDefaultPattern(event, pattern);
+        let defaultPattern = this.getDefaultPattern(event, pattern);
         // Validate with special formed pattern.
-        var regex = new RegExp(defaultPattern);
+        let regex = new RegExp(defaultPattern);
         // Validation with Code.
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
         return regex.test(key);
     }
 };
