@@ -116,9 +116,8 @@ var jsValidator = {
         if (false == this.initialLoad) validationResponse.init(errorList);
 
         this.initialLoad = false;
-        alert('Status ' + status);
-        return false;
-        // return status;
+
+        return status;
 
     },
     // To looping all elements for actions.
@@ -326,6 +325,7 @@ var jsFilter = {
     isAlpha: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
+        // Managing the Pattern.
         var status = pattern.validate(event, 'a-zA-Z');
         // Return status of the Action.
         if (false === status) event.preventDefault();
@@ -342,6 +342,7 @@ var jsFilter = {
     isValidPassword: function (event) {
         // Prevent using "space".
         var charCode = (event.which) ? event.which : event.keyCode;
+        // If event is "space" then prevent to enter.
         if (charCode === 32) {
             event.preventDefault();
             return false;
@@ -487,6 +488,7 @@ var jsField = {
     // Return all required elements list.
     required: function (field, forceFilter) {
         var requiredFieldsList = [];
+        // Looping fields to filter.
         for (var i = 0; i < field.length; i++) {
             // Check and push elements.
             if (field[i].required === true || true === forceFilter) {
@@ -505,6 +507,7 @@ var jsField = {
 var jsRuleSets = {
     // To Check, whether the element have value or not.
     isSet: function (elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         var status = true;
         var value = elem.value;
@@ -514,6 +517,7 @@ var jsRuleSets = {
     },
     // To Check Element with Min Condition.
     min: function (elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         var status = true;
         var value = elem.value;
@@ -524,6 +528,7 @@ var jsRuleSets = {
     },
     // To Check Element with Max Condition.
     max: function (elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         var status = true;
         var value = elem.value;
@@ -534,6 +539,7 @@ var jsRuleSets = {
     },
     // To Check Element Email is Valid or Not.
     email: function (elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         var status = true;
         var email = elem.value;
@@ -550,6 +556,7 @@ var jsRuleSets = {
     },
     // To Check Element Phone Value is Valid or Not.
     phone: function (elem, pattern) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         var status = true;
         if (elem.value === '') status = false;
@@ -557,6 +564,7 @@ var jsRuleSets = {
     },
     // To Compare two Elements Values.
     compare: function (elem1) {
+        // If field is not required, then return "true".
         if (false === elem1.required) return true;
         var elem2_id = elem1.getAttribute('data-check');
 
