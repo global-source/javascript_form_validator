@@ -1,5 +1,12 @@
-## Welcome to Global Source - JavaScript Form Validator
+## Global Source - JavaScript Form Validator
 
+
+[![Packagist](https://img.shields.io/badge/JavaScript-Core-blue.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/JavaScript-ES6-green.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/Build-Alpha-lightgrey.svg)](https://github.com/global-source/javascript_form_validator)
+
+
+### Installation 
+
+    composer require shankar-thiyagaraajan/javascript-form-validator
 
 #### Why javascriptFormValidator ?
 
@@ -11,7 +18,7 @@
 
 **Steps to Integrate to Form :**
 
-``<script src="simpleFormValidator/src/js/formValidator.js"></script>``
+``<script src="./../src/js/formValidator.js"></script>``
 
 Then Integrate your form with Validator.
 
