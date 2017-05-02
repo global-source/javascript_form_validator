@@ -339,6 +339,7 @@ class jsFilter {
         if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
             event.preventDefault();
         }
+        // Updating the value.
         event.target.value = (event.target.value > max) ? max : event.target.value;
     }
 
@@ -752,8 +753,12 @@ let pattern = {
     }
 };
 
+/*
+ * To Manage all kind of error response.
+ */
 let validationResponse = {
 
+    // Initiating the Response handler.
     init: function (errorList) {
         // let errorElements = option.errorElem;
         jsLogger.out('Errors', errorList);
@@ -761,19 +766,19 @@ let validationResponse = {
         this.select(errorList.select);
         this.textArea(errorList.textArea);
     },
-
+    // To handle the "input" element.
     input: function (elem) {
         this.process(elem);
     },
-
+    // To handle the "select" element.
     select: function (elem) {
         this.process(elem);
     },
-
+    // To handle the "textArea" element.
     textArea: function (elem) {
         this.process(elem);
     },
-
+    // To process all handlers.
     process: function (elem) {
         for (let i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
@@ -791,13 +796,13 @@ let validationResponse = {
                     jsLogger.out('Element Found', true);
                 }
                 jsLogger.out('Error Elem', activeElem.el);
+                // Append HTML response to the Element.
                 activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
         }
     },
-
+    // Perform template creation and update.
     template: function () {
 
     }
-
 };

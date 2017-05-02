@@ -693,8 +693,13 @@ var pattern = {
     }
 };
 
+
+/*
+ * To Manage all kind of error response.
+ */
 var validationResponse = {
 
+    // Initiating the Response handler.
     init: function (errorList) {
         // let errorElements = option.errorElem;
         jsLogger.out('Errors', errorList);
@@ -702,21 +707,21 @@ var validationResponse = {
         this.select(errorList.select);
         this.textArea(errorList.textArea);
     },
-
+    // To handle the "input" element.
     input: function (elem) {
         this.process(elem);
     },
-
+    // To handle the "select" element.
     select: function (elem) {
         this.process(elem);
     },
-
+    // To handle the "textArea" element.
     textArea: function (elem) {
         this.process(elem);
     },
-
+    // To process all handlers.
     process: function (elem) {
-        for (var i in elem) {
+        for (let i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
             if (elem[i].el && true === elem[i].el.required) {
                 var activeElem = elem[i];
@@ -732,13 +737,13 @@ var validationResponse = {
                     jsLogger.out('Element Found', true);
                 }
                 jsLogger.out('Error Elem', activeElem.el);
+                // Append HTML response to the Element.
                 activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
         }
     },
-
+    // Perform template creation and update.
     template: function () {
 
     }
-
 };
