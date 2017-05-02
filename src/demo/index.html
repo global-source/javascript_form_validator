@@ -9,6 +9,7 @@
     <form name="demo_validation" id="demoValidation" novalidate>
         <div>
             <div>
+                <div id="test"></div>
                 <label for="name">Name :</label>
                 <input type="text" data-allow="onlyAlpha" pattern="^[a-zA-C]+$" id="check" data-allowSpecial="_."
                        value=""
@@ -16,28 +17,28 @@
                        required>
             </div>
             <div>
-                <label for="name">String :</label>
-                <input type="text" data-allow="string" value="" name="name" required>
+                <label for="name1">String :</label>
+                <input type="text" data-allow="string" value="" name="name1" required>
             </div>
             <div>
-                <label for="name">String + [0-5]:</label>
-                <input type="text" data-allow="string   " pattern="^[a-zA-Z0-5]+$" value="" name="name" required>
+                <label for="name2">String + [0-5]:</label>
+                <input type="text" data-allow="string" pattern="^[a-zA-Z0-5]+$" value="" name="name2" required>
             </div>
             <div>
-                <label for="name">Number in [3-7] :</label>
-                <input type="number" name="name" id="number" min="3" max="7" required>
+                <label for="name3">Number in [3-500] :</label>
+                <input type="number" name="name3" id="number" min="3" max="500" required>
             </div>
             <div>
-                <label for="name">Password :</label>
+                <label for="name4">Password :</label>
                 <input type="password" data-check="rePassword" id="password" pattern="^[a-zA-Z0-5]+$"
                        data-allow="password"
                        value=""
-                       name="name"
+                       name="name4"
                        required>
             </div>
             <div>
-                <label for="name">Re-Password :</label>
-                <input type="password" name="name" data-parent="password" id="rePassword" pattern="^[a-zA-Z0-5]+$"
+                <label for="name5">Re-Password :</label>
+                <input type="password" name="name5" data-parent="password" id="rePassword" pattern="^[a-zA-Z0-5]+$"
                        data-allow="password"
                        required>
             </div>

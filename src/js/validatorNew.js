@@ -23,6 +23,7 @@
 /*
  * For Managing overall Validation flow.
  */
+
 var jsValidator = {
     // Holding form element data.
     formData: false,
@@ -78,6 +79,8 @@ var jsValidator = {
         // Loading JS error list.
         var errorList = this.formErrorList;
 
+        var option = [];
+
         // Looping the "input" elements for validation and filter implementation.
         errorList.input = this.elemLoop('input', jsFormObj.input);
         // Looping the "textArea" elements fro validation filter implementation.
@@ -86,6 +89,8 @@ var jsValidator = {
         errorList.select = this.elemLoop('select', jsFormObj.select);
 
         jsLogger.out('Error List', this.formErrorList);
+
+        option.push({'errorElem': errorList});
 
         // To Update global Validation Status.
         // If, Input elements have no errors.
@@ -100,6 +105,7 @@ var jsValidator = {
                 }
             }
         }
+        validationResponse.init(errorList);
         return status;
 
     },
@@ -136,16 +142,32 @@ var jsValidator = {
     // To start validation process.
     checkValidation: function (activeElem, log) {
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem))log.push({'empty': activeElem});
+        if (!jsRuleSets.isSet(activeElem)) log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
         // To Check the Value is less than min or not.
-        if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({'min': activeElem});
+        if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'min',
+            'id': activeElem.name
+        });
         // To Check the Value is grater than max or not.
-        if (activeElem.max) if (!jsRuleSets.max(activeElem)) log.push({'max': activeElem});
+        if (activeElem.max) if (!jsRuleSets.max(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'max',
+            'id': activeElem.name
+        });
         // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") if (!jsRuleSets.email(activeElem)) log.push({'email': activeElem});
+        if (activeElem.type == "email") if (!jsRuleSets.email(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'email',
+            'id': activeElem.name
+        });
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password")if (!jsRuleSets.compare(activeElem)) log.push({'password': activeElem});
+        if (activeElem.type == "password")if (!jsRuleSets.compare(activeElem)) log.push({
+            'el': activeElem,
+            'type': 'password',
+            'id': activeElem.name
+        });
         // Return overall log report of validation.
         return log;
     },
@@ -225,7 +247,7 @@ var jsFilter = {
     isAlpha: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
-        var status = helper.patternValid(event, 'a-zA-Z');
+        var status = pattern.validate(event, 'a-zA-Z');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -234,7 +256,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -248,7 +270,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -257,7 +279,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = helper.patternValid(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -506,6 +528,7 @@ var jsLogger = {
     }
 };
 
+
 var helper = {
     /*
      * To check the keyboard action is window action or not.
@@ -525,33 +548,42 @@ var helper = {
         // If not in list then check return with corresponding data.
         key = String.fromCharCode(key);
         // Return also if length is 0.
-        if (key.length == 0) return true;
+        if (key.length === 0) return true;
 
         // Finally return "false" for general keys.
         return false;
-    },
-    getDefaultPattern: function (event, originalPattern) {
-        if (typeof originalPattern == 'undefined') var originalPattern = false;
+    }
+};
+
+/*
+ * Simple library for Pattern.
+ */
+var pattern = {
+
+    // To generate pattern from element attribute.
+    getDefault: function (event, originalPattern) {
+        if (typeof originalPattern == 'undefined') originalPattern = '';
         // Getting special characters list.
         var allow_special = event.target.getAttribute('data-allowSpecial');
         var pattern = event.target.pattern;
         console.log(pattern.length);
         var defaultPattern;
         // Set default values for special characters.
-        if (!allow_special && allow_special == null) allow_special = '';
+        if (!allow_special && allow_special === null) allow_special = '';
         // Format to string.
         allow_special = allow_special.toString();
 
-        if (pattern != '' && pattern.length > 0 && pattern != null) {
+        if (pattern !== '' && pattern.length > 0 && pattern !== null) {
             defaultPattern = pattern;
         } else {
             defaultPattern = '^[' + originalPattern + allow_special + ']+$';
         }
         return defaultPattern;
     },
-    patternValid: function (event, pattern) {
+    // To validate event with the pattern.
+    validate: function (event, pattern) {
         // Managing the Pattern.
-        var defaultPattern = this.getDefaultPattern(event, pattern);
+        var defaultPattern = this.getDefault(event, pattern);
         // Validate with special formed pattern.
         var regex = new RegExp(defaultPattern);
         // Validation with Code.
@@ -560,3 +592,51 @@ var helper = {
     }
 };
 
+var validationResponse = {
+
+    init: function (errorList) {
+        // let errorElements = option.errorElem;
+        jsLogger.out('Errors', errorList);
+        this.input(errorList.input);
+        // this.select(errorElements.select);
+        // this.textArea(errorElements.textArea);
+    },
+
+    input: function (elem) {
+        this.process(elem);
+    },
+
+    select: function (elem) {
+        this.process(elem);
+    },
+
+    textArea: function (elem) {
+        this.process(elem);
+    },
+
+    process: function (elem) {
+        for (let i in elem) {
+            // jsLogger.out('Element', document.getElementById(elem[i].id));
+            if (elem[i].el) {
+                var spanTag = document.getElementById(elem[i].id);
+                jsLogger.out('Element Hit', spanTag);
+                if (typeof(spanTag) === 'undefined' || spanTag === null) {
+                    jsLogger.out('Element Found', false);
+                    spanTag = document.createElement('span');
+                    spanTag.setAttribute('id', elem[i].id);
+                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                } else {
+                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    jsLogger.out('Element Found', true);
+                }
+                jsLogger.out('Error Elem', elem[i].el);
+                elem[i].el.parentNode.insertBefore(spanTag, elem[i].el.nextSibling);
+            }
+        }
+    },
+
+    template: function () {
+
+    }
+
+};
