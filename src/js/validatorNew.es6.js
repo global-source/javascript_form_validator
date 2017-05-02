@@ -552,6 +552,7 @@ class jsRuleSets {
 
     // To Check, whether the element have value or not.
     static isSet(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
@@ -562,6 +563,7 @@ class jsRuleSets {
 
     // To Check Element with Min Condition.
     static min(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
@@ -573,6 +575,7 @@ class jsRuleSets {
 
     // To Check Element with Max Condition.
     static max(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
@@ -584,6 +587,7 @@ class jsRuleSets {
 
     // To Check Element Email is Valid or Not.
     static email(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let email = elem.value;
@@ -601,6 +605,7 @@ class jsRuleSets {
 
     // To Check Element Phone Value is Valid or Not.
     static phone(elem, pattern) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         if (elem.value === '') status = false;
@@ -609,6 +614,7 @@ class jsRuleSets {
 
     // To Compare two Elements Values.
     static compare(elem1) {
+        // If field is not required, then return "true".
         if (false === elem1.required) return true;
 
         let elem2_id = elem1.getAttribute('data-check');
