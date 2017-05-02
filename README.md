@@ -1,7 +1,7 @@
 ## Global Source - JavaScript Form Validator
 
 
-[![Packagist](https://img.shields.io/badge/JavaScript-Core-blue.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/JavaScript-ES6-green.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/Build-Alpha-lightgrey.svg)](https://github.com/global-source/javascript_form_validator)
+[![Packagist](https://img.shields.io/badge/JavaScript-Core-blue.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/JavaScript-ES6-green.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/Build-Alpha-lightgrey.svg)](https://github.com/global-source/javascript_form_validator) [![License](https://img.shields.io/badge/Version-v.0.9-blue.svg)](https://github.com/shankarThiyagaraajan/PHP_Migration/blob/master/LICENSE)
 
 
 ### Installation 
