@@ -37,6 +37,10 @@ var jsValidator = {
     jsFormError: false,
     // Overall error list.
     formErrorList: {},
+    // To Filter non-required fields.
+    forceFilter: false,
+    // To Filter the First load.
+    initialLoad: true,
     // Initiating the Validator.
     init: function (option) {
         jsLogger.table(option);
@@ -49,6 +53,8 @@ var jsValidator = {
         this.jsForm = jsForm.init(option);
         // Initiate form error setup.
         this.jsFormError = jsFormError.init();
+        // Update Force Field status.
+        this.forceFilter = option.forceFilter;
         // To check the form elements.
         this.check();
         // To register the listener.
@@ -59,9 +65,10 @@ var jsValidator = {
     // To make listen on submit action of the form.
     submitListener: function (formID, obj) {
         // To off submit listener, if only filter needed.
-        if (false === this.onlyFilter) {
+        if (false === this.onlyFilter || typeof(this.onlyFilter) === 'undefined') {
             // Initiate listener for form submission.
             document.querySelector("#" + formID).addEventListener("submit", function (e) {
+
                 // To start form validations.
                 // Check validation status.
                 if (false === obj.check()) {
@@ -105,25 +112,35 @@ var jsValidator = {
                 }
             }
         }
-        validationResponse.init(errorList);
-        return status;
+
+        if (false == this.initialLoad) validationResponse.init(errorList);
+
+        this.initialLoad = false;
+        alert('Status ' + status);
+        return false;
+        // return status;
 
     },
     // To looping all elements for actions.
     elemLoop: function (index, formElem) {
         // Initiate empty array for keep list of errors.
         var log = [];
+        // Sanity check with "formElem".
+        if (formElem === null || typeof formElem === 'undefined') return false;
         // Looping elements.
         for (var i in formElem) {
-            // Switch to static variable.
-            var activeElem = formElem[i];
-            // Apply filter to element.
-            this.applyFilters(activeElem);
-            // If not only filter, then start validations.
-            if (false === this.onlyFilter) {
-                // Initiate validations and update to log.
-                log = this.checkValidation(activeElem, log);
+            if (formElem[i]) {
+                // Switch to static variable.
+                var activeElem = formElem[i];
+                // Apply filter to element.
+                this.applyFilters(activeElem);
+                jsLogger.out('Only Filter', this.onlyFilter);
+                // If not only filter, then start validations.
+                if (false === this.onlyFilter || typeof(this.onlyFilter) === 'undefined') {
+                    // Initiate validations and update to log.
+                    log = this.checkValidation(activeElem, log);
 
+                }
             }
         }
         return log;
@@ -141,33 +158,67 @@ var jsValidator = {
     },
     // To start validation process.
     checkValidation: function (activeElem, log) {
+        jsLogger.out('Active Elem', activeElem);
+        var validElem = true;
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem)) log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+        if (!jsRuleSets.isSet(activeElem)) {
+            log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+        }
         // To Check the Value is less than min or not.
-        if (activeElem.min) if (!jsRuleSets.min(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'min',
-            'id': activeElem.name
-        });
+        if (activeElem.min) {
+            if (!jsRuleSets.min(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'min',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
         // To Check the Value is grater than max or not.
-        if (activeElem.max) if (!jsRuleSets.max(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'max',
-            'id': activeElem.name
-        });
+        if (activeElem.max) {
+            if (!jsRuleSets.max(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'max',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
         // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") if (!jsRuleSets.email(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'email',
-            'id': activeElem.name
-        });
+        if (activeElem.type == "email") {
+            if (!jsRuleSets.email(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'email',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password")if (!jsRuleSets.compare(activeElem)) log.push({
-            'el': activeElem,
-            'type': 'password',
-            'id': activeElem.name
-        });
+        if (activeElem.type == "password") {
+            if (!jsRuleSets.compare(activeElem)) {
+                log.push({
+                    'el': activeElem,
+                    'type': 'password',
+                    'id': activeElem.name
+                });
+                validElem = false;
+            }
+        }
+        // If valid, then reset validation message.
+        if (true === validElem) {
+            jsLogger.out('Valid Elem', activeElem);
+            if (activeElem.name !== '') {
+                var elem = document.getElementById(activeElem.name);
+                if (typeof(elem) !== 'undefined' && elem !== null) {
+                    elem.innerHTML = '';
+                }
+            }
+        }
         // Return overall log report of validation.
         return log;
     },
@@ -184,37 +235,65 @@ var jsValidator = {
 var jsFilter = {
     // Number elements filter listener.
     number: function (element) {
-        element.addEventListener("keypress", this.isNumberKey, false);
+        var status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+        if (true === status) element.addEventListener("keypress", this.isNumberKey, false);
     },
     // String elements filter listener.
     string: function (element) {
         // Getting "data" attribute for actions.
         var type = element.getAttribute('data-allow');
         var current = this;
+        var status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
 
         // Switching actions.
         switch (type) {
             // Allow only alphabets [a-zA-Z] not [0-9] and special characters.
             case 'onlyAlpha':
-                element.addEventListener("keypress", current.isAlpha, false);
+                if (true === status) element.addEventListener("keypress", current.isAlpha, false);
                 break;
             // Allow only alpha Numeric [a-zA-Z0-9] not special characters.
             case 'string':
-                element.addEventListener("keypress", current.isAlphaNumeric, false);
+                if (true === status) element.addEventListener("keypress", current.isAlphaNumeric, false);
                 break;
             // Allow based on the pattern given.
             default:
-                element.addEventListener("keypress", current.isPatternValid, false);
+                if (true === status) element.addEventListener("keypress", current.isPatternValid, false);
                 break;
         }
     },
     // Email elements filter listener.
     email: function (element) {
-        element.addEventListener("keypress", jsRuleSets.email, false);
+        var status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+        if (true === status) element.addEventListener("keypress", jsRuleSets.email, false);
     },
     // Numeric with Limited elements filter listener.
     limit: function (element) {
-        element.addEventListener("keypress", this.isInLimit, false);
+        var status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+        if (true === status) element.addEventListener("keypress", this.isInLimit, false);
     },
     // Restrict element with it's limit.
     isInLimit: function (event) {
@@ -339,10 +418,16 @@ var jsForm = {
     textArea: false,
     // Form element's labels.
     label: false,
+    // Perform Force Filter on Elements.
+    forceFilter: false,
 
     // To Initiating the "jsForm".
     init: function (option) {
         jsLogger.out('Form', option.form);
+        // Update Global Option.
+        this.options = option;
+        // Enable/Disable Force Filter.
+        this.forceFilter = option.forceFilter;
         // To Register Form.
         this.registerForm(option.form);
         // To Parsing the Form.
@@ -377,12 +462,14 @@ var jsForm = {
     },
     // To set fields are required.
     required: function () {
+        // let jsField = new jsField().init(this.options);
+        let forceFilter = this.forceFilter;
         // Filter all required "input" elements.
-        this.input = jsField.required(this.input);
+        this.input = jsField.required(this.input, forceFilter);
         // Filter all required "select" elements.
-        this.select = jsField.required(this.select);
+        this.select = jsField.required(this.select, forceFilter);
         // Filter all required "textArea" elements.
-        this.textArea = jsField.required(this.textArea);
+        this.textArea = jsField.required(this.textArea, forceFilter);
     },
     log: function () {
         jsLogger.out('Form', this.form);
@@ -398,11 +485,11 @@ var jsForm = {
  */
 var jsField = {
     // Return all required elements list.
-    required: function (field) {
+    required: function (field, forceFilter) {
         var requiredFieldsList = [];
         for (var i = 0; i < field.length; i++) {
             // Check and push elements.
-            if (field[i].required === true) {
+            if (field[i].required === true || true === forceFilter) {
                 // Pushing to required elements list.
                 requiredFieldsList.push(field[i]);
             }
@@ -418,6 +505,7 @@ var jsField = {
 var jsRuleSets = {
     // To Check, whether the element have value or not.
     isSet: function (elem) {
+        if (false === elem.required) return true;
         var status = true;
         var value = elem.value;
         //TODO: Implement suitable solution for this.
@@ -426,6 +514,7 @@ var jsRuleSets = {
     },
     // To Check Element with Min Condition.
     min: function (elem) {
+        if (false === elem.required) return true;
         var status = true;
         var value = elem.value;
         var min = elem.min;
@@ -435,6 +524,7 @@ var jsRuleSets = {
     },
     // To Check Element with Max Condition.
     max: function (elem) {
+        if (false === elem.required) return true;
         var status = true;
         var value = elem.value;
         var max = elem.max;
@@ -444,6 +534,7 @@ var jsRuleSets = {
     },
     // To Check Element Email is Valid or Not.
     email: function (elem) {
+        if (false === elem.required) return true;
         var status = true;
         var email = elem.value;
         // To Validate Email.
@@ -459,12 +550,14 @@ var jsRuleSets = {
     },
     // To Check Element Phone Value is Valid or Not.
     phone: function (elem, pattern) {
+        if (false === elem.required) return true;
         var status = true;
         if (elem.value === '') status = false;
         return status;
     },
     // To Compare two Elements Values.
     compare: function (elem1) {
+        if (false === elem1.required) return true;
         var elem2_id = elem1.getAttribute('data-check');
 
         if (elem2_id == null) elem2_id = elem1.getAttribute('data-parent');
@@ -598,8 +691,8 @@ var validationResponse = {
         // let errorElements = option.errorElem;
         jsLogger.out('Errors', errorList);
         this.input(errorList.input);
-        // this.select(errorElements.select);
-        // this.textArea(errorElements.textArea);
+        this.select(errorList.select);
+        this.textArea(errorList.textArea);
     },
 
     input: function (elem) {
@@ -615,22 +708,23 @@ var validationResponse = {
     },
 
     process: function (elem) {
-        for (let i in elem) {
+        for (var i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
-            if (elem[i].el) {
-                var spanTag = document.getElementById(elem[i].id);
-                jsLogger.out('Element Hit', spanTag);
+            if (elem[i].el && true === elem[i].el.required) {
+                var activeElem = elem[i];
+                var spanTag = document.getElementById(activeElem.id);
+                jsLogger.out('Element Hit', activeElem.type);
                 if (typeof(spanTag) === 'undefined' || spanTag === null) {
                     jsLogger.out('Element Found', false);
                     spanTag = document.createElement('span');
-                    spanTag.setAttribute('id', elem[i].id);
-                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    spanTag.setAttribute('id', activeElem.id);
+                    spanTag.innerHTML = 'Error ' + activeElem.type + ' - ' + Math.random().toString(36).substring(7);
                 } else {
-                    spanTag.innerHTML = 'Error ' + Math.random().toString(36).substring(7);
+                    spanTag.innerHTML = 'Error ' + activeElem.type + ' - ' + Math.random().toString(36).substring(7);
                     jsLogger.out('Element Found', true);
                 }
-                jsLogger.out('Error Elem', elem[i].el);
-                elem[i].el.parentNode.insertBefore(spanTag, elem[i].el.nextSibling);
+                jsLogger.out('Error Elem', activeElem.el);
+                activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
         }
     },
