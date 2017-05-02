@@ -72,7 +72,7 @@ class jsValidator {
     // To make listen on submit action of the form.
     submitListener(formID, obj) {
         // To off submit listener, if only filter needed.
-        if (false === this.onlyFilter) {
+        if (false === this.onlyFilter || typeof(this.onlyFilter) === 'undefined') {
             // Initiate listener for form submission.
             document.querySelector("#" + formID).addEventListener("submit", function (e) {
 
@@ -141,7 +141,7 @@ class jsValidator {
                 // Apply filter to element.
                 this.applyFilters(activeElem);
                 // If not only filter, then start validations.
-                if (false === this.onlyFilter) {
+                if (false === this.onlyFilter || 'undefined' === this.onlyFilter) {
                     // Initiate validations and update to log.
                     log = this.constructor.checkValidation(activeElem, log);
                 }
@@ -217,9 +217,11 @@ class jsValidator {
         }
         // If valid, then reset validation message.
         if (true === validElem) {
-            let elem = document.getElementById(activeElem.name);
-            if (typeof(elem) !== 'undefined' && elem !== null) {
-                elem.innerHTML = '';
+            if (activeElem.name !== '') {
+                let elem = document.getElementById(activeElem.name);
+                if (typeof(elem) !== 'undefined' && elem !== null) {
+                    elem.innerHTML = '';
+                }
             }
         }
         // Return overall log report of validation.

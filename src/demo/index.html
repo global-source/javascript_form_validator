@@ -43,19 +43,19 @@
                        required>
             </div>
             <div>
-                <select required>
+                <select required name="select1">
                     <option value=""></option>
                     <option value="123">123</option>
                 </select>
             </div>
             <div>
-                <select required>
+                <select required name="select2">
                     <option value=""></option>
                     <option value="456">456</option>
                 </select>
             </div>
             <div>
-                <textarea required></textarea>
+                <textarea required name="text1"></textarea>
             </div>
         </div>
         <input type="submit" value="Save">
@@ -63,21 +63,21 @@
 </div>
 
 <!--<script src="./../js/formValidator.min.js"></script>-->
-<script src="./../js/validatorNew.js"></script>
-<!--<script src="../js/validatorNew.es6.js"></script>-->
+<!--<script src="./../js/validatorNew.js"></script>-->
+<script src="../js/validatorNew.es6.js"></script>
 <script>
 
     (function () {
 
-        var val = jsValidator.init({
-            form: 'demoValidation',
-            onlyFilter: false
-        });
-
-//        var val = new jsValidator().init({
+//        var val = jsValidator.init({
 //            form: 'demoValidation',
 //            onlyFilter: false
 //        });
+
+        var val = new jsValidator().init({
+            form: 'demoValidation',
+            onlyFilter: false
+        });
 
     }());
 </script>
