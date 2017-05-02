@@ -339,6 +339,7 @@ class jsFilter {
         if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
             event.preventDefault();
         }
+        // Updating the value.
         event.target.value = (event.target.value > max) ? max : event.target.value;
     }
 
@@ -552,6 +553,7 @@ class jsRuleSets {
 
     // To Check, whether the element have value or not.
     static isSet(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
@@ -562,6 +564,7 @@ class jsRuleSets {
 
     // To Check Element with Min Condition.
     static min(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
@@ -573,6 +576,7 @@ class jsRuleSets {
 
     // To Check Element with Max Condition.
     static max(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let value = elem.value;
@@ -584,6 +588,7 @@ class jsRuleSets {
 
     // To Check Element Email is Valid or Not.
     static email(elem) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         let email = elem.value;
@@ -601,6 +606,7 @@ class jsRuleSets {
 
     // To Check Element Phone Value is Valid or Not.
     static phone(elem, pattern) {
+        // If field is not required, then return "true".
         if (false === elem.required) return true;
         let status = true;
         if (elem.value === '') status = false;
@@ -609,6 +615,7 @@ class jsRuleSets {
 
     // To Compare two Elements Values.
     static compare(elem1) {
+        // If field is not required, then return "true".
         if (false === elem1.required) return true;
 
         let elem2_id = elem1.getAttribute('data-check');
@@ -746,8 +753,12 @@ let pattern = {
     }
 };
 
+/*
+ * To Manage all kind of error response.
+ */
 let validationResponse = {
 
+    // Initiating the Response handler.
     init: function (errorList) {
         // let errorElements = option.errorElem;
         jsLogger.out('Errors', errorList);
@@ -755,19 +766,19 @@ let validationResponse = {
         this.select(errorList.select);
         this.textArea(errorList.textArea);
     },
-
+    // To handle the "input" element.
     input: function (elem) {
         this.process(elem);
     },
-
+    // To handle the "select" element.
     select: function (elem) {
         this.process(elem);
     },
-
+    // To handle the "textArea" element.
     textArea: function (elem) {
         this.process(elem);
     },
-
+    // To process all handlers.
     process: function (elem) {
         for (let i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
@@ -785,13 +796,13 @@ let validationResponse = {
                     jsLogger.out('Element Found', true);
                 }
                 jsLogger.out('Error Elem', activeElem.el);
+                // Append HTML response to the Element.
                 activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
         }
     },
-
+    // Perform template creation and update.
     template: function () {
 
     }
-
 };
