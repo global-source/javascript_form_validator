@@ -18,20 +18,29 @@
 
 **Steps to Integrate to Form :**
 
+```html
 <script src="./../src/js/formValidator.js"></script>
+```
 
 Then Integrate your form with Validator.
 
              
+```javascript
+var myform = new jsValidator().init({
+        form: 'form2submit',
+        forceFilter: true
+    });
 ```
-var data = {
-  form: 'new_ticket_form',          // Required.
-  warning_color: 'aa0000',          // Optional.
-  new_class: 'test'                 // Optional.
-          };
+#### To check validation
 
-// Validation Will Init Here.
-validate(data);
+```javascript
+myform.check() // True | False
+```
+
+#### To apply on dynamic elements
+
+```javascript
+myform.update() // It will update the DOM.```
 ```
           
           
@@ -44,16 +53,16 @@ It has automated listener to eliminating unnecessary changes on form.
 1. Validation take place between tags, so need to specify the **ID**  
    of the Form or any other tags.
    
-  ```
+```html
   <form id="newUser"> </form>  // Preferred
            
   <div id=newUser> </div>      // Not-Preferred [but it supports]
-  ```
+```
            
 2. Input Fields should specify the type of validation.
  
     #### For General Input Validation
-
+   ```html
            // For Simple Require.
            <input type="text" required name="name">
            
@@ -68,34 +77,42 @@ It has automated listener to eliminating unnecessary changes on form.
            
            // For Password Match Validation.
            <input type="password" required match="field_name" name="password">
+     ```
           
    #### For Select Validation
-           
-           //For Simple Required
-           <select class="" required>
-              <option value="-"></option>                  // Value '-' is used to represent empty.
-              <option value="...">...</option>
-              <option value="...">...</option>
-              <option value="...">...</option>
-           </select>
-           
+
+```Javascript
+//For Simple Required
+<select class="" required>
+    <option value=""></option>    
+    <option value="...">...</option>
+    <option value="...">...</option>
+    <option value="...">...</option>
+</select>
+```
+
    #### For Textarea Validation
+   ```Html
            
            // For Simple Required
            <textarea required>.....</textarea>
-           
+    ``` 
            
 3. Every Input Fields should have a Label with **FOR** attributes.
 
+    ```Html
            <label for="uname">Name :</label>
            <input type="text" name="uname" required>
+    ```
            
 4. In form use "**novalidate**" to avoid browser interuptions.
-
+    
+    ````Html
          <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> 
          ...
          ...
          </form>
+    ````
          
            
 It Will listen the **Submit** button event **Automatically**.
