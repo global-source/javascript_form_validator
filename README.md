@@ -130,7 +130,7 @@ It has automated listener to eliminating unnecessary changes on form.
 4. In form use "**novalidate**" to avoid browser interuptions.
     
     ```html
-         <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> 
+         <form method="POST/GET.." action="PATH TO HANDLE" id="form2submit" ... novalidate> 
          ...
          ...
          </form>
