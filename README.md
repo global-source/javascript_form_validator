@@ -43,14 +43,14 @@ Then Integrate your form with Validator.
     });
     
 ```
-## Option
+## Options
 
-| Name        | Values          | Descriptions                                                                          |
-| ----------- | --------------- | ------------------------------------------------------------------------------------- |
-| form        | #FormID         | **ID** of the Form to  handle validations and filters.                                    |
-| forceFilter | True, False     | **True**, to allow form filter without form submission. **False**, default.           |
+| Name        | Values          | Descriptions                                                                 | Mandatory |
+| ----------- | --------------- | ---------------------------------------------------------------------------- | --------- |
+| form        | #FormID         | **ID** of the Form to  handle validations and filters.                       |    Yes    |
+| forceFilter | True, False     | **True**, to allow form filter without form validations. **False**, default. |    No     |
 
-## Action
+## Actions
 
 ### `check()` : Return as Form is Valid or Not.
 
