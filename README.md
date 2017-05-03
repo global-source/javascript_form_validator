@@ -26,10 +26,19 @@ Then Integrate your form with Validator.
 
              
 ```javascript
+
+ // For Nativ
+ var myform = jsValidator.init({
+        form: 'form2submit',
+        forceFilter: true
+    });
+    
+ // For ES6 
  var myform = new jsValidator().init({
         form: 'form2submit',
         forceFilter: true
     });
+    
 ```
 ## Validator Action
 
