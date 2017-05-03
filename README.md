@@ -18,26 +18,21 @@
 
 **Steps to Integrate to Form :**
 
-``<script src="./../src/js/formValidator.js"></script>``
+<script src="./../src/js/formValidator.js"></script>
 
 Then Integrate your form with Validator.
 
-         <script>
-         
-             /.../
              
-             var data = {
-               form: 'new_ticket_form',          // Required.
-               warning_color: 'aa0000',          // Optional.
-               new_class: 'test'                 // Optional.
-             };
+```
+var data = {
+  form: 'new_ticket_form',          // Required.
+  warning_color: 'aa0000',          // Optional.
+  new_class: 'test'                 // Optional.
+          };
 
-             // Validation Will Init Here.
-             validate(data);
-             
-             /.../
-             
-          </script>
+// Validation Will Init Here.
+validate(data);
+```
           
           
 Currently the validation will trigger on submit button trigger.
@@ -49,9 +44,11 @@ It has automated listener to eliminating unnecessary changes on form.
 1. Validation take place between tags, so need to specify the **ID**  
    of the Form or any other tags.
    
-           <form id="newUser"> </form>  // Preferred
+  ```
+  <form id="newUser"> </form>  // Preferred
            
-           <div id=newUser> </div>      // Not-Preferred [but it supports]
+  <div id=newUser> </div>      // Not-Preferred [but it supports]
+  ```
            
 2. Input Fields should specify the type of validation.
  
