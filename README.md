@@ -65,7 +65,7 @@ Then Integrate your form with Validator.
  // It will update the DOM.
  myform.update() 
 ```
-          
+---
           
 Currently the validation will trigger on submit button trigger.
 
