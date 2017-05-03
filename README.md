@@ -27,13 +27,13 @@ Then Integrate your form with Validator.
              
 ```javascript
 
- // For Nativ
+ // For Native-Javascript
  var myform = jsValidator.init({
         form: 'form2submit',
         forceFilter: true
     });
     
- // For ES6 
+ // For ES6
  var myform = new jsValidator().init({
         form: 'form2submit',
         forceFilter: true
