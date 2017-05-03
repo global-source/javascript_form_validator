@@ -31,16 +31,20 @@ Then Integrate your form with Validator.
         forceFilter: true
     });
 ```
-#### To check validation
+## Validator Action
+
+### Check Form is Valid or Not.
 
 ```javascript
- myform.check() // True | False
+// Retrun status as True|False.
+ myform.check() 
 ```
 
-#### To apply on dynamic elements
+### Update all Newly created elements to Validator's List.
 
 ```javascript
- myform.update() // It will update the DOM.```
+ // It will update the DOM.
+ myform.update() 
 ```
           
           
