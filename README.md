@@ -19,14 +19,14 @@
 **Steps to Integrate to Form :**
 
 ```html
-<script src="./../src/js/formValidator.js"></script>
+ <script src="./../src/js/formValidator.js"></script>
 ```
 
 Then Integrate your form with Validator.
 
              
 ```javascript
-var myform = new jsValidator().init({
+ var myform = new jsValidator().init({
         form: 'form2submit',
         forceFilter: true
     });
@@ -34,13 +34,13 @@ var myform = new jsValidator().init({
 #### To check validation
 
 ```javascript
-myform.check() // True | False
+ myform.check() // True | False
 ```
 
 #### To apply on dynamic elements
 
 ```javascript
-myform.update() // It will update the DOM.```
+ myform.update() // It will update the DOM.```
 ```
           
           
@@ -54,65 +54,64 @@ It has automated listener to eliminating unnecessary changes on form.
    of the Form or any other tags.
    
 ```html
-  <form id="newUser"> </form>  // Preferred
+   <form id="newUser"> </form>  // Preferred
            
-  <div id=newUser> </div>      // Not-Preferred [but it supports]
+   <div id=newUser> </div>      // Not-Preferred.
 ```
            
 2. Input Fields should specify the type of validation.
  
     #### For General Input Validation
+    
    ```html
-           // For Simple Require.
-           <input type="text" required name="name">
+   // For Simple Require.
+   <input type="text" required name="name">
            
-           // For Min Restriction.
-           <input type="text" required min=2 name="name">
+   // For Min Restriction.
+   <input type="text" required min=2 name="name">
            
-           // For Max Restriction.
-           <input type="text" required max=16 name="name">
+   // For Max Restriction.
+   <input type="text" required max=16 name="name">
            
-           // For E-Mail Validation.
-           <input type="email" required name="name">           
+   // For E-Mail Validation.
+   <input type="email" required name="name">           
            
-           // For Password Match Validation.
-           <input type="password" required match="field_name" name="password">
+   // For Password Match Validation.
+   <input type="password" required match="field_name" name="password">
      ```
           
    #### For Select Validation
 
-```Javascript
-//For Simple Required
-<select class="" required>
+```javascript
+  <select class="" required>
     <option value=""></option>    
     <option value="...">...</option>
     <option value="...">...</option>
     <option value="...">...</option>
-</select>
+  </select>
 ```
 
    #### For Textarea Validation
-   ```Html
-           
-           // For Simple Required
-           <textarea required>.....</textarea>
-    ``` 
+   
+  ```html           
+  <textarea required>.....</textarea>
+  ``` 
            
 3. Every Input Fields should have a Label with **FOR** attributes.
 
-    ```Html
+     ```html
            <label for="uname">Name :</label>
            <input type="text" name="uname" required>
-    ```
+     ```
            
 4. In form use "**novalidate**" to avoid browser interuptions.
     
-    ````Html
+    ```html
          <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> 
          ...
          ...
          </form>
-    ````
+    ```
          
            
 It Will listen the **Submit** button event **Automatically**.
