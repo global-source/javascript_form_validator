@@ -13,7 +13,7 @@
     </div>
     <div>
         <label></label>
-        <input type="text" data-allow="onlyAlpha" name="name2">
+        <input type="text" data-allow="onlyAlpha" name="name2" required>
     </div>
     <div>
         <label></label>
@@ -25,19 +25,19 @@
     </div>
 </form>
 
-<script src="./../js/validatorNew.js"></script>
-<!--<script src="./../js/validatorNew.es6.js"></script>-->
+<!--<script src="./../js/validatorNew.js"></script>-->
+<script src="./../js/validatorNew.es6.js"></script>
 <script>
 
-    //    var form = new jsValidator().init({
-    //        form: 'form2submit',
-    //        forceFilter: true
-    //    });
-
-    var form = jsValidator.init({
+    var form = new jsValidator().init({
         form: 'form2submit',
         forceFilter: true
     });
+
+    //    var form = jsValidator.init({
+    //        form: 'form2submit',
+    //        forceFilter: true
+    //    });
 
 </script>
 </body>
