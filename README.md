@@ -8,18 +8,21 @@
 
     composer require shankar-thiyagaraajan/javascript-form-validator
 
-#### Why javascriptFormValidator ?
+## What's New in this Validator ?
 
-1. It's developed by Core JavaScript. 
-2. It supports most of browsers.
-3. Light Weight Library
-4. Very Simple Implementation.
-5. PowerFull Form Management. 
+  * Support **Native** and **ES6** Javascript,
+  * Pure Javascript Code (**No Dependency**),
+  * Simplified Implementations,
+  * **HTML 5 validation** for all Browsers,
+  * Reliable and **Dynamic** level **DOM** Validations.
+
 
 **Steps to Integrate to Form :**
 
-```html
- <script src="./../src/js/formValidator.js"></script>
+```html        
+ <script src="./../src/js/validatorNew.js"></script>
+ or
+ <script src="./../src/js/validatorNew.es6.js"></script>
 ```
 
 Then Integrate your form with Validator.
