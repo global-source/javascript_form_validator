@@ -32,27 +32,34 @@ Then Integrate your form with Validator.
 
  // For Native-Javascript
  var myform = jsValidator.init({
-        form: 'form2submit',
+        form: 'form2submit',   // #id
         forceFilter: true
     });
     
  // For ES6
  var myform = new jsValidator().init({
-        form: 'form2submit',
+        form: 'form2submit',   // #id
         forceFilter: true
     });
     
 ```
-## Validator Action
+## Option
 
-### Check Form is Valid or Not.
+| Name        | Values          | Descriptions                                                                          |
+| ----------- | --------------- | ------------------------------------------------------------------------------------- |
+| form        | #FormID         | **ID** of the Form to  handle validations and filters.                                    |
+| forceFilter | True, False     | **True**, to allow form filter without form submission. **False**, default.           |
+
+## Action
+
+### `check()` : Return as Form is Valid or Not.
 
 ```javascript
 // Retrun status as True|False.
  myform.check() 
 ```
 
-### Update all Newly created elements to Validator's List.
+### `update()` : Update Newly created DOM elements to Validator.
 
 ```javascript
  // It will update the DOM.
@@ -70,9 +77,9 @@ It has automated listener to eliminating unnecessary changes on form.
    of the Form or any other tags.
    
 ```html
-   <form id="newUser"> </form>  // Preferred
+   <form id="form2submit"> </form>  // Preferred
            
-   <div id=newUser> </div>      // Not-Preferred.
+   <div id=form2submit> </div>      // Not-Preferred.
 ```
            
 2. Input Fields should specify the type of validation.
@@ -135,7 +142,8 @@ It Will listen the **Submit** button event **Automatically**.
 So **No Need** to use ``<input type="submit"..... onClick="validate()" .....>``
 
 
-### License
+License
+===
 
 MIT License
 
