@@ -45,6 +45,8 @@ class jsValidator {
         this.forceFilter = false;
         // To Filter the First load.
         this.initialLoad = true;
+        // Global options.
+        this.option = false;
     }
 
     // Initiating the Validator.
@@ -53,6 +55,8 @@ class jsValidator {
 
         jsLogger.table(option);
 
+        // To Update global options.
+        this.option = option;
         // Update "jsSettings" to global object.
         this.jsSettings = new jsSettings().init(option);
         // Update "jsForm" to global object.
@@ -83,6 +87,18 @@ class jsValidator {
                 }
             });
         }
+    }
+
+    // To update the DOM to make action listener.
+    update() {
+        // To Update global options.
+        let option = this.option;
+        // Update "jsSettings" to global object.
+        this.jsSettings = new jsSettings().init(option);
+        // Update "jsForm" to global object.
+        this.jsForm = new jsForm().init(option);
+        // Initiate form error setup.
+        this.jsFormError = new jsFormError().init();
     }
 
     // To checking all elements from registered form.
