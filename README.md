@@ -55,7 +55,7 @@ It has automated listener to eliminating unnecessary changes on form.
            
 2. Input Fields should specify the type of validation.
  
-         ////////////////////For General Input Validation////////////////////////////////////////
+    #### For General Input Validation
 
            // For Simple Require.
            <input type="text" required name="name">
@@ -71,8 +71,8 @@ It has automated listener to eliminating unnecessary changes on form.
            
            // For Password Match Validation.
            <input type="password" required match="field_name" name="password">
-           
-           ////////////////////For Select Validation////////////////////////////////////////////
+          
+   #### For Select Validation
            
            //For Simple Required
            <select class="" required>
@@ -82,7 +82,7 @@ It has automated listener to eliminating unnecessary changes on form.
               <option value="...">...</option>
            </select>
            
-           ////////////////////For Textarea Validation//////////////////////////////////////////
+   #### For Textarea Validation
            
            // For Simple Required
            <textarea required>.....</textarea>
@@ -93,34 +93,18 @@ It has automated listener to eliminating unnecessary changes on form.
            <label for="uname">Name :</label>
            <input type="text" name="uname" required>
            
-4. Form Tag Should use "**novalidate**" to Avoid Browser level validation.
+4. In form use "**novalidate**" to avoid browser interuptions.
 
          <form method="POST/GET.." action="PATH TO HANDLE" ... novalidate> 
          ...
          ...
          </form>
          
- **This will support to avoid interrupts from browsers.**
-       
-           ex. Chrome Browser      
            
 It Will listen the **Submit** button event **Automatically**.
 
 So **No Need** to use ``<input type="submit"..... onClick="validate()" .....>``
 
-**Adjust your CSS with the following,**
-
-       input {
-            display: block !important;
-        }
-
-        span {
-            display: inline !important;
-        }
-
-        label {
-            display: inline !important;
-        }
 
 ### License
 
