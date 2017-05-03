@@ -41,10 +41,14 @@ var jsValidator = {
     forceFilter: false,
     // To Filter the First load.
     initialLoad: true,
+    // Global options.
+    option: false,
     // Initiating the Validator.
     init: function (option) {
         jsLogger.table(option);
 
+        // To Update global options.
+        this.option = option;
         // Updating the filter flag to global.
         this.onlyFilter = option.onlyFilter;
         // Update "jsSettings" to global object.
@@ -77,6 +81,18 @@ var jsValidator = {
                 }
             });
         }
+    },
+    // To Refresh the DOM and enable Dynamic-Elements to Access.
+    update: function () {
+        var option = this.option;
+        // Updating the filter flag to global.
+        this.onlyFilter = option.onlyFilter;
+        // Update "jsSettings" to global object.
+        this.jsSettings = jsSettings.init(option);
+        // Update "jsForm" to global object.
+        this.jsForm = jsForm.init(option);
+        // Initiate form error setup.
+        this.jsFormError = jsFormError.init();
     },
     // To checking all elements from registered form.
     check: function () {
