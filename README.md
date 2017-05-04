@@ -87,10 +87,10 @@ Then Integrate your form with Validator.
 | Name              | Values          | Descriptions                                                                 |
 | ----------------- | --------------- | ---------------------------------------------------------------------------- |
 | required          |  True, False    | Set the fields is required to submit the Form.                               |
-| type: min         |  Integer        | To set the Minimun length of characters to proceed.                          |
-| type: max         |  Integer        | To set the Maximum length of characters to proceed.                          |
-| type: password    |  AlphaNumeric   | To set and compare password.                                                 |
-| type: email       |  AlphaNumeric   | To check the email is valid or not.                                          |
+| type="min"         |  Integer        | To set the Minimun length of characters to proceed.                          |
+| type="max"         |  Integer        | To set the Maximum length of characters to proceed.                          |
+| type="password"    |  AlphaNumeric   | To set and compare password.                                                 |
+| type="email"       |  AlphaNumeric   | To check the email is valid or not.                                          |
 | data-message="Error Message"| String | User defined, element based direct error message to handle.                 |
 | data-allow="onlyAlpha"| a-zA-Z Only | Allow only string, no digits and no special characters.                      |
 | data-allow="string"| a-zA-Z0-9 Only | Allow only string and digits, no special characters.                         |
@@ -188,8 +188,6 @@ It has automated listener to eliminating unnecessary changes on form.
          
            
 It Will listen the **Submit** button event **Automatically**.
-
-So **No Need** to use ``<input type="submit"..... onClick="validate()" .....>``
 
 
 License
