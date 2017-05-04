@@ -120,17 +120,17 @@ It has automated listener to eliminating unnecessary changes on form.
   <textarea required>.....</textarea>
   ``` 
            
-3. Every Input Fields should have a Label with **FOR** attributes.
+3. Every Input Fields should have a Label with **`FOR`** attributes.
 
      ```html
            <label for="uname">Name :</label>
            <input type="text" name="uname" required>
      ```
            
-4. In form use "**novalidate**" to avoid browser interuptions.
+4. In form use **`novalidate`** to avoid browser interuptions.
     
     ```html
-         <form method="POST/GET.." action="PATH TO HANDLE" id="form2submit" ... novalidate> 
+         <form method="POST/GET/PUT/PATCH/DELETE.." action="PATH TO HANDLE" id="form2submit" ... novalidate> 
          ...
          ...
          </form>
