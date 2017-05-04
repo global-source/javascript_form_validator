@@ -177,7 +177,7 @@ var jsValidator = {
         var validElem = true;
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem)) {
-            log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+            log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
@@ -719,7 +719,7 @@ var validationResponse = {
     init: function (errorList, option) {
         this.errorMessage = option.message;
         // var errorElements = option.errorElem;
-        jsLogger.out('Errors', errorList);
+        // jsLogger.out('Errors', errorList);
         this.input(errorList.input);
         this.select(errorList.select);
         this.textArea(errorList.textArea);
@@ -739,33 +739,30 @@ var validationResponse = {
     // To process all handlers.
     process: function (elem) {
         var elementDefaultResponse = '';
-        var errorType;
         for (var i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
             if (elem[i].el && true === elem[i].el.required) {
                 // Manage active element.
                 var activeElem = elem[i];
                 var errorType = elem[i].type;
-                errorType = this.errorMessage[errorType];
-
 
                 // Fetch from Element's direct message.
                 elementDefaultResponse = this.template(activeElem, errorType);
 
                 var spanTag = document.getElementById(activeElem.id);
-                jsLogger.out('Element Hit', errorType);
+                // jsLogger.out('Element Hit', errorType);
                 // Create new response Message SPAN.
                 if (typeof(spanTag) === 'undefined' || spanTag === null) {
-                    jsLogger.out('Element Found', false);
+                    // jsLogger.out('Element Found', false);
                     spanTag = document.createElement('span');
                     spanTag.setAttribute('id', activeElem.id);
                     spanTag.innerHTML = elementDefaultResponse;
                 } else {
                     // Re-use Existing response Message SPAN.
                     spanTag.innerHTML = elementDefaultResponse;
-                    jsLogger.out('Element Found', true);
+                    // jsLogger.out('Element Found', true);
                 }
-                jsLogger.out('Error Elem', activeElem.el);
+                // jsLogger.out('Error Elem', activeElem.el);
                 // Append HTML response to the Element.
                 activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
@@ -773,12 +770,19 @@ var validationResponse = {
     },
     // Perform template creation and update.
     template: function (activeElem, errorType) {
-        var elementDefaultResponse = '';
+        jsLogger.out('error Type 0', errorType);
         var errorIndex = '';
         var activeError = '';
-        activeElem.el.getAttribute('data-message');
-        if (!elementDefaultResponse || elementDefaultResponse == '') {
+        var elementDefaultResponse;
+
+        // Sanity check with error message object.
+        if (typeof this.errorMessage !== 'undefined' && typeof this.errorMessage[errorType] !== 'undefined') {
+
+            errorType = this.errorMessage[errorType];
+
+            activeElem.el.getAttribute('data-message');
             if (errorType) {
+                jsLogger.out('errorType', errorType);
                 activeError = errorType;
                 // If error type is Min or Max, then it will proceed responsive.
                 if (activeElem.type == 'min' || activeElem.type == 'max') {
@@ -787,14 +791,27 @@ var validationResponse = {
                     if ('max' == activeElem.type) errorIndex = activeElem.el.max;
 
                     activeError = activeError.replace('[INDEX]', errorIndex);
-
                 }
-
-                elementDefaultResponse = activeError;
-            } else {
-                elementDefaultResponse = 'Error ' + errorType + ' - ' + Math.random().toString(36).substring(7);
             }
+        } else {
+            activeError = this.default(errorType);
         }
+
+        elementDefaultResponse = activeError;
+
         return elementDefaultResponse;
+    },
+    default: function (errorType) {
+
+        var errorMessages = {
+            required: 'This field is required',
+            min: 'This field length is too low.',
+            max: 'This field length is exceeds the limit',
+            password: 'Password does not match.',
+            email: 'Email is not valid'
+        };
+        if (typeof errorType !== 'string') return false;
+        if (typeof  errorMessages[errorType] === 'undefined') return false;
+        return errorMessages[errorType];
     }
 };
