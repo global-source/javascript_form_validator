@@ -170,6 +170,8 @@ var jsValidator = {
         // if (activeElem.min || activeElem.max) jsFilter.limit(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
+        // Apply filter with pattern.
+        if (activeElem.getAttribute('pattern')) jsFilter.pattern(activeElem);
     },
     // To start validation process.
     checkValidation: function (activeElem, log) {
@@ -296,6 +298,21 @@ var jsFilter = {
                 break;
         }
     },
+    // Pattern based filter and listener.
+    pattern: function (element) {
+        var current = this;
+
+        var status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+
+        if (true === status) element.addEventListener("keypress", current.isPatternValid, false);
+
+    },
     // Email elements filter listener.
     email: function (element) {
         var status = true;
@@ -383,7 +400,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = pattern.validate(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-4');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
