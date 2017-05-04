@@ -18,12 +18,16 @@
                required>
     </div>
     <div>
+        <label>Pattern</label>
+        <input type="text" pattern="^[0-5]+$" data-allowSpecial="/-" name="pattern">
+    </div>
+    <div>
         <label>Number</label>
         <input type="number" name="name3" required>
     </div>
     <div>
         <label>Min Validator</label>
-        <input type="text" data-allow="onlyAlpha" name="name4" min="5" max="10" required>
+        <input type="text" name="name4" min="5" max="10" required>
     </div>
     <div>
         <label>Email Validator</label>
@@ -43,34 +47,34 @@
     </div>
 </form>
 
-<script src="./../js/validatorNew.js"></script>
-<!--<script src="./../js/validatorNew.es6.js"></script>-->
+<!--<script src="./../js/validatorNew.js"></script>-->
+<script src="./../js/validatorNew.es6.js"></script>
 
 <script>
 
-//    var form = new jsValidator().init({
-//        form: 'form2submit',
-//        forceFilter: true,
-//        message: {
-//            required: 'This field is required 123 !',
-//            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-//            max: 'This field is exceeds the limit of [INDEX]',
-//            password: 'Password doesn\'t match !',
-//            email: 'Invalid Email found !'
-//        }
-//    });
+    var form = new jsValidator().init({
+        form: 'form2submit',
+        forceFilter: true,
+        message: {
+            required: 'This field is required 123 !',
+            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
+    });
 
-        var form = jsValidator.init({
-            form: 'form2submit',
-            forceFilter: true,
-            message: {
-                required: 'This field is required !',
-                min: 'This field is less then the limit [INDEX]',
-                max: 'This field is exceeds the limit of [INDEX]',
-                password: 'Password doesn\'t match !',
-                email: 'Invalid Email found !'
-            }
-        });
+    //    var form = jsValidator.init({
+    //        form: 'form2submit',
+    //        forceFilter: true,
+    //        message: {
+    //            required: 'This field is required !',
+    //            min: 'This field is less then the limit [INDEX]',
+    //            max: 'This field is exceeds the limit of [INDEX]',
+    //            password: 'Password doesn\'t match !',
+    //            email: 'Invalid Email found !'
+    //        }
+    //    });
 
 </script>
 </body>
