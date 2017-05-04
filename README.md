@@ -45,10 +45,11 @@ Then Integrate your form with Validator.
 ```
 ## Options
 
-| Name        | Values          | Descriptions                                                                 | Mandatory |
-| ----------- | --------------- | ---------------------------------------------------------------------------- | --------- |
-| form        | #FormID         | **ID** of the Form to  handle validations and filters.                       |    Yes    |
-| forceFilter | True, False     | **True**, to allow form filter without form validations. **False**, default. |    No     |
+| Name        | Values          | Descriptions                                                                  | Mandatory |
+| ----------- | --------------- | ----------------------------------------------------------------------------- | --------- |
+| form        | #ID             | **ID** of the Form to  handle validations and filters.                        |    Yes    |
+| forceFilter | True, False     | **True**, to allow form filter without form validations. **False**, default.  |    No     |
+| message     | Object          | Response message for **required**,**min**,**max**,**password**,**email** &more|    No     |
 
 ## Actions
 
@@ -66,6 +67,19 @@ Then Integrate your form with Validator.
  myform.update() 
 ```
 ---
+
+## Attributes
+
+| Name              | Values          | Descriptions                                                                 |
+| ----------------- | --------------- | ---------------------------------------------------------------------------- |
+| required          |  True, False    | Set the fields is required to submit the Form.                               |
+| type: min         |  Integer        | To set the Minimun length of characters to proceed.                          |
+| type: max         |  Integer        | To set the Maximum length of characters to proceed.                          |
+| type: password    |  AlphaNumeric   | To set and compare password.                                                 |
+| type: email       |  AlphaNumeric   | To check the email is valid or not.                                          |
+| data-allow="onlyAlpha"| a-zA-Z Only | Allow only string, no digits and no special characters.                      |
+| data-allow="string"| a-zA-Z0-9 Only | Allow only string and digits, no special characters.                         |
+| data-allowSpecial="/_+"| Special characters | Allow only given special characters.                                 |
           
 Currently the validation will trigger on submit button trigger.
 
