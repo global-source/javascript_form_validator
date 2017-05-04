@@ -33,13 +33,27 @@ Then Integrate your form with Validator.
  // For Native-Javascript
  var myform = jsValidator.init({
         form: 'form2submit',   // #id
-        forceFilter: true
+        forceFilter: true,
+         message: {
+            required: 'This field is required !',
+            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
     });
     
  // For ES6
  var myform = new jsValidator().init({
         form: 'form2submit',   // #id
-        forceFilter: true
+        forceFilter: true,
+         message: {
+            required: 'This field is required !',
+            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
     });
     
 ```
@@ -77,9 +91,11 @@ Then Integrate your form with Validator.
 | type: max         |  Integer        | To set the Maximum length of characters to proceed.                          |
 | type: password    |  AlphaNumeric   | To set and compare password.                                                 |
 | type: email       |  AlphaNumeric   | To check the email is valid or not.                                          |
+| data-message="Error Message"| String | User defined, element based direct error message to handle.                 |
 | data-allow="onlyAlpha"| a-zA-Z Only | Allow only string, no digits and no special characters.                      |
 | data-allow="string"| a-zA-Z0-9 Only | Allow only string and digits, no special characters.                         |
 | data-allowSpecial="/_+"| Special characters | Allow only given special characters.                                 |
+| [INDEX]           |  Numeric        | Now supports Min&Max validation to show the limit.                           |
           
 Currently the validation will trigger on submit button trigger.
 
@@ -101,38 +117,58 @@ It has automated listener to eliminating unnecessary changes on form.
     #### For General Input Validation
     
    ```html
-   // For Simple Require.
-   <input type="text" required name="name">
-           
-   // For Min Restriction.
-   <input type="text" required min=2 name="name">
-           
-   // For Max Restriction.
-   <input type="text" required max=16 name="name">
-           
-   // For E-Mail Validation.
-   <input type="email" required name="name">           
-           
-   // For Password Match Validation.
-   <input type="password" required match="field_name" name="password">
+   <form method="post" id="form2submit" novalidate>
+    <div>
+        <label>Only Alpha</label>
+        <input type="text" `data-allow="onlyAlpha"` name="alpha"
+               data-message="<b style='color:green'>This field is required.</b>" required>
+    </div>
+    <div>
+        <label>String</label>
+        <input type="text" data-allow="string" data-message="This also required." data-allowSpecial="+-" name="string"
+               required>
+    </div>
+    <div>
+        <label>Pattern</label>
+        <input type="text" pattern="^[0-5]+$" data-allowSpecial="/-" name="pattern">
+    </div>
+    <div>
+        <label>Number</label>
+        <input type="number" name="number" required>
+    </div>
+    <div>
+        <label>Min Validator</label>
+        <input type="text" name="myNumber" min="5" max="10" required>
+    </div>
+    <div>
+        <label>Email Validator</label>
+        <input type="email" name="email" required>
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" name="password" data-check="repassword" id="password" required>
+    </div>
+     <div>
+        <label>Password</label>
+        <input type="password" name="password" data-check="repassword" id="password" required>
+    </div>
+    <div>
+        <label>List</label>
+         <select name="list" required>
+             <option value="item1">Item1</option>
+             <option value="item2">Item2</option>
+             <option value="item3">Item3</option>
+         </select>
+    </div>
+    <div>
+         <label>Description</label>
+         <textarea required name="desc"></textarea>
+    </div>
+    <div>
+        <input type="submit" value="Submit">
+    </div>
+</form>
      ```
-          
-   #### For Select Validation
-
-```javascript
-  <select class="" required>
-    <option value=""></option>    
-    <option value="...">...</option>
-    <option value="...">...</option>
-    <option value="...">...</option>
-  </select>
-```
-
-   #### For Textarea Validation
-   
-  ```html           
-  <textarea required>.....</textarea>
-  ``` 
            
 3. Every Input Fields should have a Label with **`FOR`** attributes.
 
