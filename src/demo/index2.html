@@ -9,7 +9,8 @@
 <form method="post" id="form2submit" novalidate>
     <div>
         <label>Only Alpha</label>
-        <input type="text" data-allow="onlyAlpha" name="name1" data-message="This field is required." required>
+        <input type="text" data-allow="onlyAlpha" name="name1"
+               data-message="<b style='color:green'>This field is required.</b>" required>
     </div>
     <div>
         <label>String</label>
@@ -22,7 +23,19 @@
     </div>
     <div>
         <label>Min Validator</label>
-        <input type="text" data-allow="onlyAlpha" name="name4" min="5" required>
+        <input type="text" data-allow="onlyAlpha" name="name4" min="5" max="10" required>
+    </div>
+    <div>
+        <label>Email Validator</label>
+        <input type="email" name="email" required>
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" name="name5" data-check="repassword" id="password" required>
+    </div>
+    <div>
+        <label>Re-Password</label>
+        <input type="password" name="name6" data-parent="password" id="repassword" required>
     </div>
     <div>
         <label></label>
@@ -42,7 +55,8 @@
 //            required: 'This field is required 123 !',
 //            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
 //            max: 'This field is exceeds the limit of [INDEX]',
-//            password: 'Password doesn\'t match !'
+//            password: 'Password doesn\'t match !',
+//            email: 'Invalid Email found !'
 //        }
 //    });
 
@@ -53,9 +67,9 @@
                 required: 'This field is required !',
                 min: 'This field is less then the limit [INDEX]',
                 max: 'This field is exceeds the limit of [INDEX]',
-                password: 'Password doesn\'t match !'
+                password: 'Password doesn\'t match !',
+                email: 'Invalid Email found !'
             }
-
         });
 
 </script>
