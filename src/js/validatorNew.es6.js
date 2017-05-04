@@ -121,7 +121,7 @@ class jsValidator {
 
         option.push({'errorElem': errorList});
 
-        jsLogger.out('Error List', option);
+        // jsLogger.out('Error List', option);
 
         // To Update global Validation Status.
         // If, Input elements have no errors.
@@ -148,7 +148,7 @@ class jsValidator {
         // Initiate empty array for keep list of errors.
         let log = [];
         if (formElem === null || typeof formElem === 'undefined') return false;
-        jsLogger.out('Elem Loop Filter', formElem);
+        // jsLogger.out('Elem Loop Filter', formElem);
         // Looping elements.
         for (let i in formElem) {
             if (formElem[i]) {
@@ -173,7 +173,7 @@ class jsValidator {
         // Apply filter for Email elements.
         if (activeElem.type == 'email') this.jsFilter.constructor.email(activeElem);
         // Apply filter for Numeric elements.
-        if (activeElem.min || activeElem.max) this.jsFilter.limit(activeElem);
+        // if (activeElem.min || activeElem.max) this.jsFilter.limit(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) this.jsFilter.string(activeElem);
     }
@@ -188,47 +188,55 @@ class jsValidator {
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
-            if (!jsRuleSet.constructor.min(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'min',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSet.constructor.isSet(activeElem)) {
+                if (!jsRuleSet.constructor.min(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'min',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // To Check the Value is grater than max or not.
         if (activeElem.max) {
-            if (!jsRuleSet.constructor.max(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'max',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSet.constructor.isSet(activeElem)) {
+                if (!jsRuleSet.constructor.max(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'max',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // To Check the Entered E-mail is Valid or Not.
         if (activeElem.type == "email") {
-            if (!jsRuleSet.constructor.email(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'email',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSet.constructor.isSet(activeElem)) {
+                if (!jsRuleSet.constructor.email(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'email',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
         if (activeElem.type == "password") {
-            if (!jsRuleSet.constructor.compare(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'password',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSet.constructor.isSet(activeElem)) {
+                if (!jsRuleSet.constructor.compare(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'password',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // If valid, then reset validation message.
@@ -571,6 +579,7 @@ class jsRuleSets {
     static isSet(elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
+
         let status = true;
         let value = elem.value;
         //TODO: Implement suitable solution for this.
@@ -598,7 +607,7 @@ class jsRuleSets {
         let value = elem.value;
         let max = elem.max;
         //TODO: Implement suitable solution for this.
-        if (value > max) status = false;
+        if (value.length > max) status = false;
         return status;
     }
 
@@ -606,17 +615,20 @@ class jsRuleSets {
     static email(elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
-        let status = true;
+
+        let status = false;
         let email = elem.value;
         // To Validate Email.
         // Convert to Native String Format.
         email = email.toString();
         // To Check it as String or Not.
-        if (!email) status = false;
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             // Valid Email.
             status = true;
         }
+
+        if (!email) status = false;
+
         return status;
     }
 
@@ -631,18 +643,26 @@ class jsRuleSets {
 
     // To Compare two Elements Values.
     static compare(elem1) {
+        let status = false;
+
         // If field is not required, then return "true".
-        if (false === elem1.required) return true;
+        if (false === elem1.required) status = true;
 
         let elem2_id = elem1.getAttribute('data-check');
 
+        if (typeof elem2_id == 'undefined' || elem2_id == null) status = false;
+
         if (elem2_id === null) elem2_id = elem1.getAttribute('data-parent');
-        elem2_id = elem2_id.toString();
+        if (elem2_id === null) {
+            status = false;
+        } else {
+            elem2_id = elem2_id.toString();
 
-        let elem2 = document.getElementById(elem2_id);
+            let elem2 = document.getElementById(elem2_id);
 
-        let status = true;
-        if (elem1.value !== elem2.value) status = false;
+            if (elem1.value === elem2.value) status = true;
+        }
+
         jsLogger.out('Compare Status', status);
         return status;
     }
@@ -811,7 +831,7 @@ let validationResponse = {
                 elementDefaultResponse = this.template(activeElem, errorType);
 
                 let spanTag = document.getElementById(activeElem.id);
-                jsLogger.out('Element Hit', errorType);
+                // jsLogger.out('Element Hit', errorType);
                 // Create new response Message SPAN.
                 if (typeof(spanTag) === 'undefined' || spanTag === null) {
                     jsLogger.out('Element Found', false);
@@ -821,9 +841,8 @@ let validationResponse = {
                 } else {
                     // Re-use Existing response Message SPAN.
                     spanTag.innerHTML = elementDefaultResponse;
-                    jsLogger.out('Element Found', true);
                 }
-                jsLogger.out('Error Elem', activeElem.el);
+                // jsLogger.out('Error Elem', activeElem.el);
                 // Append HTML response to the Element.
                 activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
