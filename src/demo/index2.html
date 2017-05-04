@@ -13,7 +13,8 @@
     </div>
     <div>
         <label>String</label>
-        <input type="text" data-allow="string" data-allowSpecial="+-" name="name2" required>
+        <input type="text" data-allow="string" data-message="This also required." data-allowSpecial="+-" name="name2"
+               required>
     </div>
     <div>
         <label>Number</label>
@@ -31,30 +32,31 @@
 
 <script src="./../js/validatorNew.js"></script>
 <!--<script src="./../js/validatorNew.es6.js"></script>-->
+
 <script>
 
-    //    var form = new jsValidator().init({
-    //        form: 'form2submit',
-    //        forceFilter: true,
-    //        message: {
-    //            required: 'This field is required !',
-    //            min: 'This field is less then the limit [INDEX]',
-    //            max: 'This field is exceeds the limit of [INDEX]',
-    //            password: 'Password doesn\'t match !'
-    //        }
-    //    });
+//    var form = new jsValidator().init({
+//        form: 'form2submit',
+//        forceFilter: true,
+//        message: {
+//            required: 'This field is required 123 !',
+//            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+//            max: 'This field is exceeds the limit of [INDEX]',
+//            password: 'Password doesn\'t match !'
+//        }
+//    });
 
-    var form = jsValidator.init({
-        form: 'form2submit',
-        forceFilter: true,
-        message: {
-            required: 'This field is required !',
-            min: 'This field is less then the limit [INDEX]',
-            max: 'This field is exceeds the limit of [INDEX]',
-            password: 'Password doesn\'t match !'
-        }
+        var form = jsValidator.init({
+            form: 'form2submit',
+            forceFilter: true,
+            message: {
+                required: 'This field is required !',
+                min: 'This field is less then the limit [INDEX]',
+                max: 'This field is exceeds the limit of [INDEX]',
+                password: 'Password doesn\'t match !'
+            }
 
-    });
+        });
 
 </script>
 </body>

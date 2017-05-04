@@ -184,7 +184,7 @@ class jsValidator {
         let validElem = true;
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem)) {
-            log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+            log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
@@ -804,6 +804,7 @@ let validationResponse = {
                 // Manage active element.
                 let activeElem = elem[i];
                 let errorType = elem[i].type;
+
                 errorType = this.errorMessage[errorType];
 
                 // Fetch from Element's direct message.
@@ -833,8 +834,9 @@ let validationResponse = {
         let elementDefaultResponse = '';
         let errorIndex = '';
         let activeError = '';
-        activeElem.el.getAttribute('data-message');
-        if (!elementDefaultResponse || elementDefaultResponse == '') {
+        activeError = activeElem.el.getAttribute('data-message');
+
+        if (!activeError || activeError == '') {
             if (errorType) {
                 activeError = errorType;
                 // If error type is Min or Max, then it will proceed responsive.
@@ -844,14 +846,20 @@ let validationResponse = {
                     if ('max' == activeElem.type) errorIndex = activeElem.el.max;
 
                     activeError = activeError.replace('[INDEX]', errorIndex);
-
                 }
 
-                elementDefaultResponse = activeError;
             } else {
-                elementDefaultResponse = 'Error ' + errorType + ' - ' + Math.random().toString(36).substring(7);
+                console.log('error type');
+                console.log(errorType);
+                console.log(this.errorMessage);
+                if (this.errorMessage[errorType]) {
+                    activeError = this.errorMessage[errorType];
+                } else {
+                    activeError = 'Error ' + errorType + ' - ' + Math.random().toString(36).substring(7);
+                }
             }
         }
+        elementDefaultResponse = activeError;
         return elementDefaultResponse;
     }
 };
