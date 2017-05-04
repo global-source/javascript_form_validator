@@ -136,7 +136,7 @@ class jsValidator {
                 }
             }
         }
-        if (false == this.initialLoad) validationResponse.init(errorList);
+        if (false == this.initialLoad) validationResponse.init(errorList, this.option);
 
         this.initialLoad = false;
 
@@ -184,7 +184,7 @@ class jsValidator {
         let validElem = true;
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem)) {
-            log.push({'el': activeElem, 'type': 'empty', 'id': activeElem.name});
+            log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
@@ -775,7 +775,8 @@ let pattern = {
 let validationResponse = {
 
     // Initiating the Response handler.
-    init: function (errorList) {
+    init: function (errorList, option) {
+        this.errorMessage = option.message;
         // let errorElements = option.errorElem;
         jsLogger.out('Errors', errorList);
         this.input(errorList.input);
@@ -796,19 +797,30 @@ let validationResponse = {
     },
     // To process all handlers.
     process: function (elem) {
+        var elementDefaultResponse = '';
         for (let i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
             if (elem[i].el && true === elem[i].el.required) {
+                // Manage active element.
                 let activeElem = elem[i];
+                let errorType = elem[i].type;
+
+                errorType = this.errorMessage[errorType];
+
+                // Fetch from Element's direct message.
+                elementDefaultResponse = this.template(activeElem, errorType);
+
                 let spanTag = document.getElementById(activeElem.id);
-                jsLogger.out('Element Hit', activeElem.type);
+                jsLogger.out('Element Hit', errorType);
+                // Create new response Message SPAN.
                 if (typeof(spanTag) === 'undefined' || spanTag === null) {
                     jsLogger.out('Element Found', false);
                     spanTag = document.createElement('span');
                     spanTag.setAttribute('id', activeElem.id);
-                    spanTag.innerHTML = 'Error ' + activeElem.type + ' - ' + Math.random().toString(36).substring(7);
+                    spanTag.innerHTML = elementDefaultResponse;
                 } else {
-                    spanTag.innerHTML = 'Error ' + activeElem.type + ' - ' + Math.random().toString(36).substring(7);
+                    // Re-use Existing response Message SPAN.
+                    spanTag.innerHTML = elementDefaultResponse;
                     jsLogger.out('Element Found', true);
                 }
                 jsLogger.out('Error Elem', activeElem.el);
@@ -818,7 +830,36 @@ let validationResponse = {
         }
     },
     // Perform template creation and update.
-    template: function () {
+    template: function (activeElem, errorType) {
+        let elementDefaultResponse = '';
+        let errorIndex = '';
+        let activeError = '';
+        activeError = activeElem.el.getAttribute('data-message');
 
+        if (!activeError || activeError == '') {
+            if (errorType) {
+                activeError = errorType;
+                // If error type is Min or Max, then it will proceed responsive.
+                if (activeElem.type == 'min' || activeElem.type == 'max') {
+
+                    if ('min' == activeElem.type) errorIndex = activeElem.el.min;
+                    if ('max' == activeElem.type) errorIndex = activeElem.el.max;
+
+                    activeError = activeError.replace('[INDEX]', errorIndex);
+                }
+
+            } else {
+                console.log('error type');
+                console.log(errorType);
+                console.log(this.errorMessage);
+                if (this.errorMessage[errorType]) {
+                    activeError = this.errorMessage[errorType];
+                } else {
+                    activeError = 'Error ' + errorType + ' - ' + Math.random().toString(36).substring(7);
+                }
+            }
+        }
+        elementDefaultResponse = activeError;
+        return elementDefaultResponse;
     }
 };

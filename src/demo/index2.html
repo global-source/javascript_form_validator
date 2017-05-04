@@ -8,16 +8,21 @@
 
 <form method="post" id="form2submit" novalidate>
     <div>
-        <label></label>
-        <input type="text" data-allow="onlyAlpha" name="name1" required>
+        <label>Only Alpha</label>
+        <input type="text" data-allow="onlyAlpha" name="name1" data-message="This field is required." required>
     </div>
     <div>
-        <label></label>
-        <input type="text" data-allow="onlyAlpha" name="name2" required>
+        <label>String</label>
+        <input type="text" data-allow="string" data-message="This also required." data-allowSpecial="+-" name="name2"
+               required>
     </div>
     <div>
-        <label></label>
-        <input type="text" data-allow="onlyAlpha" name="name3" required>
+        <label>Number</label>
+        <input type="number" name="name3" required>
+    </div>
+    <div>
+        <label>Min Validator</label>
+        <input type="text" data-allow="onlyAlpha" name="name4" min="5" required>
     </div>
     <div>
         <label></label>
@@ -25,19 +30,33 @@
     </div>
 </form>
 
-<!--<script src="./../js/validatorNew.js"></script>-->
-<script src="./../js/validatorNew.es6.js"></script>
+<script src="./../js/validatorNew.js"></script>
+<!--<script src="./../js/validatorNew.es6.js"></script>-->
+
 <script>
 
-    var form = new jsValidator().init({
-        form: 'form2submit',
-        forceFilter: true
-    });
+//    var form = new jsValidator().init({
+//        form: 'form2submit',
+//        forceFilter: true,
+//        message: {
+//            required: 'This field is required 123 !',
+//            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+//            max: 'This field is exceeds the limit of [INDEX]',
+//            password: 'Password doesn\'t match !'
+//        }
+//    });
 
-    //    var form = jsValidator.init({
-    //        form: 'form2submit',
-    //        forceFilter: true
-    //    });
+        var form = jsValidator.init({
+            form: 'form2submit',
+            forceFilter: true,
+            message: {
+                required: 'This field is required !',
+                min: 'This field is less then the limit [INDEX]',
+                max: 'This field is exceeds the limit of [INDEX]',
+                password: 'Password doesn\'t match !'
+            }
+
+        });
 
 </script>
 </body>
