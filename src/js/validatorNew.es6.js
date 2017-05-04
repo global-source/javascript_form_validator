@@ -613,7 +613,7 @@ class jsRuleSets {
         let value = elem.value;
         let min = elem.min;
         //TODO: Implement suitable solution for this.
-        if (value < min) status = false;
+        if (value.length < min) status = false;
         return status;
     }
 
