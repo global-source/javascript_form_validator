@@ -167,9 +167,11 @@ var jsValidator = {
         // Apply filter for Email elements.
         if (activeElem.type == 'email') jsFilter.email(activeElem);
         // Apply filter for Numeric elements.
-        if (activeElem.min || activeElem.max) jsFilter.limit(activeElem);
+        // if (activeElem.min || activeElem.max) jsFilter.limit(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
+        // Apply filter with pattern.
+        if (activeElem.getAttribute('pattern')) jsFilter.pattern(activeElem);
     },
     // To start validation process.
     checkValidation: function (activeElem, log) {
@@ -181,47 +183,55 @@ var jsValidator = {
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
-            if (!jsRuleSets.min(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'min',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.min(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'min',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // To Check the Value is grater than max or not.
         if (activeElem.max) {
-            if (!jsRuleSets.max(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'max',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.max(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'max',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // To Check the Entered E-mail is Valid or Not.
         if (activeElem.type == "email") {
-            if (!jsRuleSets.email(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'email',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.email(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'email',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
         if (activeElem.type == "password") {
-            if (!jsRuleSets.compare(activeElem)) {
-                log.push({
-                    'el': activeElem,
-                    'type': 'password',
-                    'id': activeElem.name
-                });
-                validElem = false;
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.compare(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'password',
+                        'id': activeElem.name
+                    });
+                    validElem = false;
+                }
             }
         }
         // If valid, then reset validation message.
@@ -287,6 +297,21 @@ var jsFilter = {
                 if (true === status) element.addEventListener("keypress", current.isPatternValid, false);
                 break;
         }
+    },
+    // Pattern based filter and listener.
+    pattern: function (element) {
+        var current = this;
+
+        var status = true;
+        if (false === this.forceFilter) {
+            status = false;
+            if (true === element.required) {
+                status = true;
+            }
+        }
+
+        if (true === status) element.addEventListener("keypress", current.isPatternValid, false);
+
     },
     // Email elements filter listener.
     email: function (element) {
@@ -375,7 +400,7 @@ var jsFilter = {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = pattern.validate(event, 'a-zA-Z0-9');
+        var status = pattern.validate(event, 'a-zA-Z0-4');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
@@ -557,17 +582,20 @@ var jsRuleSets = {
     email: function (elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
-        var status = true;
+
+        var status = false;
         var email = elem.value;
         // To Validate Email.
         // Convert to Native String Format.
         email = email.toString();
         // To Check it as String or Not.
-        if (!email) status = false;
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             // Valid Email.
             status = true;
         }
+
+        if (!email) status = false;
+
         return status;
     },
     // To Check Element Phone Value is Valid or Not.
@@ -580,17 +608,26 @@ var jsRuleSets = {
     },
     // To Compare two Elements Values.
     compare: function (elem1) {
+        var status = false;
+
         // If field is not required, then return "true".
-        if (false === elem1.required) return true;
+        if (false === elem1.required) status = true;
+
         var elem2_id = elem1.getAttribute('data-check');
 
-        if (elem2_id == null) elem2_id = elem1.getAttribute('data-parent');
-        elem2_id = elem2_id.toString();
+        if (typeof elem2_id == 'undefined' || elem2_id == null) status = false;
 
-        var elem2 = document.getElementById(elem2_id);
+        if (elem2_id === null) elem2_id = elem1.getAttribute('data-parent');
+        if (elem2_id === null) {
+            status = false;
+        } else {
+            elem2_id = elem2_id.toString();
 
-        var status = true;
-        if (elem1.value !== elem2.value) status = false;
+            var elem2 = document.getElementById(elem2_id);
+
+            if (elem1.value === elem2.value) status = true;
+        }
+
         jsLogger.out('Compare Status', status);
         return status;
     }
@@ -773,32 +810,33 @@ var validationResponse = {
         jsLogger.out('error Type 0', errorType);
         var errorIndex = '';
         var activeError = '';
-        var elementDefaultResponse;
+        var elementDefaultResponse = activeElem.el.getAttribute('data-message');
 
-        // Sanity check with error message object.
-        if (typeof this.errorMessage !== 'undefined' && typeof this.errorMessage[errorType] !== 'undefined') {
+        if (typeof elementDefaultResponse === 'undefined' || elementDefaultResponse === '' || elementDefaultResponse === null) {
 
-            errorType = this.errorMessage[errorType];
+            // Sanity check with error message object.
+            if (typeof this.errorMessage !== 'undefined' && typeof this.errorMessage[errorType] !== 'undefined') {
 
-            activeElem.el.getAttribute('data-message');
-            if (errorType) {
-                jsLogger.out('errorType', errorType);
-                activeError = errorType;
-                // If error type is Min or Max, then it will proceed responsive.
-                if (activeElem.type == 'min' || activeElem.type == 'max') {
+                errorType = this.errorMessage[errorType];
 
-                    if ('min' == activeElem.type) errorIndex = activeElem.el.min;
-                    if ('max' == activeElem.type) errorIndex = activeElem.el.max;
+                activeElem.el.getAttribute('data-message');
+                if (errorType) {
+                    jsLogger.out('errorType', errorType);
+                    activeError = errorType;
+                    // If error type is Min or Max, then it will proceed responsive.
+                    if (activeElem.type == 'min' || activeElem.type == 'max') {
 
-                    activeError = activeError.replace('[INDEX]', errorIndex);
+                        if ('min' == activeElem.type) errorIndex = activeElem.el.min;
+                        if ('max' == activeElem.type) errorIndex = activeElem.el.max;
+
+                        activeError = activeError.replace('[INDEX]', errorIndex);
+                    }
                 }
+            } else {
+                activeError = this.default(errorType);
             }
-        } else {
-            activeError = this.default(errorType);
+            elementDefaultResponse = activeError;
         }
-
-        elementDefaultResponse = activeError;
-
         return elementDefaultResponse;
     },
     default: function (errorType) {
