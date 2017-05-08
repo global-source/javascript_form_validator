@@ -116,11 +116,11 @@ It has automated listener to eliminating unnecessary changes on form.
  
     #### For General Input Validation
     
-   ```html
+```html
    <form method="post" id="form2submit" novalidate>
     <div>
         <label>Only Alpha</label>
-        <input type="text" `data-allow="onlyAlpha"` name="alpha"
+        <input type="text" data-allow="onlyAlpha" name="alpha"
                data-message="<b style='color:green'>This field is required.</b>" required>
     </div>
     <div>
@@ -168,7 +168,7 @@ It has automated listener to eliminating unnecessary changes on form.
         <input type="submit" value="Submit">
     </div>
 </form>
-     ```
+```
            
 3. Every Input Fields should have a Label with **`FOR`** attributes.
 
