@@ -112,9 +112,10 @@ It has automated listener to eliminating unnecessary changes on form.
    <div id=form2submit> </div>      // Not-Preferred.
 ```
            
-2. Input Fields should specify the type of validation.
  
-    #### For General Input Validation
+#### For General Input Validation
+           
+2. Input Fields should specify the type of validation.
     
 ```html
    <form method="post" id="form2submit" novalidate>
