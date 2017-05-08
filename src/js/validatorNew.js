@@ -124,6 +124,7 @@ var jsValidator = {
                 if (errorList.select.length === 0) {
                     // If validation pass, then update "validationPass" object.
                     status = true;
+                    jsLogger.out('status','Form Valid !');
                 }
             }
         }
