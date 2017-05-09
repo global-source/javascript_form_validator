@@ -23,7 +23,7 @@
 /*
  * For Managing overall Validation flow.
  */
-
+var firstErrorHit = false;
 var jsValidator = {
     // Holding form element data.
     formData: false,
@@ -177,9 +177,11 @@ var jsValidator = {
     checkValidation: function (activeElem, log) {
         jsLogger.out('Active Elem', activeElem);
         var validElem = true;
+
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem)) {
             log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
+            if (false == firstErrorHit) firstErrorHit = activeElem;
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
@@ -190,6 +192,7 @@ var jsValidator = {
                         'type': 'min',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -203,6 +206,7 @@ var jsValidator = {
                         'type': 'max',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -216,6 +220,7 @@ var jsValidator = {
                         'type': 'email',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -230,6 +235,7 @@ var jsValidator = {
                         'type': 'password',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -243,6 +249,10 @@ var jsValidator = {
                     elem.innerHTML = '';
                 }
             }
+        }
+        if (false !== firstErrorHit) {
+            jsLogger.out('First Hit ', firstErrorHit);
+            helper.scrollToItem(firstErrorHit);
         }
         // Return overall log report of validation.
         return log;
@@ -706,6 +716,33 @@ var helper = {
 
         // Finally return "false" for general keys.
         return false;
+    },
+    // To Scroll Up / Down to notify the item that have validation message.
+    scrollToItem: function (item) {
+        // Update by Tag Name.
+        var elem_name = item.nodeName;
+
+        // If Element is not valid, then return false.
+        if (!elem_name) return false;
+        if (null == elem_name) return false;
+
+        // Re-Fetching elements by its Name.
+        item = document.getElementsByName(elem_name);
+
+        var diff = (item.offsetTop - window.scrollY) / 20;
+        if (!window._lastDiff) {
+            window._lastDiff = 0;
+        }
+        if (Math.abs(diff) > 2) {
+            window.scrollTo(0, (window.scrollY + diff));
+            clearTimeout(window._TO);
+            if (diff !== window._lastDiff) {
+                window._lastDiff = diff;
+                window._TO = setTimeout(this.scrollToItem, 100, item);
+            }
+        } else {
+            window.scrollTo(0, item.offsetTop)
+        }
     }
 };
 
