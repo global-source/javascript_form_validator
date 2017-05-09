@@ -1,5 +1,5 @@
 /*!
- * JavaScript Validator Library v0.9
+ * JavaScript Validator Library v1.0
  * To perform effective validation and filter with form elements.
  *
  * Author : Shankar Thiyagaraajan
@@ -184,9 +184,11 @@ class jsValidator {
     static checkValidation(activeElem, log) {
         let jsRuleSet = new jsRuleSets();
         let validElem = true;
+        let firstErrorHit = false;
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem)) {
             log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
+            if (false == firstErrorHit) firstErrorHit = activeElem;
         }
         // To Check the Value is less than min or not.
         if (activeElem.min) {
@@ -197,6 +199,7 @@ class jsValidator {
                         'type': 'min',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -210,6 +213,7 @@ class jsValidator {
                         'type': 'max',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -223,6 +227,7 @@ class jsValidator {
                         'type': 'email',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -237,6 +242,7 @@ class jsValidator {
                         'type': 'password',
                         'id': activeElem.name
                     });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
@@ -250,6 +256,7 @@ class jsValidator {
                 }
             }
         }
+        if (false !== firstErrorHit) helper.scrollToItem(firstErrorHit);
         // Return overall log report of validation.
         return log;
     }
@@ -763,6 +770,31 @@ let helper = {
 
         // Finally return "false" for general keys.
         return false;
+    },
+    // To Scroll Up / Down to notify the item that have validation message.
+    scrollToItem: function (item) {
+        // Update by Tag Name.
+        let elem_name = item.nodeName;
+
+        // If Element is not valid, then return false.
+        if (!elem_name) return false;
+        if (null == elem_name) return false;
+        item = document.getElementsByName(elem_name);
+
+        var diff = (item.offsetTop - window.scrollY) / 20;
+        if (!window._lastDiff) {
+            window._lastDiff = 0;
+        }
+        if (Math.abs(diff) > 2) {
+            window.scrollTo(0, (window.scrollY + diff));
+            clearTimeout(window._TO);
+            if (diff !== window._lastDiff) {
+                window._lastDiff = diff;
+                window._TO = setTimeout(this.scrollToItem, 100, item);
+            }
+        } else {
+            window.scrollTo(0, item.offsetTop)
+        }
     }
 };
 
