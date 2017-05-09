@@ -6,7 +6,7 @@
 
 ### Installation 
 
-    composer require global-source/javascript_uri_query
+    composer require global-source/javascript-form-validator
 
 ## What's New in this Validator ?
 
