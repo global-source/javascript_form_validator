@@ -6,7 +6,7 @@
 
 ### Installation 
 
-    composer require shankar-thiyagaraajan/javascript-form-validator
+    composer require global-source/javascript_uri_query
 
 ## What's New in this Validator ?
 
