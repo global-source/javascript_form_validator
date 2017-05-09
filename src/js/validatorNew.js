@@ -1,5 +1,5 @@
 /*!
- * JavaScript Validator Library v0.9
+ * JavaScript Validator Library v1.0
  * To perform effective validation and filter with form elements.
  *
  * Author : Shankar Thiyagaraajan
