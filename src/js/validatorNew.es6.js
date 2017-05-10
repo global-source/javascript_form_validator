@@ -484,6 +484,10 @@ class jsForm {
 
     // To Parse all Relative Form components.
     parseForm(form) {
+
+        // Form should not be an ID.
+        if (null === form) return false;
+
         // "Input" elements like "text, date, time..."
         this.input = form.getElementsByTagName('input');
         // "Select" element.

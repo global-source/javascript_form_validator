@@ -444,6 +444,9 @@ var jsForm = {
 
     // To Parse all Relative Form components.
     parseForm: function (form) {
+
+        if (form === null) return false;
+
         // "Input" elements like "text, date, time..."
         this.input = form.getElementsByTagName('input');
         // "Select" element.
