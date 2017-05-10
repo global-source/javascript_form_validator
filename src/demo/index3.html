@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo 2 | Javascript Validator</title>
+</head>
+<body>
+
+<div class="col-md-8" align="center" style="margin-left: 20%">
+    <div class="title"><h2>Input Client Information</h2></div>
+    <form method="POST" id="clientAdd" novalidate>
+
+        <div class="">
+            <div class="row">
+                <label for="name" style="align-items: baseline">Name</label>
+                <input type="text" required class="form-control" id="name" name="name" placeholder="Enter Name">
+            </div>
+            <div class="row">
+                <label for="name">Address1</label>
+                <input type="text" required class="form-control" id="l_address" name="l_address"
+                       placeholder="Enter address1">
+
+            </div>
+            <div class="row">
+                <label for="name">Address2</label>
+                <input type="text" required class="form-control" id="p_address" name="p_address"
+                       placeholder="Enter Address2">
+            </div>
+            <div class="row">
+                <label for="name">Contact Person</label>
+                <input type="text" required class="form-control" id="contact_person" name="contact_person"
+                       placeholder="Enter Contact Person">
+            </div>
+            <label for="name">Phone No 1</label>
+            <input type="text" required class="form-control" id="contact_no1" name="contact_no1"
+                   placeholder="Enter Phone No">
+            <div class="row">
+                <label for="name">Phone No 2 </label>
+                <input type="text" class="form-control" id="contact_no2" name="contact_no2"
+                       placeholder="Enter Phone No">
+            </div>
+            <label for="name">Email Address 1</label>
+            <input type="text" required class="form-control" id="email1" name="email1" placeholder="Enter Email">
+            <div class="row">
+                <label for="name">Email Address 2</label>
+                <input type="text" class="form-control" id="email2" name="email2" placeholder="Enter Email">
+            </div>
+            <label for="name">Designation</label>
+            <input type="text" required class="form-control" id="designation" name="designation"
+                   placeholder="Enter Designation">
+            <div class="row">
+                <label for="name">Department</label>
+                <input type="text" required class="form-control" id="department" name="department"
+                       placeholder="Enter Department">
+            </div>
+        </div>
+
+        <button type="submit" name="btn-save" class="btn btn-default">Submit</button>
+    </form>
+</div>
+<script src="./../js/validatorNew.js"></script>
+<!--<script src="./../js/validatorNew.es6.js"></script>-->
+
+<script>
+
+    //        var form = new jsValidator().init({
+    //            form: 'clientAdd',
+    //            forceFilter: true,
+    //            onChange: true,
+    //            message: {
+    //                required: 'This field is required 123 !',
+    //                min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+    //                max: 'This field is exceeds the limit of [INDEX]',
+    //                password: 'Password doesn\'t match !',
+    //                email: 'Invalid Email found !'
+    //            }
+    //        });
+
+    var form = jsValidator.init({
+        form: 'clientAdd',
+        forceFilter: true,
+        onChange: true,
+        message: {
+            required: 'This field is required !',
+            min: 'This field is less then the limit [INDEX]',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
+    });
+
+</script>
+</body>
+</html>
