@@ -23,7 +23,7 @@
 /*
  * For Managing overall Validation flow.
  */
-
+var firstErrorHit = false;
 var jsValidator = {
     // Holding form element data.
     formData: false,
@@ -43,6 +43,8 @@ var jsValidator = {
     initialLoad: true,
     // Global options.
     option: false,
+    // To apply global validator.
+    onChange: false,
     // Initiating the Validator.
     init: function (option) {
         jsLogger.table(option);
@@ -51,6 +53,8 @@ var jsValidator = {
         this.option = option;
         // Updating the filter flag to global.
         this.onlyFilter = option.onlyFilter;
+        // To Enable/Disable global validator.
+        this.onChange = option.onChange;
         // Update "jsSettings" to global object.
         this.jsSettings = jsSettings.init(option);
         // Update "jsForm" to global object.
@@ -149,12 +153,16 @@ var jsValidator = {
                 var activeElem = formElem[i];
                 // Apply filter to element.
                 this.applyFilters(activeElem);
+                // Register the DOM with live onChange validations.
+                if (true == this.onChange) {
+                    this.applyGlobalListener(activeElem);
+                }
+
                 jsLogger.out('Only Filter', this.onlyFilter);
                 // If not only filter, then start validations.
                 if (false === this.onlyFilter || typeof(this.onlyFilter) === 'undefined') {
                     // Initiate validations and update to log.
-                    log = this.checkValidation(activeElem, log);
-
+                    log = jsRuleSets.checkValidation(activeElem, log);
                 }
             }
         }
@@ -173,79 +181,18 @@ var jsValidator = {
         // Apply filter with pattern.
         if (activeElem.getAttribute('pattern')) jsFilter.pattern(activeElem);
     },
-    // To start validation process.
-    checkValidation: function (activeElem, log) {
-        jsLogger.out('Active Elem', activeElem);
-        var validElem = true;
-        // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem)) {
-            log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
-        }
-        // To Check the Value is less than min or not.
-        if (activeElem.min) {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.min(activeElem)) {
-                    log.push({
-                        'el': activeElem,
-                        'type': 'min',
-                        'id': activeElem.name
-                    });
-                    validElem = false;
-                }
-            }
-        }
-        // To Check the Value is grater than max or not.
-        if (activeElem.max) {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.max(activeElem)) {
-                    log.push({
-                        'el': activeElem,
-                        'type': 'max',
-                        'id': activeElem.name
-                    });
-                    validElem = false;
-                }
-            }
-        }
-        // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.email(activeElem)) {
-                    log.push({
-                        'el': activeElem,
-                        'type': 'email',
-                        'id': activeElem.name
-                    });
-                    validElem = false;
-                }
-            }
-        }
-        // To Compare the Password is Same or Not with Re-Password.
-        // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password") {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.compare(activeElem)) {
-                    log.push({
-                        'el': activeElem,
-                        'type': 'password',
-                        'id': activeElem.name
-                    });
-                    validElem = false;
-                }
-            }
-        }
-        // If valid, then reset validation message.
-        if (true === validElem) {
-            jsLogger.out('Valid Elem', activeElem);
-            if (activeElem.name !== '') {
-                var elem = document.getElementById(activeElem.name);
-                if (typeof(elem) !== 'undefined' && elem !== null) {
-                    elem.innerHTML = '';
-                }
-            }
-        }
-        // Return overall log report of validation.
-        return log;
+    // To make it active to listen changes of those error fields.
+    applyGlobalListener: function (element) {
+        element.addEventListener("change", this.quickValidation, false);
+    },
+    // To perform quick validation to respond those fields.
+    quickValidation: function (event) {
+        jsLogger.out('Quick', event);
+        var log = [];
+        var target = event.target;
+        log = jsRuleSets.checkValidation(target, log);
+        jsLogger.out('Quick Out', log);
+        validationResponse.process(log);
     },
     // Single step instance validator for Ajax form submissions.
     validate: function () {
@@ -483,16 +430,23 @@ var jsForm = {
     // To Register Active Form to Global Object.
     registerForm: function (form) {
         // validate and Update Log.
-        if (typeof form == 'undefined') jsLogger.out('Form Identification', 'Form Identification is Missing !');
+        if (typeof form === 'undefined') jsLogger.out('Form Identification', 'Form Identification is Missing !');
+
+        // Form should not be an ID.
+        if (null === form) return false;
 
         // Fetch Form element from Document.
         this.form = document.getElementById(form);
+        if (null === this.form) jsLogger.out('Status 503', 'Failed to Proceed !');
         // Update Direct Form ID.
         this.formCore = form;
     },
 
     // To Parse all Relative Form components.
     parseForm: function (form) {
+
+        if (form === null) return false;
+
         // "Input" elements like "text, date, time..."
         this.input = form.getElementsByTagName('input');
         // "Select" element.
@@ -546,6 +500,90 @@ var jsField = {
  * List of Validation Rules.
  */
 var jsRuleSets = {
+    // To start validation process.
+    checkValidation: function (activeElem, log) {
+        jsLogger.out('Active Elem', activeElem);
+        var validElem = true;
+
+        // To Generally checks, the field is empty or not.
+        if (!jsRuleSets.isSet(activeElem)) {
+            log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
+            if (false == firstErrorHit) firstErrorHit = activeElem;
+        }
+        // To Check the Value is less than min or not.
+        if (activeElem.min) {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.min(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'min',
+                        'id': activeElem.name
+                    });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    validElem = false;
+                }
+            }
+        }
+        // To Check the Value is grater than max or not.
+        if (activeElem.max) {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.max(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'max',
+                        'id': activeElem.name
+                    });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    validElem = false;
+                }
+            }
+        }
+        // To Check the Entered E-mail is Valid or Not.
+        if (activeElem.type == "email") {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.email(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'email',
+                        'id': activeElem.name
+                    });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    validElem = false;
+                }
+            }
+        }
+        // To Compare the Password is Same or Not with Re-Password.
+        // TODO: Implement Simplified Comparison.
+        if (activeElem.type == "password") {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.compare(activeElem)) {
+                    log.push({
+                        'el': activeElem,
+                        'type': 'password',
+                        'id': activeElem.name
+                    });
+                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    validElem = false;
+                }
+            }
+        }
+        // If valid, then reset validation message.
+        if (true === validElem) {
+            jsLogger.out('Valid Elem', activeElem);
+            if (activeElem.name !== '') {
+                var elem = document.getElementById(activeElem.name);
+                if (typeof(elem) !== 'undefined' && elem !== null) {
+                    elem.innerHTML = '';
+                }
+            }
+        }
+        if (false !== firstErrorHit) {
+            jsLogger.out('First Hit ', firstErrorHit);
+            helper.scrollToItem(firstErrorHit);
+        }
+        // Return overall log report of validation.
+        return log;
+    },
     // To Check, whether the element have value or not.
     isSet: function (elem) {
         // If field is not required, then return "true".
@@ -682,7 +720,6 @@ var jsLogger = {
     }
 };
 
-
 var helper = {
     /*
      * To check the keyboard action is window action or not.
@@ -706,6 +743,33 @@ var helper = {
 
         // Finally return "false" for general keys.
         return false;
+    },
+    // To Scroll Up / Down to notify the item that have validation message.
+    scrollToItem: function (item) {
+        // Update by Tag Name.
+        var elem_name = item.nodeName;
+
+        // If Element is not valid, then return false.
+        if (!elem_name) return false;
+        if (null == elem_name) return false;
+
+        // Re-Fetching elements by its Name.
+        item = document.getElementsByName(elem_name);
+
+        var diff = (item.offsetTop - window.scrollY) / 20;
+        if (!window._lastDiff) {
+            window._lastDiff = 0;
+        }
+        if (Math.abs(diff) > 2) {
+            window.scrollTo(0, (window.scrollY + diff));
+            clearTimeout(window._TO);
+            if (diff !== window._lastDiff) {
+                window._lastDiff = diff;
+                window._TO = setTimeout(this.scrollToItem, 100, item);
+            }
+        } else {
+            window.scrollTo(0, item.offsetTop)
+        }
     }
 };
 
