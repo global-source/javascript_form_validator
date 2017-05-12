@@ -561,77 +561,85 @@ class jsRuleSets {
         let validElem = true;
         let firstErrorHit = false;
         // To Generally checks, the field is empty or not.
-        if (!this.isSet(activeElem)) {
-            log.push({'el': activeElem, 'type': 'required', 'id': activeElem.name});
+        if (!jsRuleSets.isSet(activeElem)) {
+            log.push({
+                'el': activeElem,
+                'type': 'required',
+                'id': activeElem.name + Math.random().toString(36).substring(2)
+            });
             if (false == firstErrorHit) firstErrorHit = activeElem;
-        }
-        // To Check the Value is less than min or not.
+        }    // To Check the Value is less than min or not.
+
         if (activeElem.min) {
-            if (this.isSet(activeElem)) {
-                if (!this.min(activeElem)) {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.min(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'min',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
-        }
-        // To Check the Value is grater than max or not.
+        }    // To Check the Value is grater than max or not.
+
         if (activeElem.max) {
-            if (this.isSet(activeElem)) {
-                if (!this.max(activeElem)) {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.max(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'max',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
-        }
-        // To Check the Entered E-mail is Valid or Not.
-        if (activeElem.type == "email") {
-            if (this.isSet(activeElem)) {
-                if (!this.email(activeElem)) {
+        }    // To Check the Entered E-mail is Valid or Not.
+
+        if (activeElem.type == 'email') {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.email(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'email',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
-        }
-        // To Compare the Password is Same or Not with Re-Password.
+        }    // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
-        if (activeElem.type == "password") {
-            if (this.isSet(activeElem)) {
-                if (!this.compare(activeElem)) {
+
+        if (activeElem.type == 'password') {
+            if (jsRuleSets.isSet(activeElem)) {
+                if (!jsRuleSets.compare(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'password',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
                 }
             }
-        }
-        // If valid, then reset validation message.
+        }    // If valid, then reset validation message.
+
         if (true === validElem) {
+            jsLogger.out('Valid Elem', activeElem);
             if (activeElem.name !== '') {
-                let elem = document.getElementById(activeElem.name);
-                if (typeof(elem) !== 'undefined' && elem !== null) {
+                var elem = document.getElementById(activeElem.name);
+                if (typeof (elem) !== 'undefined' && elem !== null) {
                     elem.innerHTML = '';
                 }
             }
         }
-        if (false !== firstErrorHit) helper.scrollToItem(firstErrorHit);
+        if (false !== firstErrorHit) {
+            jsLogger.out('First Hit ', firstErrorHit);
+            helper.scrollToItem(firstErrorHit);
+        }    // Return overall log report of validation.
         // Return overall log report of validation.
         return log;
     }

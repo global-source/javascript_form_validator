@@ -35,8 +35,7 @@ var jsValidator = {
     // JS form error.
     jsFormError: false,
     // Overall error list.
-    formErrorList: {
-    },
+    formErrorList: {},
     // To Filter non-required fields.
     forceFilter: false,
     // To Filter the First load.
@@ -103,8 +102,7 @@ var jsValidator = {
         var jsFormObj = this.jsForm;
         // Loading JS error list.
         var errorList = this.formErrorList;
-        var option = [
-        ];
+        var option = [];
         // Looping the "input" elements for validation and filter implementation.
         errorList.input = this.elemLoop('input', jsFormObj.input);
         // Looping the "textArea" elements fro validation filter implementation.
@@ -135,8 +133,7 @@ var jsValidator = {
     // To looping all elements for actions.
     elemLoop: function (index, formElem) {
         // Initiate empty array for keep list of errors.
-        var log = [
-        ];
+        var log = [];
         // Sanity check with "formElem".
         if (formElem === null || typeof formElem === 'undefined') return false;
         // Looping elements.
@@ -180,8 +177,7 @@ var jsValidator = {
     // To perform quick validation to respond those fields.
     quickValidation: function (event) {
         jsLogger.out('Quick', event);
-        var log = [
-        ];
+        var log = [];
         var target = event.target;
         log = jsRuleSets.checkValidation(target, log);
         jsLogger.out('Quick Out', log);
@@ -454,8 +450,7 @@ var jsForm = {
 var jsField = {
     // Return all required elements list.
     required: function (field, forceFilter) {
-        var requiredFieldsList = [
-        ];
+        var requiredFieldsList = [];
         // Looping fields to filter.
         for (var i = 0; i < field.length; i++) {
             // Check and push elements.
@@ -481,7 +476,7 @@ var jsRuleSets = {
             log.push({
                 'el': activeElem,
                 'type': 'required',
-                'id': activeElem.name
+                'id': activeElem.name + Math.random().toString(36).substring(2)
             });
             if (false == firstErrorHit) firstErrorHit = activeElem;
         }    // To Check the Value is less than min or not.
@@ -492,7 +487,7 @@ var jsRuleSets = {
                     log.push({
                         'el': activeElem,
                         'type': 'min',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -506,7 +501,7 @@ var jsRuleSets = {
                     log.push({
                         'el': activeElem,
                         'type': 'max',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -520,7 +515,7 @@ var jsRuleSets = {
                     log.push({
                         'el': activeElem,
                         'type': 'email',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -535,7 +530,7 @@ var jsRuleSets = {
                     log.push({
                         'el': activeElem,
                         'type': 'password',
-                        'id': activeElem.name
+                        'id': activeElem.name + Math.random().toString(36).substring(2)
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -800,7 +795,7 @@ var validationResponse = {
                 var spanTag = document.getElementById(activeElem.id);
                 // jsLogger.out('Element Hit', errorType);
                 // Create new response Message SPAN.
-                if (typeof (spanTag) === 'undefined' || spanTag === null) {
+                if (typeof spanTag === 'undefined' || spanTag === 'undefined' || spanTag === null) {
                     // jsLogger.out('Element Found', false);
                     spanTag = document.createElement('span');
                     spanTag.setAttribute('id', activeElem.id);
@@ -844,17 +839,16 @@ var validationResponse = {
         }
         return elementDefaultResponse;
     },
-    default:
-        function (errorType) {
-            var errorMessages = {
-                required: 'This field is required',
-                min: 'This field length is too low.',
-                max: 'This field length is exceeds the limit',
-                password: 'Password does not match.',
-                email: 'Email is not valid'
-            };
-            if (typeof errorType !== 'string') return false;
-            if (typeof errorMessages[errorType] === 'undefined') return false;
-            return errorMessages[errorType];
-        }
+    default: function (errorType) {
+        var errorMessages = {
+            required: 'This field is required',
+            min: 'This field length is too low.',
+            max: 'This field length is exceeds the limit',
+            password: 'Password does not match.',
+            email: 'Email is not valid'
+        };
+        if (typeof errorType !== 'string') return false;
+        if (typeof errorMessages[errorType] === 'undefined') return false;
+        return errorMessages[errorType];
+    }
 };
