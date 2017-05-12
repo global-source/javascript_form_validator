@@ -120,7 +120,6 @@ var jsValidator = {
             if (errorList.textArea.length === 0) {
                 // If, Select elements have no errors.
                 if (errorList.select.length === 0) {
-                    alert('Form Valid !');
                     // If validation pass, then update "validationPass" object.
                     status = true;
                 }
