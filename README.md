@@ -21,9 +21,9 @@
 **Steps to Integrate to Form :**
 
 ```html        
- <script src="./../src/js/validatorNew.js"></script>
+ <script src="./../src/js/formValidator.js"></script>
  or
- <script src="./../src/js/validatorNew.es6.js"></script>
+ <script src="./../src/js/formValidator.es6.js"></script>
 ```
 
 Then Integrate your form with Validator.
