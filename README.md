@@ -6,7 +6,8 @@
 
 ### Installation 
 
-    composer require shankar-thiyagaraajan/javascript-form-validator
+    git clone https://github.com/global-source/javascript_form_validator.git
+    git checkout master
 
 ## What's New in this Validator ?
 
@@ -112,15 +113,16 @@ It has automated listener to eliminating unnecessary changes on form.
    <div id=form2submit> </div>      // Not-Preferred.
 ```
            
-2. Input Fields should specify the type of validation.
  
-    #### For General Input Validation
+#### For General Input Validation
+           
+2. Input Fields should specify the type of validation.
     
-   ```html
+```html
    <form method="post" id="form2submit" novalidate>
     <div>
         <label>Only Alpha</label>
-        <input type="text" `data-allow="onlyAlpha"` name="alpha"
+        <input type="text" data-allow="onlyAlpha" name="alpha"
                data-message="<b style='color:green'>This field is required.</b>" required>
     </div>
     <div>
@@ -168,7 +170,7 @@ It has automated listener to eliminating unnecessary changes on form.
         <input type="submit" value="Submit">
     </div>
 </form>
-     ```
+```
            
 3. Every Input Fields should have a Label with **`FOR`** attributes.
 
