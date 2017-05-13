@@ -63,31 +63,31 @@
 
 <script>
 
-            var form = new jsValidator().init({
-                form: 'clientAdd',
-                forceFilter: true,
-                onChange: true,
-                message: {
-                    required: 'This field is required 123 !',
-                    min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-                    max: 'This field is exceeds the limit of [INDEX]',
-                    password: 'Password doesn\'t match !',
-                    email: 'Invalid Email found !'
-                }
-            });
+//            var form = new jsValidator().init({
+//                form: 'clientAdd',
+//                forceFilter: true,
+//                onChange: true,
+//                message: {
+//                    required: 'This field is required 123 !',
+//                    min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+//                    max: 'This field is exceeds the limit of [INDEX]',
+//                    password: 'Password doesn\'t match !',
+//                    email: 'Invalid Email found !'
+//                }
+//            });
 
-//    var form = jsValidator.init({
-//        form: 'clientAdd',
-//        forceFilter: true,
-//        onChange: true,
-//        message: {
-//            required: 'This field is required !',
-//            min: 'This field is less then the limit [INDEX]',
-//            max: 'This field is exceeds the limit of [INDEX]',
-//            password: 'Password doesn\'t match !',
-//            email: 'Invalid Email found !'
-//        }
-//    });
+    var form = jsValidator.init({
+        form: 'clientAdd',
+        forceFilter: true,
+        onChange: true,
+        message: {
+            required: 'This field is required !',
+            min: 'This field is less then the limit [INDEX]',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
+    });
 
 </script>
 </body>

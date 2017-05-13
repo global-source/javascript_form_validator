@@ -540,7 +540,7 @@ var jsRuleSets = {
         if (true === validElem) {
             jsLogger.out('Valid Elem', activeElem);
             if (activeElem.name !== '') {
-                var elem = document.getElementById(activeElem.name);
+                var elem = document.getElementById(activeElem.name + '_new1_1_1xv_resp');
                 if (typeof (elem) !== 'undefined' && elem !== null) {
                     elem.innerHTML = '';
                 }
