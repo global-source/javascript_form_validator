@@ -560,7 +560,7 @@ var jsRuleSets = {
         var status = true;
         var value = elem.value;
         //TODO: Implement suitable solution for this.
-        if (value.length == 0 || value == '' || value == ' ') status = false;
+        if (value.length === 0 || value === '' || value === ' ' || value === '[]') status = false;
         return status;
     },
     // To Check Element with Min Condition.

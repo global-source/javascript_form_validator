@@ -650,7 +650,7 @@ class jsRuleSets {
         let status = true;
         let value = elem.value;
         //TODO: Implement suitable solution for this.
-        if (value.length === 0 || value === '' || value === ' ') status = false;
+        if (value.length === 0 || value === '' || value === ' ' || value === '[]') status = false;
         return status;
     }
 
