@@ -564,7 +564,7 @@ class jsRuleSets {
             log.push({
                 'el': activeElem,
                 'type': 'required',
-                'id': activeElem.name + Math.random().toString(36).substring(2)
+                'id': activeElem.name + '_new1_1_1xv_resp'
             });
             if (false == firstErrorHit) firstErrorHit = activeElem;
         }    // To Check the Value is less than min or not.
@@ -575,7 +575,7 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'min',
-                        'id': activeElem.name + Math.random().toString(36).substring(2)
+                        'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -589,7 +589,7 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'max',
-                        'id': activeElem.name + Math.random().toString(36).substring(2)
+                        'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -603,7 +603,7 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'email',
-                        'id': activeElem.name + Math.random().toString(36).substring(2)
+                        'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
@@ -618,7 +618,7 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'password',
-                        'id': activeElem.name + Math.random().toString(36).substring(2)
+                        'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     if (false == firstErrorHit) firstErrorHit = activeElem;
                     validElem = false;
