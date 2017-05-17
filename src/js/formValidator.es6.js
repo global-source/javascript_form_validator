@@ -155,7 +155,8 @@ class jsValidator {
         // Initiate empty array for keep list of errors.
         let log = [];
         if (formElem === null || typeof formElem === 'undefined') return false;
-        // jsLogger.out('Elem Loop Filter', formElem);
+        // To Reverse the loop to start notify from first element.
+        formElem = formElem.reverse();
         // Looping elements.
         for (let i in formElem) {
             if (formElem[i]) {
@@ -566,7 +567,7 @@ class jsRuleSets {
                 'type': 'required',
                 'id': activeElem.name + '_new1_1_1xv_resp'
             });
-            if (false == firstErrorHit) firstErrorHit = activeElem;
+            firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
         }    // To Check the Value is less than min or not.
 
         if (activeElem.min) {
@@ -577,7 +578,7 @@ class jsRuleSets {
                         'type': 'min',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -591,7 +592,7 @@ class jsRuleSets {
                         'type': 'max',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -605,7 +606,7 @@ class jsRuleSets {
                         'type': 'email',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -620,7 +621,7 @@ class jsRuleSets {
                         'type': 'password',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -635,10 +636,10 @@ class jsRuleSets {
                 }
             }
         }
+        // If error occurred, then locate that error
         if (false !== firstErrorHit) {
-            jsLogger.out('First Hit ', firstErrorHit);
             helper.scrollToItem(firstErrorHit);
-        }    // Return overall log report of validation.
+        }
         // Return overall log report of validation.
         return log;
     }
@@ -819,28 +820,30 @@ let helper = {
     },
     // To Scroll Up / Down to notify the item that have validation message.
     scrollToItem: function (item) {
-        // Update by Tag Name.
-        let elem_name = item.nodeName;
-
-        // If Element is not valid, then return false.
-        if (!elem_name) return false;
-        if (null == elem_name) return false;
-        item = document.getElementsByName(elem_name);
-
-        var diff = (item.offsetTop - window.scrollY) / 20;
-        if (!window._lastDiff) {
-            window._lastDiff = 0;
-        }
-        if (Math.abs(diff) > 2) {
-            window.scrollTo(0, (window.scrollY + diff));
-            clearTimeout(window._TO);
-            if (diff !== window._lastDiff) {
-                window._lastDiff = diff;
-                window._TO = setTimeout(this.scrollToItem, 100, item);
-            }
-        } else {
-            window.scrollTo(0, item.offsetTop)
-        }
+        location.href = '#' + item;
+        //     // Update by Tag Name.
+        //     let elem_name = item.nodeName;
+        //
+        //     // If Element is not valid, then return false.
+        //     if (!elem_name) return false;
+        //     if (null == elem_name) return false;
+        //     item = document.getElementsByName(elem_name);
+        //
+        //
+        //     var diff = (item.offsetTop - window.scrollY) / 20;
+        //     if (!window._lastDiff) {
+        //         window._lastDiff = 0;
+        //     }
+        //     if (Math.abs(diff) > 2) {
+        //         window.scrollTo(0, (window.scrollY + diff));
+        //         clearTimeout(window._TO);
+        //         if (diff !== window._lastDiff) {
+        //             window._lastDiff = diff;
+        //             window._TO = setTimeout(this.scrollToItem, 100, item);
+        //         }
+        //     } else {
+        //         window.scrollTo(0, item.offsetTop)
+        //     }
     }
 };
 
