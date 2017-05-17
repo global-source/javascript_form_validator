@@ -135,6 +135,7 @@ var jsValidator = {
         var log = [];
         // Sanity check with "formElem".
         if (formElem === null || typeof formElem === 'undefined') return false;
+        formElem = formElem.reverse();
         // Looping elements.
         for (var i in formElem) {
             if (formElem[i]) {
@@ -154,6 +155,7 @@ var jsValidator = {
                 }
             }
         }
+        jsLogger.out('Log', log);
         return log;
     },
     // To apply filter to all relevant elements by it's attributes.
@@ -477,7 +479,7 @@ var jsRuleSets = {
                 'type': 'required',
                 'id': activeElem.name + '_new1_1_1xv_resp'
             });
-            if (false == firstErrorHit) firstErrorHit = activeElem;
+            firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
         }    // To Check the Value is less than min or not.
 
         if (activeElem.min) {
@@ -488,7 +490,7 @@ var jsRuleSets = {
                         'type': 'min',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -502,7 +504,7 @@ var jsRuleSets = {
                         'type': 'max',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -516,7 +518,7 @@ var jsRuleSets = {
                         'type': 'email',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -531,7 +533,7 @@ var jsRuleSets = {
                         'type': 'password',
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
-                    if (false == firstErrorHit) firstErrorHit = activeElem;
+                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
                     validElem = false;
                 }
             }
@@ -546,10 +548,12 @@ var jsRuleSets = {
                 }
             }
         }
+        // If error occurred, then locate that error
         if (false !== firstErrorHit) {
-            jsLogger.out('First Hit ', firstErrorHit);
             helper.scrollToItem(firstErrorHit);
-        }    // Return overall log report of validation.
+        }
+        // }
+        // Return overall log report of validation.
 
         return log;
     },
@@ -698,27 +702,30 @@ var helper = {
     },
     // To Scroll Up / Down to notify the item that have validation message.
     scrollToItem: function (item) {
-        // Update by Tag Name.
-        var elem_name = item.nodeName;
-        // If Element is not valid, then return false.
-        if (!elem_name) return false;
-        if (null == elem_name) return false;
-        // Re-Fetching elements by its Name.
-        item = document.getElementsByName(elem_name);
-        var diff = (item.offsetTop - window.scrollY) / 20;
-        if (!window._lastDiff) {
-            window._lastDiff = 0;
-        }
-        if (Math.abs(diff) > 2) {
-            window.scrollTo(0, (window.scrollY + diff));
-            clearTimeout(window._TO);
-            if (diff !== window._lastDiff) {
-                window._lastDiff = diff;
-                window._TO = setTimeout(this.scrollToItem, 100, item);
-            }
-        } else {
-            window.scrollTo(0, item.offsetTop)
-        }
+        // alert(item);
+        location.href = '#' + item;
+        // // Update by Tag Name.
+        // var elem_name = item.nodeName;
+        // // If Element is not valid, then return false.
+        // if (!elem_name) return false;
+        // if (null == elem_name) return false;
+        // // Re-Fetching elements by its Name.
+        // item = document.getElementsByName(elem_name);
+        //
+        // var diff = (item.offsetTop - window.scrollY) / 20;
+        // if (!window._lastDiff) {
+        //     window._lastDiff = 0;
+        // }
+        // if (Math.abs(diff) > 2) {
+        //     window.scrollTo(0, (window.scrollY + diff));
+        //     clearTimeout(window._TO);
+        //     if (diff !== window._lastDiff) {
+        //         window._lastDiff = diff;
+        //         window._TO = setTimeout(this.scrollToItem, 100, item);
+        //     }
+        // } else {
+        //     window.scrollTo(0, item.offsetTop)
+        // }
     }
 };
 /*
