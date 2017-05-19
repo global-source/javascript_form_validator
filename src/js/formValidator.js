@@ -23,6 +23,9 @@
  * For Managing overall Validation flow.
  */
 var firstErrorHit = false;
+/**
+ * Core Js Validator.
+ */
 var jsValidator = {
     // Holding form element data.
     formData: false,
@@ -44,7 +47,9 @@ var jsValidator = {
     option: false,
     // To apply global validator.
     onChange: false,
-    // Initiating the Validator.
+    /*
+     * Initiating the Validator.
+     */
     init: function (option) {
         jsLogger.table(option);
         // To Update global options.
@@ -68,7 +73,9 @@ var jsValidator = {
         // Send back "this".
         return this;
     },
-    // To make listen on submit action of the form.
+    /*
+     * To make listen on submit action of the form.
+     */
     submitListener: function (formID, obj) {
         // To off submit listener, if only filter needed.
         if (false === this.onlyFilter || typeof (this.onlyFilter) === 'undefined') {
@@ -83,7 +90,9 @@ var jsValidator = {
             });
         }
     },
-    // To Refresh the DOM and enable Dynamic-Elements to Access.
+    /*
+     * To Refresh the DOM and enable Dynamic-Elements to Access.
+     */
     update: function () {
         var option = this.option;
         // Updating the filter flag to global.
@@ -95,7 +104,9 @@ var jsValidator = {
         // Initiate form error setup.
         this.jsFormError = jsFormError.init();
     },
-    // To checking all elements from registered form.
+    /*
+     * To checking all elements from registered form.
+     */
     check: function () {
         var status = false;
         // Loading JS Form.
@@ -129,7 +140,9 @@ var jsValidator = {
         this.initialLoad = false;
         return status;
     },
-    // To looping all elements for actions.
+    /*
+     * To looping all elements for actions.
+     */
     elemLoop: function (index, formElem) {
         // Initiate empty array for keep list of errors.
         var log = [];
@@ -158,7 +171,9 @@ var jsValidator = {
         jsLogger.out('Log', log);
         return log;
     },
-    // To apply filter to all relevant elements by it's attributes.
+    /*
+     * To apply filter to all relevant elements by it's attributes.
+     */
     applyFilters: function (activeElem) {
         // Apply filter for Number elements.
         if (activeElem.type == 'number') jsFilter.number(activeElem);
@@ -171,11 +186,15 @@ var jsValidator = {
         // Apply filter with pattern.
         if (activeElem.getAttribute('pattern')) jsFilter.pattern(activeElem);
     },
-    // To make it active to listen changes of those error fields.
+    /*
+     * To make it active to listen changes of those error fields.
+     */
     applyGlobalListener: function (element) {
         element.addEventListener('change', this.quickValidation, false);
     },
-    // To perform quick validation to respond those fields.
+    /*
+     * To perform quick validation to respond those fields.
+     */
     quickValidation: function (event) {
         jsLogger.out('Quick', event);
         var log = [];
@@ -184,13 +203,15 @@ var jsValidator = {
         jsLogger.out('Quick Out', log);
         validationResponse.process(log);
     },
-    // Single step instance validator for Ajax form submissions.
+    /*
+     * Single step instance validator for Ajax form submissions.
+     */
     validate: function () {
         // Initiate form Check.
         return this.check();
     }
 };
-/*
+/**
  * Common Filter instances.
  */
 var jsFilter = {
@@ -205,7 +226,9 @@ var jsFilter = {
         }
         if (true === status) element.addEventListener('keypress', this.isNumberKey, false);
     },
-    // String elements filter listener.
+    /*
+     * String elements filter listener.
+     */
     string: function (element) {
         // Getting "data" attribute for actions.
         var type = element.getAttribute('data-allow');
@@ -233,7 +256,9 @@ var jsFilter = {
                 break;
         }
     },
-    // Pattern based filter and listener.
+    /*
+     * Pattern based filter and listener.
+     */
     pattern: function (element) {
         var current = this;
         var status = true;
@@ -245,7 +270,9 @@ var jsFilter = {
         }
         if (true === status) element.addEventListener('keypress', current.isPatternValid, false);
     },
-    // Email elements filter listener.
+    /*
+     * Email elements filter listener.
+     */
     email: function (element) {
         var status = true;
         if (false === this.forceFilter) {
@@ -256,7 +283,9 @@ var jsFilter = {
         }
         if (true === status) element.addEventListener('keypress', jsRuleSets.email, false);
     },
-    // Numeric with Limited elements filter listener.
+    /*
+     * Numeric with Limited elements filter listener.
+     */
     limit: function (element) {
         var status = true;
         if (false === this.forceFilter) {
@@ -267,7 +296,9 @@ var jsFilter = {
         }
         if (true === status) element.addEventListener('keypress', this.isInLimit, false);
     },
-    // Restrict element with it's limit.
+    /*
+     * Restrict element with it's limit.
+     */
     isInLimit: function (event) {
         var value = event.target.value;
         // To check is this action is from "windows" action or not.
@@ -290,7 +321,9 @@ var jsFilter = {
         }
         event.target.value = event.target.value.substring(0, event.target.value.length - 1);
     },
-    // Only allow alpha([a-zA-Z]).
+    /*
+     * Only allow alpha([a-zA-Z]).
+     */
     isAlpha: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
@@ -299,7 +332,9 @@ var jsFilter = {
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
-    // Only allow alpha([a-zA-Z0-9]).
+    /*
+     * Only allow alpha([a-zA-Z0-9]).
+     */
     isAlphaNumeric: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
@@ -308,6 +343,9 @@ var jsFilter = {
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
+    /*
+     * To check password is valid or not.
+     */
     isValidPassword: function (event) {
         // Prevent using "space".
         var charCode = (event.which) ? event.which : event.keyCode;
@@ -323,7 +361,9 @@ var jsFilter = {
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
-    // Only allow by pattern(ex. ^[a-zA-Z0-3@#$!_.]+$).
+    /*
+     * Only allow by pattern(ex. ^[a-zA-Z0-3@#$!_.]+$).
+     */
     isPatternValid: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
@@ -332,7 +372,9 @@ var jsFilter = {
         // Return status of the Action.
         if (false === status) event.preventDefault();
     },
-    // Check is numeric or not.
+    /*
+     * Check is numeric or not.
+     */
     isNumberKey: function (event) {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
@@ -354,7 +396,9 @@ var jsSettings = {
     errorColor: false,
     // Set common template for error message
     errorTemplate: false,
-    // To Initiate the Configurations.
+    /*
+     * To Initiate the Configurations.
+     */
     init: function (option) {
         // To update error message color to global object.
         this.errorColor = option.errorColor;
@@ -363,9 +407,11 @@ var jsSettings = {
         // Return "this" object.
         return this;
     },
+    /*
+     * General Log.
+     */
     log: function () {
         jsLogger.out(this.errorColor);
-        jsLogger.out(this.followedElement);
         jsLogger.out(this.errorTemplate);
     }
 };
@@ -387,7 +433,9 @@ var jsForm = {
     label: false,
     // Perform Force Filter on Elements.
     forceFilter: false,
-    // To Initiating the "jsForm".
+    /*
+     * To Initiating the "jsForm".
+     */
     init: function (option) {
         jsLogger.out('Form', option.form);
         // Update Global Option.
@@ -402,7 +450,9 @@ var jsForm = {
         this.required();
         return this;
     },
-    // To Register Active Form to Global Object.
+    /*
+     * To Register Active Form to Global Object.
+     */
     registerForm: function (form) {
         // validate and Update Log.
         if (typeof form === 'undefined') jsLogger.out('Form Identification', 'Form Identification is Missing !');
@@ -414,7 +464,9 @@ var jsForm = {
         // Update Direct Form ID.
         this.formCore = form;
     },
-    // To Parse all Relative Form components.
+    /*
+     * To Parse all Relative Form components.
+     */
     parseForm: function (form) {
         if (form === null) return false;
         // "Input" elements like "text, date, time..."
@@ -426,7 +478,9 @@ var jsForm = {
         // "Label" element.
         this.label = form.getElementsByTagName('label');
     },
-    // To set fields are required.
+    /*
+     * To set fields are required.
+     */
     required: function () {
         // var jsField = new jsField().init(this.options);
         var forceFilter = this.forceFilter;
@@ -437,6 +491,9 @@ var jsForm = {
         // Filter all required "textArea" elements.
         this.textArea = jsField.required(this.textArea, forceFilter);
     },
+    /*
+     * General Log.
+     */
     log: function () {
         jsLogger.out('Form', this.form);
         jsLogger.out('input', this.input);
@@ -445,11 +502,13 @@ var jsForm = {
         jsLogger.out('labels', this.label);
     }
 };
-/*
+/**
  * Perform Operations in Field level.
  */
 var jsField = {
-    // Return all required elements list.
+    /*
+     * Return all required elements list.
+     */
     required: function (field, forceFilter) {
         var requiredFieldsList = [];
         // Looping fields to filter.
@@ -468,7 +527,9 @@ var jsField = {
  * List of Validation Rules.
  */
 var jsRuleSets = {
-    // To start validation process.
+    /*
+     * To start validation process.
+     */
     checkValidation: function (activeElem, log) {
         jsLogger.out('Active Elem', activeElem);
         var validElem = true;
@@ -557,7 +618,9 @@ var jsRuleSets = {
 
         return log;
     },
-    // To Check, whether the element have value or not.
+    /*
+     * To Check, whether the element have value or not.
+     */
     isSet: function (elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
@@ -567,7 +630,9 @@ var jsRuleSets = {
         if (value.length === 0 || value === '' || value === ' ' || value === '[]') status = false;
         return status;
     },
-    // To Check Element with Min Condition.
+    /*
+     * To Check Element with Min Condition.
+     */
     min: function (elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
@@ -578,7 +643,9 @@ var jsRuleSets = {
         if (value.length < min && value.length != 0) status = false;
         return status;
     },
-    // To Check Element with Max Condition.
+    /*
+     * To Check Element with Max Condition.
+     */
     max: function (elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
@@ -589,7 +656,9 @@ var jsRuleSets = {
         if (value.length > max && value.length != 0) status = false;
         return status;
     },
-    // To Check Element Email is Valid or Not.
+    /*
+     * To Check Element Email is Valid or Not.
+     */
     email: function (elem) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
@@ -606,7 +675,9 @@ var jsRuleSets = {
         if (!email) status = false;
         return status;
     },
-    // To Check Element Phone Value is Valid or Not.
+    /*
+     * To Check Element Phone Value is Valid or Not.
+     */
     phone: function (elem, pattern) {
         // If field is not required, then return "true".
         if (false === elem.required) return true;
@@ -614,7 +685,9 @@ var jsRuleSets = {
         if (elem.value === '') status = false;
         return status;
     },
-    // To Compare two Elements Values.
+    /*
+     * To Compare two Elements Values.
+     */
     compare: function (elem1) {
         var status = false;
         // If field is not required, then return "true".
@@ -643,42 +716,56 @@ var jsFormError = {
     errorCss: false,
     // Success Css.
     successCss: false,
-    // Initiate overall form error handler.
+    /*
+     * Initiate overall form error handler.
+     */
     init: function () {
         this.errorHit = false;
         this.errorCss = 'border-color: red;border-radius: 5px;color: red;';
         this.successCss = 'border-color: green;border-radius: 5px;color: green;';
     },
-    // Form error log.
+    /*
+     * Form error log.
+     */
     log: function () {
         jsLogger.out('Form Error Hit', this.errorHit);
     },
-    // Form error style.
+    /*
+     * Form error style.
+     */
     style: function (css) {
         this.errorCss = css.error;
         this.successCss = css.success;
     }
 };
-/*
+/**
  * For manage overall logging with validator.
- *
  */
 var jsLogger = {
-    // Simple log with "heading" and "message".
+    /*
+     * Simple log with "heading" and "message".
+     */
     out: function (heading, message) {
         console.log('======' + heading + '======');
         console.log(message);
         console.log('------------------------');
     },
-    // For bulk data logging.
+    /*
+     * For bulk data logging.
+     */
     bulk: function (data) {
         console.log(data);
     },
-    // For log data with table.
+    /*
+     * For log data with table.
+     */
     table: function (data) {
         console.table(data);
     }
 };
+/**
+ * General Helping methods.
+ */
 var helper = {
     /*
      * To check the keyboard action is window action or not.
@@ -700,7 +787,9 @@ var helper = {
         // Finally return "false" for general keys.
         return false;
     },
-    // To Scroll Up / Down to notify the item that have validation message.
+    /*
+     * To Scroll Up / Down to notify the item that have validation message.
+     */
     scrollToItem: function (item) {
         // alert(item);
         location.href = '#' + item;
@@ -728,11 +817,13 @@ var helper = {
         // }
     }
 };
-/*
+/**
  * Simple library for Pattern.
  */
 var pattern = {
-    // To generate pattern from element attribute.
+    /*
+     * To generate pattern from element attribute.
+     */
     getDefault: function (event, originalPattern) {
         if (typeof originalPattern == 'undefined') originalPattern = '';
         // Getting special characters list.
@@ -751,7 +842,9 @@ var pattern = {
         }
         return defaultPattern;
     },
-    // To validate event with the pattern.
+    /*
+     * To validate event with the pattern.
+     */
     validate: function (event, pattern) {
         // Managing the Pattern.
         var defaultPattern = this.getDefault(event, pattern);
@@ -762,11 +855,13 @@ var pattern = {
         return regex.test(key);
     }
 };
-/*
+/**
  * To Manage all kind of error response.
  */
 var validationResponse = {
-    // Initiating the Response handler.
+    /*
+     * Initiating the Response handler.
+     */
     init: function (errorList, option) {
         this.errorMessage = option.message;
         // var errorElements = option.errorElem;
@@ -775,19 +870,27 @@ var validationResponse = {
         this.select(errorList.select);
         this.textArea(errorList.textArea);
     },
-    // To handle the "input" element.
+    /*
+     * To handle the "input" element.
+     */
     input: function (elem) {
         this.process(elem);
     },
-    // To handle the "select" element.
+    /*
+     * To handle the "select" element.
+     */
     select: function (elem) {
         this.process(elem);
     },
-    // To handle the "textArea" element.
+    /*
+     * To handle the "textArea" element.
+     */
     textArea: function (elem) {
         this.process(elem);
     },
-    // To process all handlers.
+    /*
+     * To process all handlers.
+     */
     process: function (elem) {
         var elementDefaultResponse = '';
         for (var i in elem) {
@@ -817,7 +920,9 @@ var validationResponse = {
             }
         }
     },
-    // Perform template creation and update.
+    /*
+     * Perform template creation and update.
+     */
     template: function (activeElem, errorType) {
         jsLogger.out('error Type 0', errorType);
         var errorIndex = '';
@@ -845,9 +950,11 @@ var validationResponse = {
         }
         return elementDefaultResponse;
     },
-    /* Default error handling messages.
-     If user not specify the messages,
-     then it will be replaces. */
+    /*
+     * Default error handling messages.
+     * If user not specify the messages,
+     * then it will be replaces.
+     */
     default: function (errorType) {
         var errorMessages = {
             required: 'This field is required',
