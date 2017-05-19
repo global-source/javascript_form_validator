@@ -976,6 +976,9 @@ let validationResponse = {
         }
         return elementDefaultResponse;
     },
+    /* Default error handling messages.
+     If user not specify the messages,
+     then it will be replaces. */
     default: function (errorType) {
 
         let errorMessages = {
