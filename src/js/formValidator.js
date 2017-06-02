@@ -160,7 +160,7 @@ var jsValidator = {
                 if (true == this.onChange) {
                     this.applyGlobalListener(activeElem);
                 }
-                jsLogger.out('Only Filter', this.onlyFilter);
+                //jsLogger.out('Only Filter', this.onlyFilter);
                 // If not only filter, then start validations.
                 if (false === this.onlyFilter || typeof (this.onlyFilter) === 'undefined') {
                     // Initiate validations and update to log.
@@ -313,8 +313,8 @@ var jsFilter = {
         var regex = new RegExp('^[0-9]+$');
         // Validation with Code.
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        jsLogger.out('Limit', regex.test(key) + ' | min |' + min + ' | max | ' + max);
-        jsLogger.out('Regex', regex.test(key));
+        //jsLogger.out('Limit', regex.test(key) + ' | min |' + min + ' | max | ' + max);
+        //jsLogger.out('Regex', regex.test(key));
         // Return status of the Action.
         if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
             event.preventDefault();
@@ -531,7 +531,7 @@ var jsRuleSets = {
      * To start validation process.
      */
     checkValidation: function (activeElem, log) {
-        jsLogger.out('Active Elem', activeElem);
+        //jsLogger.out('Active Elem', activeElem);
         var validElem = true;
         // To Generally checks, the field is empty or not.
         if (!jsRuleSets.isSet(activeElem)) {
@@ -541,6 +541,7 @@ var jsRuleSets = {
                 'id': activeElem.name + '_new1_1_1xv_resp'
             });
             firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+            helper.scrollToItem('#' + firstErrorHit);
         }    // To Check the Value is less than min or not.
 
         if (activeElem.min) {
@@ -552,6 +553,7 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    helper.scrollToItem('#' + firstErrorHit);
                     validElem = false;
                 }
             }
@@ -566,6 +568,7 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    helper.scrollToItem('#' + firstErrorHit);
                     validElem = false;
                 }
             }
@@ -580,6 +583,7 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    helper.scrollToItem('#' + firstErrorHit);
                     validElem = false;
                 }
             }
@@ -595,13 +599,14 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    helper.scrollToItem('#' + firstErrorHit);
                     validElem = false;
                 }
             }
         }    // If valid, then reset validation message.
 
         if (true === validElem) {
-            jsLogger.out('Valid Elem', activeElem);
+            //jsLogger.out('Valid Elem', activeElem);
             if (activeElem.name !== '') {
                 var elem = document.getElementById(activeElem.name + '_new1_1_1xv_resp');
                 if (typeof (elem) !== 'undefined' && elem !== null) {
@@ -611,7 +616,7 @@ var jsRuleSets = {
         }
         // If error occurred, then locate that error
         if (false !== firstErrorHit) {
-            helper.scrollToItem(firstErrorHit);
+            //helper.scrollToItem(firstErrorHit);
         }
         // }
         // Return overall log report of validation.
@@ -702,7 +707,7 @@ var jsRuleSets = {
             var elem2 = document.getElementById(elem2_id);
             if (elem1.value === elem2.value) status = true;
         }
-        jsLogger.out('Compare Status', status);
+        //jsLogger.out('Compare Status', status);
         return status;
     }
 };
@@ -791,30 +796,23 @@ var helper = {
      * To Scroll Up / Down to notify the item that have validation message.
      */
     scrollToItem: function (item) {
-        // alert(item);
-        location.href = '#' + item;
-        // // Update by Tag Name.
-        // var elem_name = item.nodeName;
-        // // If Element is not valid, then return false.
-        // if (!elem_name) return false;
-        // if (null == elem_name) return false;
-        // // Re-Fetching elements by its Name.
-        // item = document.getElementsByName(elem_name);
-        //
-        // var diff = (item.offsetTop - window.scrollY) / 20;
-        // if (!window._lastDiff) {
-        //     window._lastDiff = 0;
-        // }
-        // if (Math.abs(diff) > 2) {
-        //     window.scrollTo(0, (window.scrollY + diff));
-        //     clearTimeout(window._TO);
-        //     if (diff !== window._lastDiff) {
-        //         window._lastDiff = diff;
-        //         window._TO = setTimeout(this.scrollToItem, 100, item);
-        //     }
-        // } else {
-        //     window.scrollTo(0, item.offsetTop)
-        // }
+        // Form hash value.
+        var hash = '#' + item;
+        // Navigate with the hash value.
+        window.location.href = hash;
+        // Remove the navigated value.
+        this.removeHash(hash);
+    },
+    /*
+     * To remove the hash value from the URL.
+     */
+    removeHash: function (hash) {
+        // Getting the actual URL.
+        var path = window.location.href;
+        // Replacing the URL with specific hash value.
+        path = path.replace(hash, '');
+        // Update to url history.
+        window.history.pushState('', 'Title', path)
     }
 };
 /**
@@ -924,7 +922,7 @@ var validationResponse = {
      * Perform template creation and update.
      */
     template: function (activeElem, errorType) {
-        jsLogger.out('error Type 0', errorType);
+        //jsLogger.out('error Type 0', errorType);
         var errorIndex = '';
         var activeError = '';
         var elementDefaultResponse = activeElem.el.getAttribute('data-message');
@@ -934,7 +932,7 @@ var validationResponse = {
                 errorType = this.errorMessage[errorType];
                 activeElem.el.getAttribute('data-message');
                 if (errorType) {
-                    jsLogger.out('errorType', errorType);
+                    //jsLogger.out('errorType', errorType);
                     activeError = errorType;
                     // If error type is Min or Max, then it will proceed responsive.
                     if (activeElem.type == 'min' || activeElem.type == 'max') {
