@@ -7,6 +7,7 @@
 ### Installation 
 
     git clone https://github.com/global-source/javascript_form_validator.git
+    
     git checkout master
 
 ## What's New in this Validator ?
