@@ -131,7 +131,7 @@ var jsValidator = {
             if (errorList.textArea.length === 0) {
                 // If, Select elements have no errors.
                 if (errorList.select.length === 0) {
-                    // If validation pass, then update "validationPass" object.
+                    // If validation pass, then update "status" object.
                     status = true;
                 }
             }
@@ -168,7 +168,7 @@ var jsValidator = {
                 }
             }
         }
-        jsLogger.out('Log', log);
+        // jsLogger.out('Log', log);
         return log;
     },
     /*
@@ -196,11 +196,11 @@ var jsValidator = {
      * To perform quick validation to respond those fields.
      */
     quickValidation: function (event) {
-        jsLogger.out('Quick', event);
+        // jsLogger.out('Quick', event);
         var log = [];
         var target = event.target;
         log = jsRuleSets.checkValidation(target, log);
-        jsLogger.out('Quick Out', log);
+        // jsLogger.out('Quick Out', log);
         validationResponse.process(log);
     },
     /*
@@ -733,7 +733,7 @@ var jsFormError = {
      * Form error log.
      */
     log: function () {
-        jsLogger.out('Form Error Hit', this.errorHit);
+        // jsLogger.out('Form Error Hit', this.errorHit);
     },
     /*
      * Form error style.
