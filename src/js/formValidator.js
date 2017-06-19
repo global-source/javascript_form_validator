@@ -180,7 +180,7 @@ var jsValidator = {
         // Apply filter for Email elements.
         if (activeElem.type == 'email') jsFilter.email(activeElem);
         // Apply filter for Numeric elements.
-        // if (activeElem.min || activeElem.max) jsFilter.limit(activeElem);
+        if (activeElem.min || activeElem.max || activeElem.minLength || activeElem.maxLength) jsFilter.limit(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
         // Apply filter with pattern.
@@ -294,7 +294,7 @@ var jsFilter = {
                 status = true;
             }
         }
-        if (true === status) element.addEventListener('keypress', this.isInLimit, false);
+        if (true === status) element.addEventListener('input', this.isInLimit, false);
     },
     /*
      * Restrict element with it's limit.
@@ -319,6 +319,11 @@ var jsFilter = {
         if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
             event.preventDefault();
         }
+
+            var num = +this.value, max = 31, min = 1;          //converts value to a Number
+            if(!this.value.length) return false;               //allows empty field
+            this.value = isNaN(num) ? min : num > max ? max : num < min  ? min : num;
+
         event.target.value = event.target.value.substring(0, event.target.value.length - 1);
     },
     /*
@@ -669,6 +674,7 @@ var jsRuleSets = {
         if (false === elem.required) return true;
         var status = false;
         var email = elem.value;
+        if (typeof email === 'undefined') return false;
         // To Validate Email.
         // Convert to Native String Format.
         email = email.toString();
