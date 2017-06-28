@@ -180,7 +180,7 @@ var jsValidator = {
         // Apply filter for Email elements.
         if (activeElem.type == 'email') jsFilter.email(activeElem);
         // Apply filter for Numeric elements.
-        if (activeElem.min || activeElem.max || activeElem.minLength || activeElem.maxLength) jsFilter.limit(activeElem);
+        // if (activeElem.min || activeElem.max || activeElem.minLength || activeElem.maxLength) jsFilter.limit(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
         // Apply filter with pattern.
