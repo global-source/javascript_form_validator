@@ -677,20 +677,23 @@ var jsRuleSets = {
     },
     file: function (elem) {
         var list_to_allow = elem.target.getAttribute('data-extensions');
+        var target = elem.target;
         var list_to_allow_array;
-        var inputID = elem.target.getAttribute('id');
         var file_response;
         if ('' === list_to_allow) return true;
-        if (-1 === list_to_allow.indexOf(',')) list_to_allow = [list_to_allow];
-
-        list_to_allow_array = list_to_allow.split(',');
-
-        var fileName = document.getElementById(inputID).value;
+        // Slit into array of extensions.
+        if (-1 === list_to_allow.indexOf(',')) {
+            list_to_allow_array = [list_to_allow];
+        } else {
+            list_to_allow_array = list_to_allow.split(',');
+        }
+        // Get file name.
+        var fileName = target.value;
         // Convert to lower case for native validation.
         fileName = fileName.toLowerCase();
         file_response = (new RegExp('(' + list_to_allow_array.join('|').replace(/\./g, '\\.') + ')$')).test(fileName);
         if (false === file_response) {
-            alert('Allowed file types are ' + list_to_allow + ' !');
+            alert('Allowed file types are "' + list_to_allow + '" !');
             // Reset file type.
             elem.target.value = '';
             return false;
