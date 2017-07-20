@@ -207,7 +207,8 @@ It has automated listener to monitor every changes on form.
     
 ```
            
-It Will listen the **Submit** button event **Automatically**.
+It Will listen the **Submit** event **Automatically** and initiating the validation checks.
+And based on response, it will allow to submit or throw messages.
 
 
 License
