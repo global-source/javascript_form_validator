@@ -218,15 +218,20 @@ var jsValidator = {
  * Common Filter instances.
  */
 var jsFilter = {
-    // Number elements filter listener.
-    number: function (element) {
-        var status = true;
+    checkStatus: function (elem) {
+        var status;
+        status = true;
         if (false === this.forceFilter) {
             status = false;
-            if (true === element.required) {
+            if (true === elem.required) {
                 status = true;
             }
         }
+        return status;
+    },
+    // Number elements filter listener.
+    number: function (element) {
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('keypress', this.isNumberKey, false);
     },
     /*
@@ -236,14 +241,9 @@ var jsFilter = {
         // Getting "data" attribute for actions.
         var type = element.getAttribute('data-allow');
         var current = this;
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }    // Switching actions.
+        var status = this.checkStatus(element);
 
+        // Switching actions.
         switch (type) {
             // Allow only alphabets [a-zA-Z] not [0-9] and special characters.
             case 'onlyAlpha':
@@ -264,49 +264,25 @@ var jsFilter = {
      */
     pattern: function (element) {
         var current = this;
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('keypress', current.isPatternValid, false);
     },
     /*
      * Email elements filter listener.
      */
     email: function (element) {
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('keypress', jsRuleSets.email, false);
     },
     file: function (element) {
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('change', jsRuleSets.file, false);
     },
     /*
      * Numeric with Limited elements filter listener.
      */
     limit: function (element) {
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('input', this.isInLimit, false);
     },
     /*
