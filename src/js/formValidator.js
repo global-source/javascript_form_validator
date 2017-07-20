@@ -19,6 +19,7 @@
  *
  * Date: 2017-05-01
  */
+
 /*
  * For Managing overall Validation flow.
  */
@@ -181,6 +182,8 @@ var jsValidator = {
         if (activeElem.type == 'email') jsFilter.email(activeElem);
         // Apply filter for Numeric elements.
         // if (activeElem.min || activeElem.max || activeElem.minLength || activeElem.maxLength) jsFilter.limit(activeElem);
+        // Apply filter File elements.
+        if (activeElem.type == 'file') jsFilter.file(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
         if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
         // Apply filter with pattern.
@@ -215,15 +218,20 @@ var jsValidator = {
  * Common Filter instances.
  */
 var jsFilter = {
-    // Number elements filter listener.
-    number: function (element) {
-        var status = true;
+    checkStatus: function (elem) {
+        var status;
+        status = true;
         if (false === this.forceFilter) {
             status = false;
-            if (true === element.required) {
+            if (true === elem.required) {
                 status = true;
             }
         }
+        return status;
+    },
+    // Number elements filter listener.
+    number: function (element) {
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('keypress', this.isNumberKey, false);
     },
     /*
@@ -233,14 +241,9 @@ var jsFilter = {
         // Getting "data" attribute for actions.
         var type = element.getAttribute('data-allow');
         var current = this;
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }    // Switching actions.
+        var status = this.checkStatus(element);
 
+        // Switching actions.
         switch (type) {
             // Allow only alphabets [a-zA-Z] not [0-9] and special characters.
             case 'onlyAlpha':
@@ -261,39 +264,25 @@ var jsFilter = {
      */
     pattern: function (element) {
         var current = this;
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('keypress', current.isPatternValid, false);
     },
     /*
      * Email elements filter listener.
      */
     email: function (element) {
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('keypress', jsRuleSets.email, false);
+    },
+    file: function (element) {
+        var status = this.checkStatus(element);
+        if (true === status) element.addEventListener('change', jsRuleSets.file, false);
     },
     /*
      * Numeric with Limited elements filter listener.
      */
     limit: function (element) {
-        var status = true;
-        if (false === this.forceFilter) {
-            status = false;
-            if (true === element.required) {
-                status = true;
-            }
-        }
+        var status = this.checkStatus(element);
         if (true === status) element.addEventListener('input', this.isInLimit, false);
     },
     /*
@@ -320,9 +309,9 @@ var jsFilter = {
             event.preventDefault();
         }
 
-            var num = +this.value, max = 31, min = 1;          //converts value to a Number
-            if(!this.value.length) return false;               //allows empty field
-            this.value = isNaN(num) ? min : num > max ? max : num < min  ? min : num;
+        var num = +this.value, max = 31, min = 1;          //converts value to a Number
+        if (!this.value.length) return false;               //allows empty field
+        this.value = isNaN(num) ? min : num > max ? max : num < min ? min : num;
 
         event.target.value = event.target.value.substring(0, event.target.value.length - 1);
     },
@@ -686,6 +675,28 @@ var jsRuleSets = {
         if (!email) status = false;
         return status;
     },
+    file: function (elem) {
+        var list_to_allow = elem.target.getAttribute('data-extensions');
+        var list_to_allow_array;
+        var inputID = elem.target.getAttribute('id');
+        var file_response;
+        if ('' === list_to_allow) return true;
+        if (-1 === list_to_allow.indexOf(',')) list_to_allow = [list_to_allow];
+
+        list_to_allow_array = list_to_allow.split(',');
+
+        var fileName = document.getElementById(inputID).value;
+        // Convert to lower case for native validation.
+        fileName = fileName.toLowerCase();
+        file_response = (new RegExp('(' + list_to_allow_array.join('|').replace(/\./g, '\\.') + ')$')).test(fileName);
+        if (false === file_response) {
+            alert('Allowed file types are ' + list_to_allow + ' !');
+            // Reset file type.
+            elem.target.value = '';
+            return false;
+        }
+        return true;
+    },
     /*
      * To Check Element Phone Value is Valid or Not.
      */
@@ -965,7 +976,8 @@ var validationResponse = {
             min: 'This field length is too low.',
             max: 'This field length is exceeds the limit',
             password: 'Password does not match.',
-            email: 'Email is not valid'
+            email: 'Email is not valid',
+            file: 'This file is not allowed'
         };
         if (typeof errorType !== 'string') return false;
         if (typeof errorMessages[errorType] === 'undefined') return false;
