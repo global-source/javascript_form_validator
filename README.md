@@ -10,13 +10,14 @@
     
     git checkout master
 
-## What's New ?
+## Why this ?
 
   * Support **Native** and **ES6** Javascript,
   * Pure Javascript Code (**No Dependency**),
   * Simplified Implementations,
   * **HTML 5 validation** for all Browsers,
-  * Reliable and **Dynamic** level **DOM** Validations.
+  * Reliable and **Dynamic** level **DOM** Validations,
+  * Dynamic auto scroll with element.
 
 
 **Steps to Integrate to Form :**
