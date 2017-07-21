@@ -535,9 +535,10 @@ var jsRuleSets = {
                 'id': activeElem.name + '_new1_1_1xv_resp'
             });
             firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-            helper.scrollToItem('#' + firstErrorHit);
-        }    // To Check the Value is less than min or not.
+            helper.scrollToItem(firstErrorHit);
+        }
 
+        // To Check the Value is less than minimum or not.
         if (activeElem.min) {
             if (jsRuleSets.isSet(activeElem)) {
                 if (!jsRuleSets.min(activeElem)) {
@@ -547,12 +548,13 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem('#' + firstErrorHit);
+                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
-        }    // To Check the Value is grater than max or not.
+        }
 
+        // To Check the Value is grater than max or not.
         if (activeElem.max) {
             if (jsRuleSets.isSet(activeElem)) {
                 if (!jsRuleSets.max(activeElem)) {
@@ -562,12 +564,13 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem('#' + firstErrorHit);
+                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
-        }    // To Check the Entered E-mail is Valid or Not.
+        }
 
+        // To Check the Entered E-mail is Valid or Not.
         if (activeElem.type == 'email') {
             if (jsRuleSets.isSet(activeElem)) {
                 if (!jsRuleSets.email(activeElem)) {
@@ -577,13 +580,14 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem('#' + firstErrorHit);
+                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
-        }    // To Compare the Password is Same or Not with Re-Password.
-        // TODO: Implement Simplified Comparison.
+        }
 
+        // To Compare the Password is Same or Not with Re-Password.
+        // TODO: Implement Simplified Comparison.
         if (activeElem.type == 'password') {
             if (jsRuleSets.isSet(activeElem)) {
                 if (!jsRuleSets.compare(activeElem)) {
@@ -593,7 +597,7 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem('#' + firstErrorHit);
+                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
@@ -817,7 +821,9 @@ var helper = {
      */
     scrollToItem: function (item) {
         // Form hash value.
-        var hash = '#' + item;
+        var hash = item;
+        // If "#" is missing, then add back to the ID.
+        if (-1 === hash.indexOf('#')) hash = '#' + hash;
         // Navigate with the hash value.
         window.location.href = hash;
         // Remove the navigated value.
