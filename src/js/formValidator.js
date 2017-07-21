@@ -17,7 +17,7 @@
  * Released under the MIT license
  * https://github.com/global-source/javascript_form_validator/blob/master/LICENSE
  *
- * Date: 2017-05-01
+ * Date: 2017-07-21
  */
 
 /*
@@ -59,6 +59,8 @@ var jsValidator = {
         this.onlyFilter = option.onlyFilter;
         // To Enable/Disable global validator.
         this.onChange = option.onChange;
+        // Update default response "class".
+        if ('undefined' === typeof option.errorClass) option.errorClass = 'js-error-cop';
         // Update "jsSettings" to global object.
         this.jsSettings = jsSettings.init(option);
         // Update "jsForm" to global object.
@@ -139,6 +141,7 @@ var jsValidator = {
         }
         if (false == this.initialLoad) validationResponse.init(errorList, this.option);
         this.initialLoad = false;
+        helper.scrollToError();
         return status;
     },
     /*
@@ -221,7 +224,7 @@ var jsFilter = {
     checkStatus: function (elem) {
         var status;
         status = true;
-        if (false === this.forceFilter) {
+        if (false === jsValidator.forceFilter) {
             status = false;
             if (true === elem.required) {
                 status = true;
@@ -296,8 +299,8 @@ var jsFilter = {
         var min = event.target.min;
         var max = event.target.max;
         // Default values for Min and Max.
-        if (!min) min = 0;
-        if (!max) max = 54;
+        if (!min) min = 1;
+        if (!max) max = 31;
         // Forming pattern for Restriction.
         var regex = new RegExp('^[0-9]+$');
         // Validation with Code.
@@ -309,7 +312,7 @@ var jsFilter = {
             event.preventDefault();
         }
 
-        var num = +this.value, max = 31, min = 1;          //converts value to a Number
+        var num = +this.value;          //converts value to a Number
         if (!this.value.length) return false;               //allows empty field
         this.value = isNaN(num) ? min : num > max ? max : num < min ? min : num;
 
@@ -535,7 +538,6 @@ var jsRuleSets = {
                 'id': activeElem.name + '_new1_1_1xv_resp'
             });
             firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-            helper.scrollToItem(firstErrorHit);
         }
 
         // To Check the Value is less than minimum or not.
@@ -548,7 +550,6 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
@@ -564,7 +565,6 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
@@ -580,7 +580,6 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
@@ -597,7 +596,6 @@ var jsRuleSets = {
                         'id': activeElem.name + '_new1_1_1xv_resp'
                     });
                     firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
-                    helper.scrollToItem(firstErrorHit);
                     validElem = false;
                 }
             }
@@ -819,6 +817,19 @@ var helper = {
     /*
      * To Scroll Up / Down to notify the item that have validation message.
      */
+    scrollToError: function () {
+        var active_class = validationResponse.getClass();
+        if (0 === document.getElementsByClassName(active_class).length) return false;
+        document.getElementsByClassName(active_class)[0].setAttribute('id', '__header_error_target_temp');
+        var id = '#' + document.getElementsByClassName(active_class)[0].id;
+        window.location.href = id;
+        document.getElementsByClassName(active_class)[0].removeAttribute('id');
+        // Remove the navigated value.
+        this.removeHash(id);
+    },
+    /*
+     * To Scroll Up / Down to notify the item that have validation message.
+     */
     scrollToItem: function (item) {
         // Form hash value.
         var hash = item;
@@ -838,7 +849,7 @@ var helper = {
         // Replacing the URL with specific hash value.
         path = path.replace(hash, '');
         // Update to url history.
-        window.history.pushState('', 'Title', path)
+        window.history.pushState('', 'Title', path);
     }
 };
 /**
@@ -883,16 +894,20 @@ var pattern = {
  * To Manage all kind of error response.
  */
 var validationResponse = {
+    active_class: false,
     /*
      * Initiating the Response handler.
      */
     init: function (errorList, option) {
         this.errorMessage = option.message;
+        // Updating the class.
+        this.active_class = option.errorClass;
         // var errorElements = option.errorElem;
         // jsLogger.out('Errors', errorList);
         this.input(errorList.input);
         this.select(errorList.select);
         this.textArea(errorList.textArea);
+
     },
     /*
      * To handle the "input" element.
@@ -906,6 +921,9 @@ var validationResponse = {
     select: function (elem) {
         this.process(elem);
     },
+    getClass: function () {
+        return this.active_class;
+    },
     /*
      * To handle the "textArea" element.
      */
@@ -917,6 +935,7 @@ var validationResponse = {
      */
     process: function (elem) {
         var elementDefaultResponse = '';
+        var active_class = this.getClass();
         for (var i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
             if (elem[i].el && true === elem[i].el.required) {
@@ -932,6 +951,7 @@ var validationResponse = {
                     // jsLogger.out('Element Found', false);
                     spanTag = document.createElement('span');
                     spanTag.setAttribute('id', activeElem.id);
+                    spanTag.setAttribute('class', active_class);
                     spanTag.innerHTML = elementDefaultResponse;
                 } else {
                     // Re-use Existing response Message SPAN.
@@ -980,13 +1000,14 @@ var validationResponse = {
      * then it will be replaces.
      */
     default: function (errorType) {
+        var active_class = this.getClass();
         var errorMessages = {
-            required: 'This field is required',
-            min: 'This field length is too low.',
-            max: 'This field length is exceeds the limit',
-            password: 'Password does not match.',
-            email: 'Email is not valid',
-            file: 'This file is not allowed'
+            required: '<span class="' + active_class + '">This field is required.</span>',
+            min: '<span class="' + active_class + '">This field length is too low.</span>',
+            max: '<span class="' + active_class + '">This field length is exceeds the limit.</span>',
+            password: '<span class="' + active_class + '">Password does not match.</span>',
+            email: '<span class="' + active_class + '">Email is not valid.</span>',
+            file: '<span class="' + active_class + '">This file is not allowed.</span>'
         };
         if (typeof errorType !== 'string') return false;
         if (typeof errorMessages[errorType] === 'undefined') return false;

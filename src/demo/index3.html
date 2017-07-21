@@ -110,12 +110,14 @@
         form: 'clientAdd',
         forceFilter: true,
         onChange: true,
+        errorClass: '__error_cap',
         message: {
-            required: 'This field is required !',
-            min: 'This field is less then the limit [INDEX]',
-            max: 'This field is exceeds the limit of [INDEX]',
-            password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
+            required: 'This field is required.',
+            min: 'This field length is too low.',
+            max: 'This field length is exceeds the limit.',
+            password: 'Password does not match.',
+            email: 'Email is not valid.',
+            file: 'This file is not allowed.'
         }
     });
 
