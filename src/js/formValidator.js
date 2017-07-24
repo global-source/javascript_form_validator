@@ -52,9 +52,9 @@ var jsValidator = {
      * Initiating the Validator.
      */
     init: function (option) {
-        jsLogger.table(option);
         // To Update global options.
         this.option = option;
+        jsLogger.table(option);
         // Updating the filter flag to global.
         this.onlyFilter = option.onlyFilter;
         // To Enable/Disable global validator.
@@ -606,7 +606,8 @@ var jsRuleSets = {
             if (activeElem.name !== '') {
                 var elem = document.getElementById(activeElem.name + '_new1_1_1xv_resp');
                 if (typeof (elem) !== 'undefined' && elem !== null) {
-                    elem.innerHTML = '';
+                    // Remove element to avoid un-necessary buffer.
+                    elem.remove();
                 }
             }
         }
@@ -769,10 +770,15 @@ var jsFormError = {
  * For manage overall logging with validator.
  */
 var jsLogger = {
+    status: function () {
+        return jsValidator.option.log
+    },
     /*
      * Simple log with "heading" and "message".
      */
     out: function (heading, message) {
+
+        if (true !== this.status()) return false;
         console.log('======' + heading + '======');
         console.log(message);
         console.log('------------------------');
@@ -781,12 +787,14 @@ var jsLogger = {
      * For bulk data logging.
      */
     bulk: function (data) {
+        if (true !== this.status()) return false;
         console.log(data);
     },
     /*
      * For log data with table.
      */
     table: function (data) {
+        if (true !== this.status()) return false;
         console.table(data);
     }
 };
@@ -818,12 +826,19 @@ var helper = {
      * To Scroll Up / Down to notify the item that have validation message.
      */
     scrollToError: function () {
+        var dummy_id = '__header_error_target_temp';
         var active_class = validationResponse.getClass();
         if (0 === document.getElementsByClassName(active_class).length) return false;
-        document.getElementsByClassName(active_class)[0].setAttribute('id', '__header_error_target_temp');
+        // Getting current ID of the element.
+        var active_id = document.getElementsByClassName(active_class)[0].id;
+        // Update first element with dummy indec ID.
+        document.getElementsByClassName(active_class)[0].setAttribute('id', dummy_id);
+        // Forming ID.
         var id = '#' + document.getElementsByClassName(active_class)[0].id;
+        // Navigate to ID.
         window.location.href = id;
-        document.getElementsByClassName(active_class)[0].removeAttribute('id');
+        // Restore with actual ID.
+        document.getElementsByClassName(active_class)[0].setAttribute('id', active_id);
         // Remove the navigated value.
         this.removeHash(id);
     },
@@ -913,12 +928,14 @@ var validationResponse = {
      * To handle the "input" element.
      */
     input: function (elem) {
+        // Initiate process for Input.
         this.process(elem);
     },
     /*
      * To handle the "select" element.
      */
     select: function (elem) {
+        // Initiate process for Select.
         this.process(elem);
     },
     getClass: function () {
@@ -928,13 +945,16 @@ var validationResponse = {
      * To handle the "textArea" element.
      */
     textArea: function (elem) {
+        // Initiate process for TextArea.
         this.process(elem);
     },
     /*
      * To process all handlers.
      */
     process: function (elem) {
+        // Process with initial response.
         var elementDefaultResponse = '';
+        // Get active class for error response element
         var active_class = this.getClass();
         for (var i in elem) {
             // jsLogger.out('Element', document.getElementById(elem[i].id));
@@ -956,10 +976,8 @@ var validationResponse = {
                 } else {
                     // Re-use Existing response Message SPAN.
                     spanTag.innerHTML = elementDefaultResponse;
-                    // jsLogger.out('Element Found', true);
-                }        // jsLogger.out('Error Elem', activeElem.el);
+                }
                 // Append HTML response to the Element.
-
                 activeElem.el.parentNode.insertBefore(spanTag, activeElem.el.nextSibling);
             }
         }
@@ -971,12 +989,15 @@ var validationResponse = {
         //jsLogger.out('error Type 0', errorType);
         var errorIndex = '';
         var activeError = '';
+        // Getting error response message from elemnet.
         var elementDefaultResponse = activeElem.el.getAttribute('data-message');
         if (typeof elementDefaultResponse === 'undefined' || elementDefaultResponse === '' || elementDefaultResponse === null) {
             // Sanity check with error message object.
             if (typeof this.errorMessage !== 'undefined' && typeof this.errorMessage[errorType] !== 'undefined') {
+                // Getting error type. [ex. Required, Min, Max...]
                 errorType = this.errorMessage[errorType];
-                activeElem.el.getAttribute('data-message');
+
+                // activeElem.el.getAttribute('data-message');
                 if (errorType) {
                     //jsLogger.out('errorType', errorType);
                     activeError = errorType;
