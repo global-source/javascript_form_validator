@@ -10,13 +10,14 @@
     
     git checkout master
 
-## What's New ?
+## Why this ?
 
   * Support **Native** and **ES6** Javascript,
   * Pure Javascript Code (**No Dependency**),
   * Simplified Implementations,
   * **HTML 5 validation** for all Browsers,
-  * Reliable and **Dynamic** level **DOM** Validations.
+  * Reliable and **Dynamic** level **DOM** Validations,
+  * Dynamic auto scroll with element.
 
 
 **Steps to Integrate to Form :**
@@ -29,36 +30,22 @@
 
 Then Integrate your form with Validator.
 
-             
 ```javascript
+    
+    // Core
+    var myform = jsValidator.init({
+        form: 'form2submit',   // #id
+    });
+    
+    // ES6
+    var myform = new jsValidator().init({
+        form: 'form2submit',   // #id
+    });
 
- // For Native-Javascript
- var myform = jsValidator.init({
-        form: 'form2submit',   // #id
-        forceFilter: true,
-         message: {
-            required: 'This field is required !',
-            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-            max: 'This field is exceeds the limit of [INDEX]',
-            password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
-        }
-    });
-    
- // For ES6
- var myform = new jsValidator().init({
-        form: 'form2submit',   // #id
-        forceFilter: true,
-         message: {
-            required: 'This field is required !',
-            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-            max: 'This field is exceeds the limit of [INDEX]',
-            password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
-        }
-    });
-    
 ```
+
+             
+
 ## Options
 
 | Name        | Values          | Descriptions                                                                  | Mandatory |
@@ -101,7 +88,7 @@ Then Integrate your form with Validator.
           
 Currently the validation will trigger on submit button trigger.
 
-It has automated listener to eliminating unnecessary changes on form.
+It has automated listener to monitor every changes on form.
 
 **Note:**
 
@@ -189,8 +176,40 @@ It has automated listener to eliminating unnecessary changes on form.
          </form>
     ```
          
+#### Sample
+
+```javascript
+
+ // For Native-Javascript
+ var myform = jsValidator.init({
+        form: 'form2submit',   // #id
+        forceFilter: true,
+         message: {
+            required: 'This field is required !',
+            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
+    });
+    
+ // For ES6
+ var myform = new jsValidator().init({
+        form: 'form2submit',   // #id
+        forceFilter: true,
+         message: {
+            required: 'This field is required !',
+            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
+            max: 'This field is exceeds the limit of [INDEX]',
+            password: 'Password doesn\'t match !',
+            email: 'Invalid Email found !'
+        }
+    });
+    
+```
            
-It Will listen the **Submit** button event **Automatically**.
+It Will listen the **Submit** event **Automatically** and initiating the validation checks.
+And based on response, it will allow to submit or throw messages.
 
 
 License
