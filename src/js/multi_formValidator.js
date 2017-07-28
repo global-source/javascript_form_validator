@@ -62,11 +62,11 @@ function jsValidator() {
         // Update default response "class".
         if ('undefined' === typeof option.errorClass) option.errorClass = 'js-error-cop';
         // Update "jsSettings" to global object.
-        this.jsSettings = jsSettings.init(option);
+        this.jsSettings = new jsSettings().init(option);
         // Update "jsForm" to global object.
-        this.jsForm = jsForm.init(option);
+        this.jsForm = new jsForm().init(option);
         // Initiate form error setup.
-        this.jsFormError = jsFormError.init();
+        this.jsFormError = new jsFormError().init();
         // Update Force Field status.
         this.forceFilter = option.forceFilter;
         // To check the form elements.
@@ -101,11 +101,11 @@ function jsValidator() {
         // Updating the filter flag to global.
         this.onlyFilter = option.onlyFilter;
         // Update "jsSettings" to global object.
-        this.jsSettings = jsSettings.init(option);
+        this.jsSettings = new jsSettings().init(option);
         // Update "jsForm" to global object.
-        this.jsForm = jsForm.init(option);
+        this.jsForm = new jsForm().init(option);
         // Initiate form error setup.
-        this.jsFormError = jsFormError.init();
+        this.jsFormError = new jsFormError().init();
     };
     /*
      * To checking all elements from registered form.
@@ -168,7 +168,7 @@ function jsValidator() {
                 // If not only filter, then start validations.
                 if (false === this.onlyFilter || typeof (this.onlyFilter) === 'undefined') {
                     // Initiate validations and update to log.
-                    log = jsRuleSets.checkValidation(activeElem, log);
+                    log = new jsRuleSets().checkValidation(activeElem, log);
                 }
             }
         }
@@ -180,17 +180,17 @@ function jsValidator() {
      */
     this.applyFilters = function (activeElem) {
         // Apply filter for Number elements.
-        if (activeElem.type == 'number') jsFilter.number(activeElem);
+        if (activeElem.type == 'number') new jsFilter().number(activeElem);
         // Apply filter for Email elements.
-        if (activeElem.type == 'email') jsFilter.email(activeElem);
+        if (activeElem.type == 'email') new jsFilter().email(activeElem);
         // Apply filter for Numeric elements.
         // if (activeElem.min || activeElem.max || activeElem.minLength || activeElem.maxLength) jsFilter.limit(activeElem);
         // Apply filter File elements.
-        if (activeElem.type == 'file') jsFilter.file(activeElem);
+        if (activeElem.type == 'file') new jsFilter().file(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
-        if (activeElem.getAttribute('data-allow')) jsFilter.string(activeElem);
+        if (activeElem.getAttribute('data-allow')) new jsFilter().string(activeElem);
         // Apply filter with pattern.
-        if (activeElem.getAttribute('pattern')) jsFilter.pattern(activeElem);
+        if (activeElem.getAttribute('pattern')) new jsFilter().pattern(activeElem);
     };
     /*
      * To make it active to listen changes of those error fields.
@@ -205,9 +205,9 @@ function jsValidator() {
         // jsLogger.out('Quick', event);
         var log = [];
         var target = event.target;
-        log = jsRuleSets.checkValidation(target, log);
+        log = new jsRuleSets().checkValidation(target, log);
         // jsLogger.out('Quick Out', log);
-        validationResponse.process(log);
+        new validationResponse().process(log);
     };
     /*
      * Single step instance validator for Ajax form submissions.
@@ -224,7 +224,7 @@ function jsFilter() {
     this.checkStatus = function (elem) {
         var status;
         status = true;
-        if (false === jsValidator.forceFilter) {
+        if (false === new jsValidator().forceFilter) {
             status = false;
             if (true === elem.required) {
                 status = true;
@@ -336,7 +336,7 @@ function jsFilter() {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = pattern.validate(event, 'a-zA-Z0-9');
+        var status = new pattern().validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     };
@@ -354,7 +354,7 @@ function jsFilter() {
 
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = pattern.validate(event, 'a-zA-Z0-9');
+        var status = new pattern().validate(event, 'a-zA-Z0-9');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     };
@@ -365,7 +365,7 @@ function jsFilter() {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        var status = pattern.validate(event, 'a-zA-Z0-4');
+        var status = new pattern().validate(event, 'a-zA-Z0-4');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     };
@@ -385,6 +385,7 @@ function jsFilter() {
         return true;
     };
 }
+
 /**
  * To Update overall JsValidator Settings.
  */
@@ -481,12 +482,13 @@ function jsForm() {
     this.required = function () {
         // var jsField = new jsField().init(this.options);
         var forceFilter = this.forceFilter;
+        var jsField_obj = new jsField();
         // Filter all required "input" elements.
-        this.input = jsField.required(this.input, forceFilter);
+        this.input = jsField_obj.required(this.input, forceFilter);
         // Filter all required "select" elements.
-        this.select = jsField.required(this.select, forceFilter);
+        this.select = jsField_obj.required(this.select, forceFilter);
         // Filter all required "textArea" elements.
-        this.textArea = jsField.required(this.textArea, forceFilter);
+        this.textArea = jsField_obj.required(this.textArea, forceFilter);
     };
     /*
      * General Log.
@@ -530,8 +532,9 @@ function jsRuleSets() {
     this.checkValidation = function (activeElem, log) {
         //jsLogger.out('Active Elem', activeElem);
         var validElem = true;
+        var jsRuleSets_obj = new jsRuleSets();
         // To Generally checks, the field is empty or not.
-        if (!jsRuleSets.isSet(activeElem)) {
+        if (!jsRuleSets_obj.isSet(activeElem)) {
             log.push({
                 'el': activeElem,
                 'type': 'required',
@@ -542,8 +545,8 @@ function jsRuleSets() {
 
         // To Check the Value is less than minimum or not.
         if (activeElem.min) {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.min(activeElem)) {
+            if (jsRuleSets_obj.isSet(activeElem)) {
+                if (!jsRuleSets_obj.min(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'min',
@@ -557,8 +560,8 @@ function jsRuleSets() {
 
         // To Check the Value is grater than max or not.
         if (activeElem.max) {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.max(activeElem)) {
+            if (jsRuleSets_obj.isSet(activeElem)) {
+                if (!jsRuleSets_obj.max(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'max',
@@ -572,8 +575,8 @@ function jsRuleSets() {
 
         // To Check the Entered E-mail is Valid or Not.
         if (activeElem.type == 'email') {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.email(activeElem)) {
+            if (jsRuleSets_obj.isSet(activeElem)) {
+                if (!jsRuleSets_obj.email(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'email',
@@ -588,8 +591,8 @@ function jsRuleSets() {
         // To Compare the Password is Same or Not with Re-Password.
         // TODO: Implement Simplified Comparison.
         if (activeElem.type == 'password') {
-            if (jsRuleSets.isSet(activeElem)) {
-                if (!jsRuleSets.compare(activeElem)) {
+            if (jsRuleSets_obj.isSet(activeElem)) {
+                if (!jsRuleSets_obj.compare(activeElem)) {
                     log.push({
                         'el': activeElem,
                         'type': 'password',
@@ -769,37 +772,38 @@ function jsFormError() {
 /**
  * For manage overall logging with validator.
  */
-function jsLogger() {
-    this.status = function () {
-        return jsValidator.option.log
-    };
+var jsLogger = {
+    status: function () {
+        // return jsValidator.option.log;
+        return '[]';
+    },
     /*
      * Simple log with "heading" and "message".
      */
-    this.out = function (heading, message) {
+    out: function (heading, message) {
 
         if (true !== this.status()) return false;
         console.log('======' + heading + '======');
         console.log(message);
         console.log('------------------------');
-    };
+    },
     /*
      * For bulk data logging.
      */
-    this.bulk = function (data) {
+    bulk: function (data) {
         if (true !== this.status()) return false;
         console.log(data);
-    };
+    },
     /*
      * For log data with table.
      */
-    this.table = function (data) {
+    table: function (data) {
         if (true !== this.status()) return false;
         console.table(data);
-    };
-}
+    }
+};
 /**
- * General Helping methods.
+ * General Helping methods.jsField_obj
  */
 var helper = {
     /*
@@ -827,7 +831,7 @@ var helper = {
      */
     scrollToError: function () {
         var dummy_id = '__header_error_target_temp';
-        var active_class = validationResponse.getClass();
+        var active_class = new validationResponse().getClass();
         if (0 === document.getElementsByClassName(active_class).length) return false;
         // Getting current ID of the element.
         var active_id = document.getElementsByClassName(active_class)[0].id;
