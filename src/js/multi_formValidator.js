@@ -4,7 +4,7 @@
  *
  * Author : Shankar Thiyagaraajan
  * Email  : shankarthiyagaraajan@gmail.com
- * Github : https://github.com/shankarThiyagaraajan
+ * GitHub : https://github.com/shankarThiyagaraajan
  *
  * Source
  * https://github.com/global-source/javascript_form_validator
@@ -139,7 +139,7 @@ function jsValidator() {
                 }
             }
         }
-        if (false == this.initialLoad) validationResponse.init(errorList, this.option);
+        if (false == this.initialLoad) new validationResponse().init(errorList, this.option);
         this.initialLoad = false;
         helper.scrollToError();
         return status;
@@ -205,6 +205,7 @@ function jsValidator() {
         // jsLogger.out('Quick', event);
         var log = [];
         var target = event.target;
+        // To check the validation of an element.
         log = new jsRuleSets().checkValidation(target, log);
         // jsLogger.out('Quick Out', log);
         new validationResponse().process(log);
@@ -832,6 +833,12 @@ var helper = {
     scrollToError: function () {
         var dummy_id = '__header_error_target_temp';
         var active_class = new validationResponse().getClass();
+
+        if (false === active_class) {
+            jsLogger.out('Active Class Error', 'ACTIVE CLASS NOT DEFINED, GET :' + active_class);
+            return false;
+        }
+
         if (0 === document.getElementsByClassName(active_class).length) return false;
         // Getting current ID of the element.
         var active_id = document.getElementsByClassName(active_class)[0].id;
