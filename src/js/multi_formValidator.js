@@ -24,6 +24,7 @@
  * For Managing overall Validation flow.
  */
 var firstErrorHit = false;
+var __err_id_suffix_rand_hash = '_new1_1_1xv_resp';
 /**
  * Core Js Validator.
  */
@@ -541,9 +542,9 @@ function jsRuleSets() {
             log.push({
                 'el': activeElem,
                 'type': 'required',
-                'id': activeElem.name + '_new1_1_1xv_resp'
+                'id': activeElem.name + __err_id_suffix_rand_hash
             });
-            firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+            firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
         }
 
         // To Check the Value is less than minimum or not.
@@ -553,9 +554,9 @@ function jsRuleSets() {
                     log.push({
                         'el': activeElem,
                         'type': 'min',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -568,9 +569,9 @@ function jsRuleSets() {
                     log.push({
                         'el': activeElem,
                         'type': 'max',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -583,9 +584,9 @@ function jsRuleSets() {
                     log.push({
                         'el': activeElem,
                         'type': 'email',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -599,9 +600,9 @@ function jsRuleSets() {
                     log.push({
                         'el': activeElem,
                         'type': 'password',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -610,7 +611,7 @@ function jsRuleSets() {
         if (true === validElem) {
             //jsLogger.out('Valid Elem', activeElem);
             if (activeElem.name !== '') {
-                var elem = document.getElementById(activeElem.name + '_new1_1_1xv_resp');
+                var elem = document.getElementById(activeElem.name + __err_id_suffix_rand_hash);
                 if (typeof (elem) !== 'undefined' && elem !== null) {
                     // Remove element to avoid un-necessary buffer.
                     elem.remove();
@@ -849,7 +850,7 @@ var helper = {
         // Forming ID.
         var id = document.getElementsByClassName(active_class)[0].id;
         // Retrieve the element name.
-        var elem_name = active_id.replace('_new1_1_1xv_resp', '');
+        var elem_name = active_id.replace(__err_id_suffix_rand_hash, '');
         // Taking active element to navigate.
         var top = document.getElementsByName(elem_name)[0].offsetTop;
         // Format as ID.

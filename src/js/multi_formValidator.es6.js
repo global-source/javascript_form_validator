@@ -24,6 +24,8 @@
  * For Managing overall Validation flow.
  */
 let firstErrorHit = false;
+let __err_id_suffix_rand_hash = '_new1_1_1xv_resp';
+
 /**
  * Core Js Validator.
  */
@@ -575,9 +577,9 @@ class jsRuleSets {
             log.push({
                 'el': activeElem,
                 'type': 'required',
-                'id': activeElem.name + '_new1_1_1xv_resp'
+                'id': activeElem.name + __err_id_suffix_rand_hash
             });
-            firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+            firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
         }
 
         // To Check the Value is less than minimum or not.
@@ -587,9 +589,9 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'min',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -602,9 +604,9 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'max',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -617,9 +619,9 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'email',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -633,9 +635,9 @@ class jsRuleSets {
                     log.push({
                         'el': activeElem,
                         'type': 'password',
-                        'id': activeElem.name + '_new1_1_1xv_resp'
+                        'id': activeElem.name + __err_id_suffix_rand_hash
                     });
-                    firstErrorHit = activeElem.name + '_new1_1_1xv_resp';
+                    firstErrorHit = activeElem.name + __err_id_suffix_rand_hash;
                     validElem = false;
                 }
             }
@@ -644,7 +646,7 @@ class jsRuleSets {
         if (true === validElem) {
             //jsLogger.out('Valid Elem', activeElem);
             if (activeElem.name !== '') {
-                let elem = document.getElementById(activeElem.name + '_new1_1_1xv_resp');
+                let elem = document.getElementById(activeElem.name + __err_id_suffix_rand_hash);
                 if (typeof (elem) !== 'undefined' && elem !== null) {
                     // Remove element to avoid un-necessary buffer.
                     elem.remove();
@@ -895,7 +897,7 @@ let helper = {
         // Forming ID.
         let id = document.getElementsByClassName(active_class)[0].id;
         // Retrieve the element name.
-        let elem_name = active_id.replace('_new1_1_1xv_resp', '');
+        let elem_name = active_id.replace(__err_id_suffix_rand_hash, '');
         // Taking active element to navigate.
         let top = document.getElementsByName(elem_name)[0].offsetTop;
         // Format as ID.
