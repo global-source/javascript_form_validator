@@ -48,6 +48,7 @@ function jsValidator() {
     this.option = false;
     // To apply global validator.
     this.onChange = false;
+    this.validateResponse = false;
     /*
      * Initiating the Validator.
      */
@@ -61,6 +62,7 @@ function jsValidator() {
         this.onChange = option.onChange;
         // Update default response "class".
         if ('undefined' === typeof option.errorClass) option.errorClass = 'js-error-cop';
+        this.validateResponse = new validationResponse();
         // Update "jsSettings" to global object.
         this.jsSettings = new jsSettings().init(option);
         // Update "jsForm" to global object.
@@ -139,9 +141,9 @@ function jsValidator() {
                 }
             }
         }
-        if (false == this.initialLoad) new validationResponse().init(errorList, this.option);
+        if (false == this.initialLoad) this.validateResponse.init(errorList, this.option);
         this.initialLoad = false;
-        helper.scrollToError();
+        helper.scrollToError(this.validateResponse);
         return status;
     };
     /*
@@ -830,9 +832,9 @@ var helper = {
     /*
      * To Scroll Up / Down to notify the item that have validation message.
      */
-    scrollToError: function () {
+    scrollToError: function (validateResponse) {
         var dummy_id = '__header_error_target_temp';
-        var active_class = new validationResponse().getClass();
+        var active_class = validateResponse.getClass();
 
         if (false === active_class) {
             jsLogger.out('Active Class Error', 'ACTIVE CLASS NOT DEFINED, GET :' + active_class);
@@ -842,12 +844,20 @@ var helper = {
         if (0 === document.getElementsByClassName(active_class).length) return false;
         // Getting current ID of the element.
         var active_id = document.getElementsByClassName(active_class)[0].id;
-        // Update first element with dummy indec ID.
+        // Update first element with dummy index ID.
         document.getElementsByClassName(active_class)[0].setAttribute('id', dummy_id);
         // Forming ID.
-        var id = '#' + document.getElementsByClassName(active_class)[0].id;
+        var id = document.getElementsByClassName(active_class)[0].id;
+        // Retrieve the element name.
+        var elem_name = active_id.replace('_new1_1_1xv_resp', '');
+        // Taking active element to navigate.
+        var top = document.getElementsByName(elem_name)[0].offsetTop;
+        // Format as ID.
+        id = '#' + id;
         // Navigate to ID.
-        window.location.href = id;
+        // window.location.href = id;
+        // Scroll to error element as close as possible.
+        window.scroll(0, parseInt(top) - 15);
         // Restore with actual ID.
         document.getElementsByClassName(active_class)[0].setAttribute('id', active_id);
         // Remove the navigated value.
