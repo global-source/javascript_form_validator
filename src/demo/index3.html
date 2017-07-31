@@ -88,8 +88,7 @@
         <button type="submit" name="btn-save" class="btn btn-default">Submit</button>
     </form>
 </div>
-<script src="./../js/formValidator.js"></script>
-<!--<script src="../js/formValidator.es6.min.js"></script>-->
+<script src="./../js/multi_formValidator.js"></script>
 
 <script>
 
@@ -106,12 +105,13 @@
     //                }
     //            });
 
-    var form = jsValidator.init({
+    var form = new jsValidator();
+    form.init({
         form: 'clientAdd',
         forceFilter: true,
         onChange: true,
         errorClass: '__error_cap',
-//        log:true,
+        log: true,
         message: {
             required: 'This field is required.',
             min: 'This field length is too low.',
