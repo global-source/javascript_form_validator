@@ -13,14 +13,15 @@
         <div class="">
             <div class="row">
                 <label for="name" style="align-items: baseline">Name</label>
-                <input type="text" required class="form-control" id="name" name="name" placeholder="Enter Name">
+                <input type="text" required class="form-control" data-allowSpecial="_" data-allow="onlyAlpha" id="name"
+                       name="name" placeholder="Enter Name">
             </div>
 
             <br><br><br><br><br><br><br>
 
             <div class="row">
                 <label for="name">Address1</label>
-                <input type="text" required class="form-control" id="l_address" name="l_address"
+                <input type="text" required class="form-control" pattern="[a-Z]" id="l_address" name="l_address"
                        placeholder="Enter address1">
 
             </div>

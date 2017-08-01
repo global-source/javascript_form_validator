@@ -349,7 +349,7 @@ class jsFilter {
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
         // Managing the Pattern.
-        let status = pattern.validate(event, 'a-zA-Z');
+        let status = new pattern().validate(event, 'a-zA-Z');
         // Return status of the Action.
         if (false === status) event.preventDefault();
     };
