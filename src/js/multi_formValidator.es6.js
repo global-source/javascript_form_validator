@@ -196,7 +196,7 @@ class jsValidator {
         // Apply filter for Email elements.
         if (activeElem.type == 'email') new jsFilter().email(activeElem);
         // Apply filter for Numeric elements.
-        // if (activeElem.min || activeElem.max || activeElem.minLength || activeElem.maxLength) jsFilter.limit(activeElem);
+        if (activeElem.min || activeElem.max || activeElem.getAttribute('data-maxlength') || activeElem.minLength || activeElem.maxLength) new jsFilter().limit(activeElem);
         // Apply filter File elements.
         if (activeElem.type == 'file') new jsFilter().file(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
@@ -307,39 +307,81 @@ class jsFilter {
      * Numeric with Limited elements filter listener.
      */
     limit(element) {
+        let current = this;
         let status = this.checkStatus(element);
-        if (true === status) element.addEventListener('input', this.isInLimit, false);
+        if (true === status) element.addEventListener('change', current.isInLimit, false);
     };
 
     /*
      * Restrict element with it's limit.
      */
     isInLimit(event) {
+
+        // Load the element value.
         let value = event.target.value;
+
         // To check is this action is from "windows" action or not.
         if (true === helper.isWindowAction(event)) return true;
+
+        // Getting target element.
+        let target = event.target;
+
+        // Final value to load back.
+        let final_value = value;
+
         // Getting object from element.
         let min = event.target.min;
         let max = event.target.max;
-        // Default values for Min and Max.
-        if (!min) min = 1;
-        if (!max) max = 31;
-        // Forming pattern for Restriction.
-        let regex = new RegExp('^[0-9]+$');
-        // Validation with Code.
-        let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        //jsLogger.out('Limit', regex.test(key) + ' | min |' + min + ' | max | ' + max);
-        //jsLogger.out('Regex', regex.test(key));
-        // Return status of the Action.
-        if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
-            event.preventDefault();
+
+        // Get max-length attribute from element.
+        let max_length = event.target.getAttribute('data-maxlength') ? event.target.getAttribute('data-maxlength') : 0;
+        max_length = parseInt(max_length);
+        let num = value;
+
+        // if "max_length" is "0", then its don't have limit letiables.
+        if (0 === max_length) {
+
+            // Default values for Min and Max.
+            if (!min) min = 1;
+            if (!max) max = 31;
+
+            // Forming pattern for Restriction.
+            let regex = new RegExp('^[0-9]+$');
+
+            // Validation with Code.
+            let key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+
+            // Return status of the Action.
+            if (false === regex.test(key) || parseInt(value) > max || parseInt(value) < min) {
+                event.preventDefault();
+            }
+
+            // Parse to INT.
+            num = parseInt(num, 10);
+
+            // // converts value to a Number.
+            if (isNaN(num)) {
+                target.value = "";
+                return;
+            }
+
+            // Check value is greater than "max", then replace "max".
+            if (parseInt(num) > max) final_value = max;
+
+            // Check value is greater than "min", then replace "min".
+            if (parseInt(num) < min) final_value = min;
+
+        } else {
+            //TODO: Min length later.
+            // Validate the length of the string.
+            if ((num.length > max_length) && 0 < max_length) {
+                // If length is more, then cutoff the remaining letters.
+                final_value = num.substr(0, max_length);
+            }
         }
 
-        let num = +this.value;          //converts value to a Number
-        if (!this.value.length) return false;               //allows empty field
-        this.value = isNaN(num) ? min : num > max ? max : num < min ? min : num;
-
-        event.target.value = event.target.value.substring(0, event.target.value.length - 1);
+        // Revert value back to an element.
+        this.value = final_value;
     };
 
     /*

@@ -725,6 +725,9 @@ function jsRuleSets() {
         if (!email) status = false;
         return status;
     };
+    /*
+     * To Check Element's file is valid or not.
+     */
     this.file = function (elem) {
         var list_to_allow = elem.target.getAttribute('data-extensions');
         var target = elem.target;
