@@ -75,6 +75,7 @@ Then Integrate your form with Validator.
 | maxLength="10"     |  Integer        | To set the Maximum length of characters to proceed.                          |
 | type="password"    |  AlphaNumeric   | To set and compare password.                                                 |
 | type="email"       |  AlphaNumeric   | To check the email is valid or not.                                          |
+| type="file"       |  string ['png,jpeg..']   | To check the file format is allowed or not.                                          |
 | data-message="Error Message"| String | User defined, element based direct error message to handle.                 |
 | data-allow="onlyAlpha"| a-zA-Z Only | Allow only string, no digits and no special characters.                      |
 | data-allow="string"| a-zA-Z0-9 Only | Allow only string and digits, no special characters.                         |
@@ -130,6 +131,10 @@ It has automated listener to monitor every changes on form.
         <input type="email" name="email" required>
     </div>
     <div>
+         <label for="file">File</label>
+         <input type="file" required class="form-control" id="file" data-extensions="png,jpeg,jpg" name="file">
+    </div>
+    <div>
         <label>Password</label>
         <input type="password" name="password" data-check="repassword" id="password" required>
     </div>
@@ -175,29 +180,17 @@ It has automated listener to monitor every changes on form.
 
 ```javascript
 
- // For Native-Javascript
- var myform = jsValidator.init({
-        form: 'form2submit',   // #id
-        forceFilter: true,
-         message: {
-            required: 'This field is required !',
-            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-            max: 'This field is exceeds the limit of [INDEX]',
-            password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
-        }
-    });
-    
- // For ES6
+ // For Native-Javascript & ES6
  var myform = new jsValidator().init({
         form: 'form2submit',   // #id
         forceFilter: true,
          message: {
             required: 'This field is required !',
-            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-            max: 'This field is exceeds the limit of [INDEX]',
+            min: '<br><span style="color: red;">This field is less then the limit</span>',
+            max: 'This field is exceeds the limit',
             password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
+            email: 'Invalid Email found !',
+            file: 'Invalid File format given'
         }
     });
     
