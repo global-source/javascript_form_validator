@@ -196,7 +196,7 @@ class jsValidator {
         // Apply filter for Email elements.
         if (activeElem.type == 'email') new jsFilter().email(activeElem);
         // Apply filter for Numeric elements.
-        if (activeElem.min || activeElem.max || activeElem.getAttribute('data-maxlength') || activeElem.minLength || activeElem.maxLength) new jsFilter().limit(activeElem);
+        if ('' !== activeElem.min || '' !== activeElem.max || activeElem.getAttribute('data-maxlength') || -1 !== activeElem.maxLength) new jsFilter().limit(activeElem);
         // Apply filter File elements.
         if (activeElem.type == 'file') new jsFilter().file(activeElem);
         // Apply filter with string, alphaNumeric and pregMatch.
