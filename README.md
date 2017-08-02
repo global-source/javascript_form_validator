@@ -69,8 +69,10 @@ Then Integrate your form with Validator.
 | Name              | Values          | Descriptions                                                                 |
 | ----------------- | --------------- | ---------------------------------------------------------------------------- |
 | required          |  True, False    | Set the fields is required to submit the Form.                               |
-| type="min"         |  Integer        | To set the Minimun length of characters to proceed.                          |
-| type="max"         |  Integer        | To set the Maximum length of characters to proceed.                          |
+| min               |  Integer        | To set the Minimun value to proceed.                          |
+| max               |  Integer        | To set the Maximum value to proceed.                          |
+| data-maxlength="10" |  Integer        | To set the Maximum length of characters to proceed.                          |
+| maxLength="10"     |  Integer        | To set the Maximum length of characters to proceed.                          |
 | type="password"    |  AlphaNumeric   | To set and compare password.                                                 |
 | type="email"       |  AlphaNumeric   | To check the email is valid or not.                                          |
 | data-message="Error Message"| String | User defined, element based direct error message to handle.                 |
