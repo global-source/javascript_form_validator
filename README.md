@@ -23,27 +23,20 @@
 **Steps to Integrate to Form :**
 
 ```html        
- <script src="./../src/js/formValidator.js"></script>
+ <script src="formValidator.js"></script>
  or
- <script src="./../src/js/formValidator.es6.js"></script>
+ <script src="formValidator.es6.js"></script>
 ```
 
 Then Integrate your form with Validator.
 
 ```javascript
     
-    // Core
-    var myform = jsValidator.init({
-        form: 'form2submit',   // #id
-    });
-    
-    // ES6
     var myform = new jsValidator().init({
         form: 'form2submit',   // #id
     });
-
+    
 ```
-
              
 
 ## Options
