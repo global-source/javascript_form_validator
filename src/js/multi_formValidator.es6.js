@@ -343,7 +343,7 @@ class jsFilter {
 
             // Default values for Min and Max.
             if (!min) min = 1;
-            if (!max) max = 31;
+            if (!max) max = 100;
 
             // Forming pattern for Restriction.
             let regex = new RegExp('^[0-9]+$');

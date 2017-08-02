@@ -322,7 +322,7 @@ function jsFilter() {
 
             // Default values for Min and Max.
             if (!min) min = 1;
-            if (!max) max = 31;
+            if (!max) max = 100;
 
             // Forming pattern for Restriction.
             var regex = new RegExp('^[0-9]+$');
@@ -780,7 +780,10 @@ function jsRuleSets() {
             var elem2 = document.getElementById(elem2_id);
             if (elem1.value === elem2.value) status = true;
         }
-        //jsLogger.out('Compare Status', status);
+        // Hardly remove the error message.
+        // document.getElementById(elem1.name + __err_id_suffix_rand_hash).remove();
+        // document.getElementById(elem2.name + __err_id_suffix_rand_hash).remove();
+
         return status;
     };
 }
