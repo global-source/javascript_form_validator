@@ -159,15 +159,8 @@ It has automated listener to monitor every changes on form.
     </div>
 </form>
 ```
-           
-3. Every Input Fields should have a Label with **`FOR`** attributes.
 
-     ```html
-           <label for="uname">Name :</label>
-           <input type="text" name="uname" required>
-     ```
-           
-4. In form use **`novalidate`** to avoid browser interuptions.
+3. In form use **`novalidate`** to avoid browser interuptions.
     
     ```html
          <form method="POST/GET/PUT/PATCH/DELETE.." action="PATH TO HANDLE" id="form2submit" ... novalidate> 
