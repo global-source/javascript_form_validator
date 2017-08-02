@@ -173,7 +173,7 @@ It has automated listener to monitor every changes on form.
 
 ```javascript
 
- // For Native-Javascript & ES6
+ // For Native & ES6 Javascript.
  var myform = new jsValidator().init({
         form: 'form2submit',   // #id
         forceFilter: true,
