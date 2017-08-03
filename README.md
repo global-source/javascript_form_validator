@@ -7,10 +7,7 @@
 ### Installation 
 
     git clone https://github.com/global-source/javascript_form_validator.git
-    
---or--
-    
-    composer require global-source/javascript-form-validator
+    git checkout -b V.2.0
 
     
 ## Why this ?
