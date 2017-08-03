@@ -810,16 +810,38 @@ class jsRuleSets {
         let status = false;
         // If field is not required, then return "true".
         if (false === elem1.required) status = true;
+        // 2'nd element's ID.
         let elem2_id = elem1.getAttribute('data-check');
+        // Default 2'nd element comparision.
+        let elem2_value = '';
+        // Secondary element.
+        let elem2 = false;
+        // Verify, 2'nd element is defined or not.
         if (typeof elem2_id == 'undefined' || elem2_id == null) status = false;
+        // If null, then take it's a primary element.
         if (elem2_id === null) elem2_id = elem1.getAttribute('data-parent');
+        // If secondary element not defined, then "status" will FALSE.
         if (elem2_id === null) {
             status = false;
         } else {
+            // If set, then take secondary element's id.
             elem2_id = elem2_id.toString();
-            let elem2 = document.getElementById(elem2_id);
+            // Get value of secondary element.
+            elem2 = document.getElementById(elem2_id);
+            // If both values are same, then "status" will TRUE.
             if (elem1.value === elem2.value) status = true;
+            // Value of secondary element.
+            elem2_value = elem2.value;
         }
+
+        // Throw error message for password validation.
+        if (true === status || '' === elem2_value) {
+            // Hardly remove the error message.
+            document.getElementById(elem1.name + __err_id_suffix_rand_hash).remove();
+            // Verify and remove error message.
+            if (false !== elem2) document.getElementById(elem2.name + __err_id_suffix_rand_hash).remove();
+        }
+
         //jsLogger.out('Compare Status', status);
         return status;
     };
