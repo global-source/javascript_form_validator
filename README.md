@@ -1,15 +1,18 @@
 ## Global Source - JavaScript Form Validator [Ready to Use] 
 
 
-[![Packagist](https://img.shields.io/badge/JavaScript-Core-blue.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/JavaScript-ES6-green.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/Build-Alpha-lightgrey.svg)](https://github.com/global-source/javascript_form_validator) [![License](https://img.shields.io/badge/Version-v.0.9-blue.svg)](https://github.com/shankarThiyagaraajan/PHP_Migration/blob/master/LICENSE)
+[![Packagist](https://img.shields.io/badge/JavaScript-Core-brightgreen.svg)](https://github.com/global-source/javascript_form_validator) [![Packagist](https://img.shields.io/badge/JavaScript-ES6-green.svg)](https://github.com/global-source/javascript_form_validator)  [![License](https://img.shields.io/badge/Build-V.2.0-blue.svg)](https://github.com/shankarThiyagaraajan/PHP_Migration/blob/master/LICENSE)
 
 
 ### Installation 
 
     git clone https://github.com/global-source/javascript_form_validator.git
     
-    git checkout master
+--or--
+    
+    composer require global-source/javascript-form-validator
 
+    
 ## Why this ?
 
   * Support **Native** and **ES6** Javascript,
@@ -23,27 +26,20 @@
 **Steps to Integrate to Form :**
 
 ```html        
- <script src="./../src/js/formValidator.js"></script>
+ <script src="formValidator.js"></script>
  or
- <script src="./../src/js/formValidator.es6.js"></script>
+ <script src="formValidator.es6.js"></script>
 ```
 
 Then Integrate your form with Validator.
 
 ```javascript
     
-    // Core
-    var myform = jsValidator.init({
-        form: 'form2submit',   // #id
-    });
-    
-    // ES6
     var myform = new jsValidator().init({
         form: 'form2submit',   // #id
     });
-
+    
 ```
-
              
 
 ## Options
@@ -76,10 +72,13 @@ Then Integrate your form with Validator.
 | Name              | Values          | Descriptions                                                                 |
 | ----------------- | --------------- | ---------------------------------------------------------------------------- |
 | required          |  True, False    | Set the fields is required to submit the Form.                               |
-| type="min"         |  Integer        | To set the Minimun length of characters to proceed.                          |
-| type="max"         |  Integer        | To set the Maximum length of characters to proceed.                          |
+| min               |  Integer        | To set the Minimun value to proceed.                          |
+| max               |  Integer        | To set the Maximum value to proceed.                          |
+| data-maxlength="10" |  Integer        | To set the Maximum length of characters to proceed.                          |
+| maxLength="10"     |  Integer        | To set the Maximum length of characters to proceed.                          |
 | type="password"    |  AlphaNumeric   | To set and compare password.                                                 |
 | type="email"       |  AlphaNumeric   | To check the email is valid or not.                                          |
+| type="file"       |  string ['png,jpeg..']   | To check the file format is allowed or not.                                          |
 | data-message="Error Message"| String | User defined, element based direct error message to handle.                 |
 | data-allow="onlyAlpha"| a-zA-Z Only | Allow only string, no digits and no special characters.                      |
 | data-allow="string"| a-zA-Z0-9 Only | Allow only string and digits, no special characters.                         |
@@ -135,6 +134,10 @@ It has automated listener to monitor every changes on form.
         <input type="email" name="email" required>
     </div>
     <div>
+         <label for="file">File</label>
+         <input type="file" required class="form-control" id="file" data-extensions="png,jpeg,jpg" name="file">
+    </div>
+    <div>
         <label>Password</label>
         <input type="password" name="password" data-check="repassword" id="password" required>
     </div>
@@ -159,15 +162,8 @@ It has automated listener to monitor every changes on form.
     </div>
 </form>
 ```
-           
-3. Every Input Fields should have a Label with **`FOR`** attributes.
 
-     ```html
-           <label for="uname">Name :</label>
-           <input type="text" name="uname" required>
-     ```
-           
-4. In form use **`novalidate`** to avoid browser interuptions.
+3. In form use **`novalidate`** to avoid browser interuptions.
     
     ```html
          <form method="POST/GET/PUT/PATCH/DELETE.." action="PATH TO HANDLE" id="form2submit" ... novalidate> 
@@ -180,29 +176,17 @@ It has automated listener to monitor every changes on form.
 
 ```javascript
 
- // For Native-Javascript
- var myform = jsValidator.init({
-        form: 'form2submit',   // #id
-        forceFilter: true,
-         message: {
-            required: 'This field is required !',
-            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-            max: 'This field is exceeds the limit of [INDEX]',
-            password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
-        }
-    });
-    
- // For ES6
+ // For Native & ES6 Javascript.
  var myform = new jsValidator().init({
         form: 'form2submit',   // #id
         forceFilter: true,
          message: {
             required: 'This field is required !',
-            min: '<br><span style="color: red;">This field is less then the limit [INDEX]</span>',
-            max: 'This field is exceeds the limit of [INDEX]',
+            min: '<br><span style="color: red;">This field is less then the limit</span>',
+            max: 'This field is exceeds the limit',
             password: 'Password doesn\'t match !',
-            email: 'Invalid Email found !'
+            email: 'Invalid Email found !',
+            file: 'Invalid File format given'
         }
     });
     
