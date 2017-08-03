@@ -8,8 +8,10 @@
 
     git clone https://github.com/global-source/javascript_form_validator.git
     
-    git checkout master
-
+    --or--
+    
+    composer require global-source/javascript-form-validator
+    
 ## Why this ?
 
   * Support **Native** and **ES6** Javascript,
