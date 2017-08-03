@@ -1,86 +1,129 @@
-<!Doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=0.9">
-    <title>Demo 1 | Javascript Validator</title>
+    <title>Demo 2 | Javascript Validator</title>
 </head>
 <body>
-<div>
-    <form name="demo_validation" id="demoValidation" novalidate>
-        <div>
+
+<div class="col-md-8" align="center" style="margin-left: 20%">
+    <div class="title"><h2>Input Client Information</h2></div>
+    <form method="POST" id="clientAdd" novalidate>
+
+        <div class="">
+            <div class="row">
+                <label for="name" style="align-items: baseline">Name</label>
+                <input type="text" required class="form-control" data-allowSpecial="_" data-allow="onlyAlpha" id="name"
+                       name="name" placeholder="Enter Name">
+            </div>
+
+            <br><br><br><br><br><br><br>
+
+            <div class="row">
+                <label for="name">Address1</label>
+                <input type="text" required class="form-control" pattern="[a-z]" id="l_address" name="l_address"
+                       placeholder="Enter address1">
+
+            </div>
+
+            <br><br><br><br><br><br><br>
+
+            <div class="row">
+                <label for="name">Address2</label>
+                <input type="text" required class="form-control" id="p_address" name="p_address"
+                       placeholder="Enter Address2">
+            </div>
+
+            <br><br><br><br><br><br><br><br>
+
+            <div class="row">
+                <label for="name">Contact Person</label>
+                <input type="text" required class="form-control" id="contact_person" name="contact_person"
+                       placeholder="Enter Contact Person">
+            </div>
+
+            <br><br><br><br><br><br><br><br><br>
+
+            <label for="name">Phone No 1</label>
+            <input type="text" required class="form-control" id="contact_no1" name="contact_no1"
+                   placeholder="Enter Phone No">
+
+            <div class="row">
+                <label for="name">Phone No 2 </label>
+                <input type="text" class="form-control" pattern="[0-9.]" id="contact_no2" name="contact_no2"
+                       placeholder="Enter Phone No">
+            </div>
+
+            <br><br><br><br><br><br><br>
+
+            <label for="name">Email Address 1</label>
+            <input type="email" required class="form-control" id="email1" name="email1" placeholder="Enter Email">
+            <div class="row">
+                <label for="name">Email Address 2</label>
+                <input type="text" class="form-control" id="email2" name="email2" placeholder="Enter Email">
+            </div>
+
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <label for="name">Designation</label>
+            <input type="text" required class="form-control" id="designation" name="designation"
+                   placeholder="Enter Designation">
+            <div class="row">
+                <label for="name">Department</label>
+                <input type="text" required class="form-control" id="department" name="department"
+                       placeholder="Enter Department">
+            </div>
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
             <div>
-                <div id="test"></div>
-                <label for="name">Name :</label>
-                <input type="text" data-allow="onlyAlpha" pattern="^[a-zA-C]+$" id="check" data-allowSpecial="_."
-                       value=""
-                       name="name"
-                       required>
+                <label>Password</label>
+                <input type="password" name="name5" data-check="repassword" id="password" required>
             </div>
             <div>
-                <label for="name1">String :</label>
-                <input type="text" data-allow="string" value="" name="name1" required>
+                <label>Re-Password</label>
+                <input type="password" name="name6" data-parent="password" id="repassword" required>
             </div>
-            <div>
-                <label for="name2">String + [0-5]:</label>
-                <input type="text" data-allow="string" pattern="^[a-zA-Z0-5]+$" value="" name="name2" required>
-            </div>
-            <div>
-                <label for="name3">Number in [3-500] :</label>
-                <input type="number" name="name3" id="number" min="3" max="500" required>
-            </div>
-            <div>
-                <label for="name4">Password :</label>
-                <input type="password" data-check="rePassword" id="password" pattern="^[a-zA-Z0-5]+$"
-                       data-allow="password"
-                       value=""
-                       name="name4"
-                       required>
-            </div>
-            <div>
-                <label for="name5">Re-Password :</label>
-                <input type="password" name="name5" data-parent="password" id="rePassword" pattern="^[a-zA-Z0-5]+$"
-                       data-allow="password"
-                       required>
-            </div>
-            <div>
-                <select required name="select1">
-                    <option value=""></option>
-                    <option value="123">123</option>
-                </select>
-            </div>
-            <div>
-                <select required name="select2">
-                    <option value=""></option>
-                    <option value="456">456</option>
-                </select>
-            </div>
-            <div>
-                <textarea required name="text1"></textarea>
-            </div>
+
+            <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+            <label for="file">File</label>
+            <input type="file" required class="form-control" id="file" data-extensions="png,jpeg,jpg" name="file">
+
+            <br><br><br><br><br><br><br><br><br><br>
         </div>
-        <input type="submit" value="Save">
+        <div>
+            <label>Min :</label>
+            <input type="number" required min="2" max="10" minlength="1" maxlength="2" name="rangeTester">
+        </div>
+        <br><br><br><br><br><br><br>
+        <div>
+            <label>Length Chars :</label>
+            <input type="text" required min="4" max="50" data-maxlength="10" name="rangeTester">
+        </div>
+        <br><br><br><br><br><br><br>
+        <button type="submit" name="btn-save" class="btn btn-default">Submit</button>
     </form>
 </div>
+<script src="./../js/formValidator.js"></script>
 
-<!--<script src="./../js/formValidator.min.js"></script>-->
-<!--<script src="./../js/formValidator.js"></script>-->
-<script src="../js/formValidator.es6.js"></script>
 <script>
 
-    (function () {
+    var form = new jsValidator();
+    form.init({
+        form: 'clientAdd',
+        forceFilter: true,
+        onChange: true,
+        errorClass: '__error_cap',
+        log: true,
+        message: {
+            required: 'This field is required.',
+            min: 'This field length is too low.',
+            max: 'This field length is exceeds the limit.',
+            password: 'Password does not match.',
+            email: 'Email is not valid.',
+            file: 'This file is not allowed.'
+        }
+    });
 
-//        var val = jsValidator.init({
-//            form: 'demoValidation',
-//            onlyFilter: false
-//        });
-
-        var val = new jsValidator().init({
-            form: 'demoValidation',
-            onlyFilter: false
-        });
-
-    }());
 </script>
 </body>
 </html>
