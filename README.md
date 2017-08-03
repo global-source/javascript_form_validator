@@ -8,9 +8,10 @@
 
     git clone https://github.com/global-source/javascript_form_validator.git
     
-    --or--
+--or--
     
     composer require global-source/javascript-form-validator
+
     
 ## Why this ?
 
