@@ -77,8 +77,8 @@ Then Integrate your form with Validator.
 | type="email"       |  AlphaNumeric   | To check the email is valid or not.                                          |
 | type="file"       |  string ['png,jpeg..']   | To check the file format is allowed or not.                                          |
 | data-message="Error Message"| String | User defined, element based direct error message to handle.                 |
-| data-allow="onlyAlpha"| a-zA-Z Only | Allow only string, no digits and no special characters.                      |
-| data-allow="string"| a-zA-Z0-9 Only | Allow only string and digits, no special characters.                         |
+| data-allow="onlyAlpha"| Alphabets Only | Allow only string, no digits and no special characters.                      |
+| data-allow="string"|  Alphabets + Numbers Only | Allow only string and digits, no special characters.                         |
 | data-allowSpecial="/_+"| Special characters | Allow only given special characters.                                 |
 | [INDEX]           |  Numeric        | Now supports Min&Max validation to show the limit.                           |
           
