@@ -47,6 +47,8 @@ Then Integrate your form with Validator.
 | forceFilter | True, False     | **True**, to allow form filter without form validations. **False**, default.  |    No     |
 | message     | Object          | Response message for all HTML elements.                                       |    No     |
 
+---
+
 ## Actions
 
 ### `check()` : Return as Form is Valid or Not.
