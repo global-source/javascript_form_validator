@@ -10,7 +10,7 @@
     git checkout -b V.2.0
 
     
-## Why this ?
+## Why me ?
 
   * Support **Native** and **ES6** Javascript,
   * Pure Javascript Code (**No Dependency**),
@@ -45,7 +45,7 @@ Then Integrate your form with Validator.
 | ----------- | --------------- | ----------------------------------------------------------------------------- | --------- |
 | form        | #ID             | **ID** of the Form to  handle validations and filters.                        |    Yes    |
 | forceFilter | True, False     | **True**, to allow form filter without form validations. **False**, default.  |    No     |
-| message     | Object          | Response message for **required**,**min**,**max**,**password**,**email** &more|    No     |
+| message     | Object          | Response message for all HTML elements.                                       |    No     |
 
 ## Actions
 
@@ -163,7 +163,7 @@ It has automated listener to monitor every changes on form.
 3. In form use **`novalidate`** to avoid browser interuptions.
     
     ```html
-         <form method="POST/GET/PUT/PATCH/DELETE.." action="PATH TO HANDLE" id="form2submit" ... novalidate> 
+         <form method="POST/GET/PUT/PATCH/DELETE" action="PATH-TO-HANDLE" id="form2submit" novalidate> 
          ...
          ...
          </form>
