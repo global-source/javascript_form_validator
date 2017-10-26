@@ -44,8 +44,9 @@ Then Integrate your form with Validator.
 | Name        | Values          | Descriptions                                                                  | Mandatory |
 | ----------- | --------------- | ----------------------------------------------------------------------------- | --------- |
 | form        | #ID             | **ID** of the Form to  handle validations and filters.                        |    Yes    |
-| forceFilter | True, False     | **True**, to allow form filter without form validations. **False**, default.  |    No     |
+| forceFilter | Bool            | **True**, to allow form filter without form validations. **False**, default.  |    No     |
 | message     | Object          | Response message for all HTML elements.                                       |    No     |
+| Log         | Bool            | To enable error log on console.                                               |    No     |
 
 ---
 
