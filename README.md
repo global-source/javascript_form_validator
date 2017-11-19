@@ -7,7 +7,7 @@
 ### Installation 
 
     git clone https://github.com/global-source/javascript_form_validator.git
-    git checkout -b V.2.0
+    git checkout -b [VERSION]
 
     
 ## Why me ?
