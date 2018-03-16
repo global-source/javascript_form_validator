@@ -21,7 +21,8 @@
 
             <div class="row">
                 <label for="name">Address1</label>
-                <input type="text" required class="form-control" pattern="[a-z]" id="l_address" name="l_address"
+                <input type="text" required class="form-control" pattern="[a-z./]" id="l_address" name="l_address"
+                       data-message="Yah, Address1 should not be empty."
                        placeholder="Enter address1">
 
             </div>
@@ -50,7 +51,7 @@
 
             <div class="row">
                 <label for="name">Phone No 2 </label>
-                <input type="text" class="form-control" pattern="[0-9.]" id="contact_no2" name="contact_no2"
+                <input type="text" class="form-control" pattern="[0-9.]" required id="contact_no2" name="contact_no2"
                        placeholder="Enter Phone No">
             </div>
 

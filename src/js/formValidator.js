@@ -715,12 +715,16 @@ function jsRuleSets() {
         // To Validate Email.
         // Convert to Native String Format.
         email = email.toString();
+
+        // If no email or empty,
+        if (!email) status = false;
+
         // To Check it as String or Not.
         if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
             // Valid Email.
             status = true;
         }
-        if (!email) status = false;
+       
         return status;
     };
     /*
@@ -866,7 +870,7 @@ var jsLogger = {
      */
     table: function (data) {
         if (true !== this.status()) return false;
-        console.table(data);
+        console.log(data);
     }
 };
 /**
